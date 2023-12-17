@@ -1,4 +1,5 @@
-﻿using Quizer.Application.Common.Interfaces.Authentication;
+﻿using Quizer.Application.Common.Exceptions;
+using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Entities;
 
@@ -17,8 +18,8 @@ namespace Quizer.Application.Services.Authentication
 
         public async Task<AuthenticationResult> Register(string firstName, string lastName, string email, string password)
         {
-            if(await _userRepository.GetUserByEmail(email) is not null)
-                throw new Exception("User with this email already exists.");
+            if (await _userRepository.GetUserByEmail(email) is not null)
+                throw new ConflictException("Email already exists");
 
             var user = new User
             {
