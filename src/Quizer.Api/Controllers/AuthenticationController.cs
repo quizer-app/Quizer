@@ -8,9 +8,9 @@ namespace Quizer.Api.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IAuthenticationCommandService _authenticationService;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IAuthenticationCommandService authenticationService)
         {
             _authenticationService = authenticationService;
         }

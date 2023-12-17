@@ -5,12 +5,12 @@ using Quizer.Domain.Entities;
 
 namespace Quizer.Application.Services.Authentication
 {
-    public class AuthenticationService : IAuthenticationService
+    public class AuthenticationCommandService : IAuthenticationCommandService
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IUserRepository _userRepository;
 
-        public AuthenticationService(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+        public AuthenticationCommandService(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
             _userRepository = userRepository;
@@ -39,14 +39,9 @@ namespace Quizer.Application.Services.Authentication
 
         public async Task<AuthenticationResult> Login(string email, string password)
         {
-            if (await _userRepository.GetUserByEmail(email) is not User user)
+            if (await _userRepository.GetUserByEmail(email) is not User user || user.Password != password)
             {
-                throw new Exception("User with this email does not exist.");
-            }
-
-            if (user.Password != password)
-            {
-                throw new Exception("Invalid password.");
+                throw new BadRequestException("Invalid email or password.");
             }
 
             var token = _jwtTokenGenerator.GenerateToken(user);

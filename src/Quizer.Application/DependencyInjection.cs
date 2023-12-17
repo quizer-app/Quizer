@@ -7,7 +7,7 @@ namespace Quizer.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAuthenticationCommandService, AuthenticationCommandService>();
 
             return services;
         }
