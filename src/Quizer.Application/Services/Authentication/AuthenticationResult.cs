@@ -1,10 +1,9 @@
-﻿namespace Quizer.Application.Services.Authentication
+﻿using Quizer.Domain.Entities;
+
+namespace Quizer.Application.Services.Authentication
 {
     public record AuthenticationResult (
-        Guid Id,
-        string FirstName,
-        string LastName,
-        string Email,
+        User User,
         string Token
     );
 }
