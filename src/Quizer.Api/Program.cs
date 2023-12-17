@@ -20,7 +20,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services
     .AddApplication()
-    .AddInfractructure();
+    .AddInfractructure(builder.Configuration);
 
 var app = builder.Build();
 

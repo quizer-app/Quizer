@@ -1,5 +1,7 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Quizer.Application.Common.Interfaces.Authentication;
+using Quizer.Application.Common.Interfaces.Services;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -8,10 +10,19 @@ namespace Quizer.Infrastructure.Authentication
 {
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
+        private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly JwtSettings _jwtSettings;
+
+        public JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtSettings)
+        {
+            _dateTimeProvider = dateTimeProvider;
+            _jwtSettings = jwtSettings.Value;
+        }
+
         public string GenerateToken(Guid userId, string firstName, string lastName)
         {
             var signingCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes("super-secret-keysuper-secret-keysuper-secret-keysuper-secret-key")),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
                 SecurityAlgorithms.HmacSha512Signature
             );
 
@@ -26,8 +37,9 @@ namespace Quizer.Infrastructure.Authentication
             var securityToken = new JwtSecurityToken(
                 claims: claims,
                 signingCredentials: signingCredentials,
-                issuer: "https://localhost:5001",
-                expires: DateTime.UtcNow.AddDays(1)
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes)
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(securityToken);
