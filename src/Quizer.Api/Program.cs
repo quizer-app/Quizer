@@ -1,3 +1,5 @@
+using Quizer.Application;
+using Quizer.Infrastructure;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,11 +18,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services
-//    .AddDbContext<ApplicationDbContext>(options =>
-//        options.UseNpgsql(
-//            builder.Configuration.GetConnectionString("DefaultConnection"))
-//        );
+builder.Services
+    .AddApplication()
+    .AddInfractructure();
 
 var app = builder.Build();
 
