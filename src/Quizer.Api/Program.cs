@@ -32,7 +32,6 @@ var app = builder.Build();
         app.UseSwaggerUI();
     }
     app.UseSerilogRequestLogging();
-    //app.UseMiddleware<ErrorHandlingMiddleware>();
     app.UseExceptionHandler("/error");
     app.UseHttpsRedirection();
     app.UseAuthentication();
