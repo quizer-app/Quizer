@@ -4,7 +4,7 @@ namespace Quizer.Application.Common.Interfaces.Persistance
 {
     public interface IUserRepository
     {
-        void Add(User user);
-        User? GetUserByEmail(string email);
+        Task Add(User user);
+        Task<User?> GetUserByEmail(string email);
     }
 }

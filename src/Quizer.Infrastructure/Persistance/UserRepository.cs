@@ -1,4 +1,5 @@
-﻿using Quizer.Application.Common.Interfaces.Persistance;
+﻿using Microsoft.EntityFrameworkCore;
+using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Entities;
 
 namespace Quizer.Infrastructure.Persistance
@@ -12,14 +13,15 @@ namespace Quizer.Infrastructure.Persistance
             _context = context;
         }
 
-        public void Add(User user)
+        public async Task Add(User user)
         {
-            _context.Users.Add(user);
+            await _context.Users.AddAsync(user);
+            await _context.SaveChangesAsync();
         }
 
-        public User? GetUserByEmail(string email)
+        public async Task<User?> GetUserByEmail(string email)
         {
-            return _context.Users.FirstOrDefault(user => user.Email == email);
+            return await _context.Users.FirstOrDefaultAsync(user => user.Email == email);
         }
     }
 }

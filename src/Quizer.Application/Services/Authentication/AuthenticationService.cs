@@ -15,9 +15,9 @@ namespace Quizer.Application.Services.Authentication
             _userRepository = userRepository;
         }
 
-        public AuthenticationResult Register(string firstName, string lastName, string email, string password)
+        public async Task<AuthenticationResult> Register(string firstName, string lastName, string email, string password)
         {
-            if(_userRepository.GetUserByEmail(email) is not null)
+            if(await _userRepository.GetUserByEmail(email) is not null)
                 throw new Exception("User with this email already exists.");
 
             var user = new User
@@ -27,7 +27,7 @@ namespace Quizer.Application.Services.Authentication
                 Email = email,
                 Password = password
             };
-            _userRepository.Add(user);
+            await _userRepository.Add(user);
 
             var token = _jwtTokenGenerator.GenerateToken(user);
 
@@ -36,9 +36,9 @@ namespace Quizer.Application.Services.Authentication
                 token);
         }
 
-        public AuthenticationResult Login(string email, string password)
+        public async Task<AuthenticationResult> Login(string email, string password)
         {
-            if (_userRepository.GetUserByEmail(email) is not User user)
+            if (await _userRepository.GetUserByEmail(email) is not User user)
             {
                 throw new Exception("User with this email does not exist.");
             }
