@@ -5,7 +5,7 @@ namespace Quizer.Api.Controllers
 {
     public class ErrorsController : ControllerBase
     {
-        [Route("errors")]
+        [Route("error")]
         public IActionResult Error()
         {
             Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()!.Error;

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Quizer.Api.Errors;
+using Quizer.Api.Common.Errors;
 using Quizer.Application;
 using Quizer.Infrastructure;
 using Serilog;

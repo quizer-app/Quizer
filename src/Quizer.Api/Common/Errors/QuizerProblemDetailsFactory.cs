@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using System.Diagnostics;
 
 // https://github.com/dotnet/aspnetcore/blob/main/src/Mvc/Mvc.Core/src/Infrastructure/DefaultProblemDetailsFactory.cs
-namespace Quizer.Api.Errors
+namespace Quizer.Api.Common.Errors
 {
     public class QuizerProblemDetailsFactory : ProblemDetailsFactory
     {
