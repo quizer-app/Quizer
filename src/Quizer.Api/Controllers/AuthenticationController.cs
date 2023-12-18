@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Quizer.Application.Services.Authentication.Commands;
-using Quizer.Application.Services.Authentication.Queries;
+using Quizer.Application.Authentication.Commands;
+using Quizer.Application.Authentication.Queries;
 using Quizer.Contracts.Authentication;
 
 namespace Quizer.Api.Controllers
@@ -21,8 +21,13 @@ namespace Quizer.Api.Controllers
         public async Task<IActionResult> Register(RegisterRequest request)
         {
             var command = new RegisterCommand(
+                request.FirstName,
+                request.LastName,
+                request.Email,
+                request.Password
                 );
-            var authResult = await _authenticationCommandService.Register(request.FirstName, request.LastName, request.Email, request.Password);
+
+            var authResult = await _mediator.Send(command);
 
             var response = new AuthenticationResponse(
                 authResult.User.Id,
@@ -38,7 +43,11 @@ namespace Quizer.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            var authResult = await _authenticationQueryService.Login(request.Email, request.Password);
+            var query = new LoginQuery(
+                request.Email,
+                request.Password
+            );
+            var authResult = await _mediator.Send(query);
 
             var response = new AuthenticationResponse(
                 authResult.User.Id,
