@@ -1,33 +1,34 @@
-﻿using Quizer.Application.Common.Exceptions;
+﻿using MediatR;
+using Quizer.Application.Authentication.Common;
+using Quizer.Application.Common.Exceptions;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Persistance;
-using Quizer.Application.Services.Authentication.Common;
 using Quizer.Domain.Entities;
 
-namespace Quizer.Application.Services.Authentication.Commands
+namespace Quizer.Application.Authentication.Commands
 {
-    public class AuthenticationCommandService : IAuthenticationCommandService
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthenticationResult>
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IUserRepository _userRepository;
 
-        public AuthenticationCommandService(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
+        public RegisterCommandHandler(IJwtTokenGenerator jwtTokenGenerator, IUserRepository userRepository)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
             _userRepository = userRepository;
         }
 
-        public async Task<AuthenticationResult> Register(string firstName, string lastName, string email, string password)
+        public async Task<AuthenticationResult> Handle(RegisterCommand command, CancellationToken cancellation)
         {
-            if (await _userRepository.GetUserByEmail(email) is not null)
+            if (await _userRepository.GetUserByEmail(command.Email) is not null)
                 throw new ConflictException("Email already exists");
 
             var user = new User
             {
-                FirstName = firstName,
-                LastName = lastName,
-                Email = email,
-                Password = password
+                FirstName = command.FirstName,
+                LastName = command.LastName,
+                Email = command.Email,
+                Password = command.Password
             };
             await _userRepository.Add(user);
 

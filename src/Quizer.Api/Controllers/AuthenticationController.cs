@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Services.Authentication.Commands;
 using Quizer.Application.Services.Authentication.Queries;
 using Quizer.Contracts.Authentication;
@@ -9,20 +10,18 @@ namespace Quizer.Api.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationCommandService _authenticationCommandService;
-        private readonly IAuthenticationQueryService _authenticationQueryService;
+        private readonly IMediator _mediator;
 
-        public AuthenticationController(
-            IAuthenticationCommandService authenticationService,
-            IAuthenticationQueryService authenticationQueryService)
+        public AuthenticationController(IMediator mediator)
         {
-            _authenticationCommandService = authenticationService;
-            _authenticationQueryService = authenticationQueryService;
+            _mediator = mediator;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
+            var command = new RegisterCommand(
+                );
             var authResult = await _authenticationCommandService.Register(request.FirstName, request.LastName, request.Email, request.Password);
 
             var response = new AuthenticationResponse(
