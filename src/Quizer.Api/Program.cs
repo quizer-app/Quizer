@@ -1,5 +1,4 @@
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Quizer.Api.Common.Errors;
+using Quizer.Api;
 using Quizer.Application;
 using Quizer.Infrastructure;
 using Serilog;
@@ -10,13 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
     {
         configuration.ReadFrom.Configuration(context.Configuration);
     });
-    builder.Services.AddControllers();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
     builder.Services
         .AddApplication()
-        .AddInfractructure(builder.Configuration);
-    builder.Services.AddSingleton<ProblemDetailsFactory, QuizerProblemDetailsFactory>();
+        .AddInfractructure(builder.Configuration)
+        .AddPresentation();
 }
 
 Log.Logger =

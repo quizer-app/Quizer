@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using MapsterMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Authentication.Commands;
 using Quizer.Application.Authentication.Queries;
@@ -11,31 +12,22 @@ namespace Quizer.Api.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IMapper _mapper;
 
-        public AuthenticationController(IMediator mediator)
+        public AuthenticationController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
-            var command = new RegisterCommand(
-                request.FirstName,
-                request.LastName,
-                request.Email,
-                request.Password
-                );
+            var command = _mapper.Map<RegisterCommand>(request);
 
             var authResult = await _mediator.Send(command);
 
-            var response = new AuthenticationResponse(
-                authResult.User.Id,
-                authResult.User.FirstName,
-                authResult.User.LastName,
-                authResult.User.Email,
-                authResult.Token
-            );
+            var response = _mapper.Map<AuthenticationResponse>(authResult);
 
             return Ok(response);
         }
@@ -43,19 +35,10 @@ namespace Quizer.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
-            var query = new LoginQuery(
-                request.Email,
-                request.Password
-            );
+            var query = _mapper.Map<LoginQuery>(request);
             var authResult = await _mediator.Send(query);
 
-            var response = new AuthenticationResponse(
-                authResult.User.Id,
-                authResult.User.FirstName,
-                authResult.User.LastName,
-                authResult.User.Email,
-                authResult.Token
-            );
+            var response = _mapper.Map<AuthenticationResponse>(authResult);
 
             return Ok(response);
         }
