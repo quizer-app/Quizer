@@ -28,6 +28,7 @@ namespace Quizer.Domain.QuizAggregate
             Name = name;
             Description = description;
             AverageRating = averageRating;
+            _questions = questions;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
         }
