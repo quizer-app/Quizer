@@ -1,4 +1,5 @@
 ﻿using Quizer.Domain.Common.Models;
+using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuizAggregate.Entities;
 using Quizer.Domain.QuizAggregate.ValueObjects;
 
@@ -10,7 +11,7 @@ namespace Quizer.Domain.QuizAggregate
 
         public string Name { get; }
         public string Description { get; }
-        public float AverageRating { get; }
+        public AverageRating AverageRating { get; }
         public IReadOnlyList<Question> Questions => _questions.AsReadOnly();
 
         public DateTime CreatedAt { get; }
@@ -20,7 +21,7 @@ namespace Quizer.Domain.QuizAggregate
             QuizId id,
             string name,
             string description,
-            float averageRating,
+            AverageRating averageRating,
             List<Question> questions,
             DateTime createdAt,
             DateTime updatedAt) : base(id)
@@ -36,7 +37,7 @@ namespace Quizer.Domain.QuizAggregate
         public static Quiz Create(
             string name,
             string description,
-            float averageRating,
+            AverageRating averageRating,
             List<Question> questions)
         {
             return new(

@@ -9,6 +9,7 @@ using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Application.Common.Interfaces.Services;
 using Quizer.Infrastructure.Authentication;
 using Quizer.Infrastructure.Persistance;
+using Quizer.Infrastructure.Persistance.Repositories;
 using Quizer.Infrastructure.Services;
 using System.Text;
 

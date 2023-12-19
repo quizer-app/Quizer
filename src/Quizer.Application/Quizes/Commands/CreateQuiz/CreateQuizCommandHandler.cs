@@ -26,7 +26,7 @@ namespace Quizer.Application.Quizes.Commands.CreateQuiz
                         q.QuestionText,
                         q.Answer)));
 
-            await _quizRepository.Add(quiz);
+            //await _quizRepository.Add(quiz);
 
             return quiz;
         }

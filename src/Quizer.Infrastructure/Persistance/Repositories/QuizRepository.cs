@@ -1,7 +1,7 @@
 ﻿using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.QuizAggregate;
 
-namespace Quizer.Infrastructure.Persistance
+namespace Quizer.Infrastructure.Persistance.Repositories
 {
     public class QuizRepository : IQuizRepository
     {
