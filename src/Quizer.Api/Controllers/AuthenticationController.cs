@@ -8,8 +8,7 @@ using Quizer.Contracts.Authentication;
 namespace Quizer.Api.Controllers
 {
     [Route("auth")]
-    [ApiController]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : ApiController
     {
         private readonly IMediator _mediator;
         private readonly IMapper _mapper;
@@ -27,20 +26,23 @@ namespace Quizer.Api.Controllers
 
             var authResult = await _mediator.Send(command);
 
-            var response = _mapper.Map<AuthenticationResponse>(authResult);
-
-            return Ok(response);
+            return authResult.Match(
+                authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+                Problem
+                );
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
             var query = _mapper.Map<LoginQuery>(request);
+
             var authResult = await _mediator.Send(query);
 
-            var response = _mapper.Map<AuthenticationResponse>(authResult);
-
-            return Ok(response);
+            return authResult.Match(
+                authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+                Problem
+                );
         }
     }
 }

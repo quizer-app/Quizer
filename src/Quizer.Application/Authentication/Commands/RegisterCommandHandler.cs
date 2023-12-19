@@ -1,13 +1,14 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 using Quizer.Application.Authentication.Common;
-using Quizer.Application.Common.Exceptions;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Entities;
+using Quizer.Domain.Common.Errors;
 
 namespace Quizer.Application.Authentication.Commands
 {
-    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, AuthenticationResult>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IUserRepository _userRepository;
@@ -18,10 +19,10 @@ namespace Quizer.Application.Authentication.Commands
             _userRepository = userRepository;
         }
 
-        public async Task<AuthenticationResult> Handle(RegisterCommand command, CancellationToken cancellation)
+        public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellation)
         {
             if (await _userRepository.GetUserByEmail(command.Email) is not null)
-                throw new ConflictException("Email already exists");
+                return Errors.User.DuplicateEmail;
 
             var user = new User
             {

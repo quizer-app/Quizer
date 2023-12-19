@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Quizer.Application.Common.Exceptions;
 
 namespace Quizer.Api.Controllers
 {
@@ -15,7 +14,6 @@ namespace Quizer.Api.Controllers
 
             var (statusCode, message) = exception switch
             {
-                IServiceException serviceException => ((int)serviceException.StatusCode, serviceException.ErrorMessage),
                 _ => (StatusCodes.Status500InternalServerError, "Internal server error")
             };
 

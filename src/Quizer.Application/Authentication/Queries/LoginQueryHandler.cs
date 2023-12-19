@@ -1,13 +1,14 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 using Quizer.Application.Authentication.Common;
-using Quizer.Application.Common.Exceptions;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Entities;
+using Quizer.Domain.Common.Errors;
 
 namespace Quizer.Application.Authentication.Queries
 {
-    public class LoginQueryHandler : IRequestHandler<LoginQuery, AuthenticationResult>
+    public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<AuthenticationResult>>
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IUserRepository _userRepository;
@@ -18,11 +19,16 @@ namespace Quizer.Application.Authentication.Queries
             _userRepository = userRepository;
         }
 
-        public async Task<AuthenticationResult> Handle(LoginQuery query, CancellationToken cancellation)
+        public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery query, CancellationToken cancellation)
         {
-            if (await _userRepository.GetUserByEmail(query.Email) is not User user || user.Password != query.Password)
+            if (await _userRepository.GetUserByEmail(query.Email) is not User user)
             {
-                throw new BadRequestException("Invalid email or password.");
+                return Errors.Authentication.InvalidCredentials;
+            }
+
+            if(user.Password != query.Password)
+            {
+                return Errors.Authentication.InvalidCredentials;
             }
 
             var token = _jwtTokenGenerator.GenerateToken(user);

@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ErrorOr;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Options;
+using Quizer.Api.Common.Http;
 using System.Diagnostics;
 
 // https://github.com/dotnet/aspnetcore/blob/main/src/Mvc/Mvc.Core/src/Infrastructure/DefaultProblemDetailsFactory.cs
@@ -82,6 +84,12 @@ namespace Quizer.Api.Common.Errors
                 problemDetails.Extensions["traceId"] = traceId;
             }
             _configure?.Invoke(new() { HttpContext = httpContext!, ProblemDetails = problemDetails });
+
+            var errors = httpContext?.Items[HttpContextItemKeys.Errors] as List<Error>;
+            if(errors is not null)
+            {
+                problemDetails.Extensions.Add("errorCodes", errors.Select(e => e.Code));
+            }
         }
     }
 }

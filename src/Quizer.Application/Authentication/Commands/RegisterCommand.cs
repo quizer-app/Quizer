@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using ErrorOr;
+using MediatR;
 using Quizer.Application.Authentication.Common;
 
 namespace Quizer.Application.Authentication.Commands
@@ -8,5 +9,5 @@ namespace Quizer.Application.Authentication.Commands
         string LastName,
         string Email,
         string Password
-        ) : IRequest<AuthenticationResult>;
+        ) : IRequest<ErrorOr<AuthenticationResult>>;
 }
