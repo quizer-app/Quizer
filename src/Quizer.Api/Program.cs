@@ -28,10 +28,14 @@ var app = builder.Build();
         app.UseSwaggerUI();
     }
     app.UseSerilogRequestLogging();
+
     app.UseExceptionHandler("/error");
+    
     app.UseHttpsRedirection();
+    
     app.UseAuthentication();
     app.UseAuthorization();
+    
     app.MapControllers();
     app.Run();
 }

@@ -10,7 +10,15 @@ namespace Quizer.Api.Controllers
         [HttpPost]
         public IActionResult Error()
         {
-            Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()!.Error;
+            var feature = HttpContext.Features.Get<IExceptionHandlerFeature>();
+            if (feature == null)
+            {
+                return Problem(
+                    statusCode: StatusCodes.Status500InternalServerError,
+                    title: "Internal server error");
+            }
+
+            Exception? exception = feature.Error;
 
             var (statusCode, message) = exception switch
             {

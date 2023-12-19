@@ -1,5 +1,6 @@
 ﻿using MapsterMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Authentication.Commands;
 using Quizer.Application.Authentication.Queries;
@@ -8,6 +9,7 @@ using Quizer.Contracts.Authentication;
 namespace Quizer.Api.Controllers
 {
     [Route("auth")]
+    [AllowAnonymous]
     public class AuthenticationController : ApiController
     {
         private readonly IMediator _mediator;
