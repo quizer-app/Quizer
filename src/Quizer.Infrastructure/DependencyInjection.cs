@@ -20,17 +20,23 @@ namespace Quizer.Infrastructure
             this IServiceCollection services,
             ConfigurationManager configuration)
         {
-            services.AddAuth(configuration);
+            services
+                .AddAuth(configuration)
+                .AddPersistance(configuration);
 
             services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            return services;
+        }
 
+        public static IServiceCollection AddPersistance(this IServiceCollection services, ConfigurationManager configuration)
+        {
             services
                 .AddDbContext<QuizerDbContext>(options =>
-                    options.UseNpgsql(
-                        configuration.GetConnectionString("DefaultConnection"))
-                    );
+                    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IQuizRepository, QuizRepository>();
 
             return services;
         }

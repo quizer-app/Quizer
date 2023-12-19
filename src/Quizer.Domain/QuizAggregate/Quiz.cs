@@ -21,6 +21,7 @@ namespace Quizer.Domain.QuizAggregate
             string name,
             string description,
             float averageRating,
+            List<Question> questions,
             DateTime createdAt,
             DateTime updatedAt) : base(id)
         {
@@ -34,13 +35,15 @@ namespace Quizer.Domain.QuizAggregate
         public static Quiz Create(
             string name,
             string description,
-            float averageRating)
+            float averageRating,
+            List<Question> questions)
         {
             return new(
                 QuizId.CreateUnique(),
                 name,
                 description,
                 averageRating,
+                questions,
                 DateTime.UtcNow,
                 DateTime.UtcNow);
         }
