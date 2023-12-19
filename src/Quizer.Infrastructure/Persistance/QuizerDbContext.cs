@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Quizer.Domain.Entities;
 using Quizer.Domain.QuizAggregate;
 
@@ -11,6 +12,12 @@ namespace Quizer.Infrastructure.Persistance
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(QuizerDbContext).Assembly);
+
+            modelBuilder.Model.GetEntityTypes()
+                .SelectMany(e => e.GetProperties())
+                .Where(p => p.IsPrimaryKey())
+                .ToList()
+                .ForEach(p => p.ValueGenerated = ValueGenerated.Never);
 
             base.OnModelCreating(modelBuilder);
         }

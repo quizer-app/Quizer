@@ -25,7 +25,6 @@ namespace Quizer.Infrastructure.Persistance.Configuration
 
                 qb.Property(qs => qs.Id)
                     .HasColumnName("QuestionId")
-                    .ValueGeneratedNever()
                     .HasConversion(
                         id => id.Value,
                         value => QuestionId.Create(value)
@@ -51,7 +50,6 @@ namespace Quizer.Infrastructure.Persistance.Configuration
             builder.HasKey(q => q.Id);
 
             builder.Property(q => q.Id)
-                .ValueGeneratedNever()
                 .HasConversion(
                     id => id.Value,
                     value => QuizId.Create(value)

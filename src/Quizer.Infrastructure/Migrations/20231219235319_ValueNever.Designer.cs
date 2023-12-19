@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Quizer.Infrastructure.Persistance;
@@ -11,9 +12,11 @@ using Quizer.Infrastructure.Persistance;
 namespace Quizer.Infrastructure.Migrations
 {
     [DbContext(typeof(QuizerDbContext))]
-    partial class QuizerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231219235319_ValueNever")]
+    partial class ValueNever
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
