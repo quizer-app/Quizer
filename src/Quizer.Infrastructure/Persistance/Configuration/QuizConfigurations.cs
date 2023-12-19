@@ -39,6 +39,9 @@ namespace Quizer.Infrastructure.Persistance.Configuration
                     .HasMaxLength(500)
                     .IsRequired();
             });
+
+            builder.Metadata.FindNavigation(nameof(Quiz.Questions))!
+                .SetPropertyAccessMode(PropertyAccessMode.Field);
         }
 
         private static void ConfigureQuizTable(EntityTypeBuilder<Quiz> builder)
