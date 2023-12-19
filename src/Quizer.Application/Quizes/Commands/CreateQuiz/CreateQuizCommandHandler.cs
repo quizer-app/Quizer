@@ -1,6 +1,7 @@
 ﻿using ErrorOr;
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
+using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuizAggregate;
 using Quizer.Domain.QuizAggregate.Entities;
 
@@ -20,13 +21,13 @@ namespace Quizer.Application.Quizes.Commands.CreateQuiz
             var quiz = Quiz.Create(
                 request.Name,
                 request.Description,
-                0,
+                AverageRating.CreateNew(),
                 request.Questions
                     .ConvertAll(q => Question.Create(
                         q.QuestionText,
                         q.Answer)));
 
-            //await _quizRepository.Add(quiz);
+            await _quizRepository.Add(quiz);
 
             return quiz;
         }

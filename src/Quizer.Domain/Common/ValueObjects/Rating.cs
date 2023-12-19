@@ -9,7 +9,7 @@ namespace Quizer.Domain.Common.ValueObjects
             Value = value;
         }
 
-        public int Value { get; }
+        public int Value { get; private set; }
 
         public static Rating Create(int value)
         {

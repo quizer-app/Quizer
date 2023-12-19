@@ -5,8 +5,8 @@ namespace Quizer.Domain.QuizAggregate.Entities
 {
     public sealed class Question : Entity<QuestionId>
     {
-        public string QuestionText { get; }
-        public string Answer { get; }
+        public string QuestionText { get; private set; }
+        public string Answer { get; private set; }
 
         private Question(QuestionId id, string questionText, string answer) : base(id)
         {
@@ -18,5 +18,11 @@ namespace Quizer.Domain.QuizAggregate.Entities
         {
             return new(QuestionId.CreateUnique(), questionText, answer);
         }
+
+#pragma warning disable CS8618
+        private Question()
+        {
+        }
+#pragma warning restore CS8618
     }
 }

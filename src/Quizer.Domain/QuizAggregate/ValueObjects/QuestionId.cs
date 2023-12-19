@@ -4,7 +4,7 @@ namespace Quizer.Domain.QuizAggregate.ValueObjects
 {
     public sealed class QuestionId : ValueObject
     {
-        public Guid Value { get; }
+        public Guid Value { get; private set; }
 
         private QuestionId(Guid value)
         {

@@ -9,13 +9,13 @@ namespace Quizer.Domain.QuizAggregate
     {
         private readonly List<Question> _questions = new();
 
-        public string Name { get; }
-        public string Description { get; }
-        public AverageRating AverageRating { get; }
+        public string Name { get; private set; }
+        public string Description { get; private set; }
+        public AverageRating AverageRating { get; private set; }
         public IReadOnlyList<Question> Questions => _questions.AsReadOnly();
 
-        public DateTime CreatedAt { get; }
-        public DateTime UpdatedAt { get; }
+        public DateTime CreatedAt { get; private set; }
+        public DateTime UpdatedAt { get; private set; }
 
         private Quiz(
             QuizId id,
@@ -49,5 +49,11 @@ namespace Quizer.Domain.QuizAggregate
                 DateTime.UtcNow,
                 DateTime.UtcNow);
         }
+
+#pragma warning disable CS8618
+        private Quiz()
+        {
+        }
+#pragma warning restore CS8618
     }
 }
