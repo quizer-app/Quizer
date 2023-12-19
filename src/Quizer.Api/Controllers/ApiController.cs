@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Quizer.Api.Common.Http;
 
 namespace Quizer.Api.Controllers
@@ -9,10 +10,24 @@ namespace Quizer.Api.Controllers
     {
         protected IActionResult Problem(List<Error> errors)
         {
-            HttpContext.Items.Add(HttpContextItemKeys.Errors, errors);
-            var firstError = errors[0];
+            if(errors.Count == 0)
+            {
+                return Problem();
+            }
 
-            var statusCode = firstError.Type switch
+            if (errors.All(error => error.Type == ErrorType.Validation))
+            {
+                return ValidationProblem(errors);
+            }
+
+            HttpContext.Items.Add(HttpContextItemKeys.Errors, errors);
+            
+            return Problem(errors[0]);
+        }
+
+        private IActionResult Problem(Error error)
+        {
+            var statusCode = error.Type switch
             {
                 ErrorType.Failure => StatusCodes.Status500InternalServerError,
                 ErrorType.Unexpected => StatusCodes.Status500InternalServerError,
@@ -23,7 +38,20 @@ namespace Quizer.Api.Controllers
                 _ => StatusCodes.Status500InternalServerError
             };
 
-            return Problem(statusCode: statusCode, title: firstError.Description);
+            return Problem(statusCode: statusCode, title: error.Description);
+        }
+
+        private IActionResult ValidationProblem(List<Error> errors)
+        {
+            var modelState = new ModelStateDictionary();
+
+            foreach (var error in errors)
+            {
+                modelState.AddModelError(
+                    error.Code,
+                    error.Description);
+            }
+            return ValidationProblem(modelState);
         }
     }
 }
