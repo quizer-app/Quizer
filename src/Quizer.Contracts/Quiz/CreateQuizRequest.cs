@@ -3,10 +3,10 @@
     public record CreateQuizRequest(
         string Name,
         string Description,
-        List<Question> Questions
+        List<QuestionRequest> Questions
         );
 
-    public record Question(
+    public record QuestionRequest(
         string QuestionText,
         string Answer);
 }
