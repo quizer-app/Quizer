@@ -1,13 +1,15 @@
 ﻿using Quizer.Domain.Common.Models;
 using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuizAggregate.Entities;
-using Quizer.Domain.QuizAggregate.ValueObjects;
+using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Domain.QuizAggregate
 {
     public sealed class Quiz : AggregateRoot<QuizId, Guid>
     {
         private readonly List<Question> _questions = new();
+
+        public UserId UserId { get; private set; }
 
         public string Name { get; private set; }
         public string Description { get; private set; }
@@ -19,6 +21,7 @@ namespace Quizer.Domain.QuizAggregate
 
         private Quiz(
             QuizId id,
+            UserId userId,
             string name,
             string description,
             AverageRating averageRating,
@@ -27,6 +30,7 @@ namespace Quizer.Domain.QuizAggregate
             DateTime updatedAt) : base(id)
         {
             Name = name;
+            UserId = userId;
             Description = description;
             AverageRating = averageRating;
             _questions = questions;
@@ -37,11 +41,13 @@ namespace Quizer.Domain.QuizAggregate
         public static Quiz Create(
             string name,
             string description,
+            UserId userId,
             AverageRating averageRating,
             List<Question> questions)
         {
             return new(
                 QuizId.CreateUnique(),
+                userId,
                 name,
                 description,
                 averageRating,

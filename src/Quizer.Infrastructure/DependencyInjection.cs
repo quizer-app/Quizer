@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Application.Common.Interfaces.Services;
+using Quizer.Domain.UserAggregate;
 using Quizer.Infrastructure.Authentication;
 using Quizer.Infrastructure.Persistance;
 using Quizer.Infrastructure.Persistance.Repositories;
@@ -36,7 +38,17 @@ namespace Quizer.Infrastructure
                 .AddDbContext<QuizerDbContext>(options =>
                     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddScoped<IUserRepository, UserRepository>();
+            services
+                .AddIdentity<User, IdentityRole>(options => {
+                    options.SignIn.RequireConfirmedEmail = true;
+                    options.User.RequireUniqueEmail = true;
+                    options.Password.RequiredLength = 8;
+                })
+                .AddEntityFrameworkStores<QuizerDbContext>()
+                .AddDefaultTokenProviders()
+                .AddUserManager<UserManager<User>>()
+                .AddSignInManager<SignInManager<User>>();
+
             services.AddScoped<IQuizRepository, QuizRepository>();
 
             return services;
