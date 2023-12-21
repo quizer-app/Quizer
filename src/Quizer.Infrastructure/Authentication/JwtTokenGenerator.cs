@@ -2,7 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Services;
-using Quizer.Domain.Entities;
+using Quizer.Domain.UserAggregate;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -29,9 +29,9 @@ namespace Quizer.Infrastructure.Authentication
 
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
-                new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.Value.ToString()),
+                //new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
+                //new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 

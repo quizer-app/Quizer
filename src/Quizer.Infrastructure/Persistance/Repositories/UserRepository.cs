@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quizer.Application.Common.Interfaces.Persistance;
-using Quizer.Domain.Entities;
+using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Infrastructure.Persistance
 {

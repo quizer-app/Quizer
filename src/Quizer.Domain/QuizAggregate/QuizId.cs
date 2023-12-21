@@ -1,10 +1,10 @@
 ﻿using Quizer.Domain.Common.Models;
 
-namespace Quizer.Domain.QuizAggregate.ValueObjects
+namespace Quizer.Domain.QuizAggregate
 {
-    public sealed class QuizId : ValueObject
+    public sealed class QuizId : AggregateRootId<Guid>
     {
-        public Guid Value { get; private set; }
+        public override Guid Value { get; protected set; }
 
         private QuizId(Guid value)
         {

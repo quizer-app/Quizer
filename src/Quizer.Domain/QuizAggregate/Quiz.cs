@@ -5,7 +5,7 @@ using Quizer.Domain.QuizAggregate.ValueObjects;
 
 namespace Quizer.Domain.QuizAggregate
 {
-    public sealed class Quiz : AggregateRoot<QuizId>
+    public sealed class Quiz : AggregateRoot<QuizId, Guid>
     {
         private readonly List<Question> _questions = new();
 

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Quizer.Domain.Entities;
+using Quizer.Domain.UserAggregate;
 using Quizer.Domain.QuizAggregate;
 
 namespace Quizer.Infrastructure.Persistance

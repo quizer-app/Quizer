@@ -1,4 +1,4 @@
-﻿using Quizer.Domain.Entities;
+﻿using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Common.Interfaces.Persistance
 {

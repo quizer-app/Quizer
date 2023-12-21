@@ -3,8 +3,8 @@ using MediatR;
 using Quizer.Application.Authentication.Common;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Persistance;
-using Quizer.Domain.Entities;
 using Quizer.Domain.Common.Errors;
+using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Authentication.Commands
 {
@@ -24,20 +24,20 @@ namespace Quizer.Application.Authentication.Commands
             if (await _userRepository.GetUserByEmail(command.Email) is not null)
                 return Errors.User.DuplicateEmail;
 
-            var user = new User
-            {
-                FirstName = command.FirstName,
-                LastName = command.LastName,
-                Email = command.Email,
-                Password = command.Password
-            };
-            await _userRepository.Add(user);
+            //var user = new User
+            //{
+            //    FirstName = command.FirstName,
+            //    LastName = command.LastName,
+            //    Email = command.Email,
+            //    Password = command.Password
+            //};
+            //await _userRepository.Add(user);
 
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            //var token = _jwtTokenGenerator.GenerateToken(user);
 
             return new AuthenticationResult(
-                user,
-                token);
+                null,
+                string.Empty);
         }
     }
 }

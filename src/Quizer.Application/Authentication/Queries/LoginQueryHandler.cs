@@ -3,8 +3,8 @@ using MediatR;
 using Quizer.Application.Authentication.Common;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Persistance;
-using Quizer.Domain.Entities;
 using Quizer.Domain.Common.Errors;
+using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Authentication.Queries
 {
@@ -21,21 +21,21 @@ namespace Quizer.Application.Authentication.Queries
 
         public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery query, CancellationToken cancellation)
         {
-            if (await _userRepository.GetUserByEmail(query.Email) is not User user)
-            {
-                return Errors.Authentication.InvalidCredentials;
-            }
+            //if (await _userRepository.GetUserByEmail(query.Email) is not User user)
+            //{
+            //    return Errors.Authentication.InvalidCredentials;
+            //}
 
-            if(user.Password != query.Password)
-            {
-                return Errors.Authentication.InvalidCredentials;
-            }
+            //if(user.Password != query.Password)
+            //{
+            //    return Errors.Authentication.InvalidCredentials;
+            //}
 
-            var token = _jwtTokenGenerator.GenerateToken(user);
+            //var token = _jwtTokenGenerator.GenerateToken(user);
 
             return new AuthenticationResult(
-                user,
-                token);
+                null,
+                string.Empty);
         }
     }
 }
