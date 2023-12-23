@@ -2,10 +2,11 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Quizer.Domain.QuizAggregate;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Infrastructure.Persistance
 {
-    public class QuizerDbContext : IdentityDbContext
+    public class QuizerDbContext : IdentityDbContext<User>
     {
         public QuizerDbContext(DbContextOptions<QuizerDbContext> options) : base(options) { }
 
@@ -22,6 +23,7 @@ namespace Quizer.Infrastructure.Persistance
             base.OnModelCreating(modelBuilder);
         }
 
+        public override DbSet<User> Users { get; set; }
         public DbSet<Quiz> Quizes { get; set; }
     }
 }

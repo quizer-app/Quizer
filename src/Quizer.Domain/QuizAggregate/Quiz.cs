@@ -1,7 +1,6 @@
 ﻿using Quizer.Domain.Common.Models;
 using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuizAggregate.Entities;
-using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Domain.QuizAggregate
 {

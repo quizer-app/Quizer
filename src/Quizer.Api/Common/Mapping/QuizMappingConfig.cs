@@ -12,7 +12,7 @@ namespace Quizer.Api.Common.Mapping
         {
             config.NewConfig<CreateQuizRequest, CreateQuizCommand>();
             config.NewConfig<Quiz, QuizResponse>()
-                .Map(dest => dest.Id, src => src.Id.Value)
+                .Map(dest => dest.Id, src => src.Id.Value.ToString())
                 .Map(dest => dest.AverageRating, src => src.AverageRating.Value);
 
             config.NewConfig<Question, QuestionResponse>()

@@ -4,8 +4,8 @@
         string Id,
         string Name,
         string Description,
-        float? AverageRating,
-        List<QuestionResponse> Questions
+        double AverageRating,
+        IReadOnlyList<QuestionResponse> Questions
         );
 
     public record QuestionResponse(

@@ -4,7 +4,6 @@ using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuizAggregate;
 using Quizer.Domain.QuizAggregate.Entities;
-using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Quizes.Commands.CreateQuiz
 {
@@ -22,7 +21,7 @@ namespace Quizer.Application.Quizes.Commands.CreateQuiz
             var quiz = Quiz.Create(
                 request.Name,
                 request.Description,
-                new Guid(request.UserId),
+                request.UserId,
                 AverageRating.CreateNew(),
                 request.Questions
                     .ConvertAll(q => Question.Create(

@@ -6,10 +6,7 @@ namespace Quizer.Application.Authentication.Commands
     {
         public RegisterCommandValidator()
         {
-            RuleFor(x => x.FirstName)
-                .NotEmpty();
-
-            RuleFor(x => x.LastName)
+            RuleFor(x => x.Username)
                 .NotEmpty();
 
             RuleFor(x => x.Email)

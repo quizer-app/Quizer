@@ -5,8 +5,7 @@ using Quizer.Application.Authentication.Common;
 namespace Quizer.Application.Authentication.Commands
 {
     public record RegisterCommand(
-        string FirstName,
-        string LastName,
+        string Username,
         string Email,
         string Password
         ) : IRequest<ErrorOr<AuthenticationResult>>;

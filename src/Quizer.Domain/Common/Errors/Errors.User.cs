@@ -9,6 +9,10 @@ namespace Quizer.Domain.Common.Errors
             public static Error DuplicateEmail => Error.Conflict(
                 code: "User.DuplicateEmail",
                 description: "Email is already taken.");
+
+            public static Error DuplicateUsername => Error.Conflict(
+                code: "User.DuplicateUsername",
+                description: "Username is already taken.");
         }
     }
 }
