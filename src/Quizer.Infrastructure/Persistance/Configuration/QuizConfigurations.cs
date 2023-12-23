@@ -61,6 +61,8 @@ namespace Quizer.Infrastructure.Persistance.Configuration
                 .HasMaxLength(100)
                 .IsRequired();
 
+            builder.HasIndex(q => q.Name).IsUnique();
+
             builder.Property(q => q.Description)
                 .HasMaxLength(1000)
                 .IsRequired();
