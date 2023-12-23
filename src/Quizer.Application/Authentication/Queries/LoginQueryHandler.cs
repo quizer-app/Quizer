@@ -2,9 +2,6 @@
 using MediatR;
 using Quizer.Application.Authentication.Common;
 using Quizer.Application.Common.Interfaces.Authentication;
-using Quizer.Application.Common.Interfaces.Persistance;
-using Quizer.Domain.Common.Errors;
-using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Authentication.Queries
 {

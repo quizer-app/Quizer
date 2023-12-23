@@ -1,9 +1,8 @@
 ﻿namespace Quizer.Contracts.Authentication
 {
-    public record AuthenticationResponse(
+    public record LoginResponse(
         Guid Id,
-        string FirstName,
-        string LastName,
+        string UserName,
         string Email,
         string Token
     );
