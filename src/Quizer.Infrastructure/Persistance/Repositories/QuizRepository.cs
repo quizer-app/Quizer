@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.QuizAggregate;
-using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Infrastructure.Persistance.Repositories
 {
@@ -30,7 +29,7 @@ namespace Quizer.Infrastructure.Persistance.Repositories
             return await _context.Quizes.FirstOrDefaultAsync(q => q.Name == name);
         }
 
-        public async Task<List<Quiz>> GetAll(UserId? userId = null)
+        public async Task<List<Quiz>> GetAll(Guid? userId = null)
         {
             if(userId is null)
                 return await _context.Quizes.ToListAsync();

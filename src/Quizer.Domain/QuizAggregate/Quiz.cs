@@ -9,7 +9,7 @@ namespace Quizer.Domain.QuizAggregate
     {
         private readonly List<Question> _questions = new();
 
-        public UserId UserId { get; private set; }
+        public Guid UserId { get; private set; }
 
         public string Name { get; private set; }
         public string Description { get; private set; }
@@ -21,7 +21,7 @@ namespace Quizer.Domain.QuizAggregate
 
         private Quiz(
             QuizId id,
-            UserId userId,
+            Guid userId,
             string name,
             string description,
             AverageRating averageRating,
@@ -41,7 +41,7 @@ namespace Quizer.Domain.QuizAggregate
         public static Quiz Create(
             string name,
             string description,
-            UserId userId,
+            Guid userId,
             AverageRating averageRating,
             List<Question> questions)
         {

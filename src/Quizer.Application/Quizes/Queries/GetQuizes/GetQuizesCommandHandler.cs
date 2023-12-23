@@ -17,7 +17,7 @@ namespace Quizer.Application.Quizes.Queries.GetQuizes
 
         public async Task<ErrorOr<List<Quiz>>> Handle(GetQuizesQuery request, CancellationToken cancellationToken)
         {
-            UserId? userId = request.UserId is null ? null : UserId.Create(new Guid(request.UserId));
+            Guid? userId = request.UserId is null ? null : new Guid(request.UserId);
             return await _quizRepository.GetAll(userId);
         }
     }

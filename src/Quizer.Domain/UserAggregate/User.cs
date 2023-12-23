@@ -2,7 +2,7 @@
 
 namespace Quizer.Domain.UserAggregate
 {
-    public class User : IdentityUser<UserId>
+    public class User : IdentityUser
     {
         public User() : base()
         {

@@ -22,7 +22,7 @@ namespace Quizer.Application.Quizes.Commands.CreateQuiz
             var quiz = Quiz.Create(
                 request.Name,
                 request.Description,
-                UserId.Create(new Guid(request.UserId)),
+                new Guid(request.UserId),
                 AverageRating.CreateNew(),
                 request.Questions
                     .ConvertAll(q => Question.Create(
