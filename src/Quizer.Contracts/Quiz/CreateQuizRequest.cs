@@ -7,6 +7,6 @@
         );
 
     public record QuestionRequest(
-        string QuestionText,
+        string Question,
         string Answer);
 }

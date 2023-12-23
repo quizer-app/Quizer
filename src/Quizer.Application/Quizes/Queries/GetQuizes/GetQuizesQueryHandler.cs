@@ -2,15 +2,14 @@
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.QuizAggregate;
-using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Quizes.Queries.GetQuizes
 {
-    public class GetQuizesCommandHandler : IRequestHandler<GetQuizesQuery, ErrorOr<List<Quiz>>>
+    public class GetQuizesQueryHandler : IRequestHandler<GetQuizesQuery, ErrorOr<List<Quiz>>>
     {
         private readonly IQuizRepository _quizRepository;
 
-        public GetQuizesCommandHandler(IQuizRepository quizRepository)
+        public GetQuizesQueryHandler(IQuizRepository quizRepository)
         {
             _quizRepository = quizRepository;
         }
