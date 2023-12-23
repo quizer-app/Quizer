@@ -7,10 +7,14 @@ namespace Quizer.Application.Authentication.Commands
         public RegisterCommandValidator()
         {
             RuleFor(x => x.Username)
-                .NotEmpty();
+                .NotEmpty()
+                .MinimumLength(5)
+                .MaximumLength(50);
 
             RuleFor(x => x.Email)
                 .NotEmpty()
+                .MinimumLength(5)
+                .MaximumLength(100)
                 .EmailAddress();
 
             RuleFor(x => x.Password)

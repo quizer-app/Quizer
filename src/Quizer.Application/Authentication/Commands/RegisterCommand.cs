@@ -1,6 +1,5 @@
 ﻿using ErrorOr;
 using MediatR;
-using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Authentication.Commands
 {
@@ -8,5 +7,5 @@ namespace Quizer.Application.Authentication.Commands
         string Username,
         string Email,
         string Password
-        ) : IRequest<ErrorOr<User>>;
+        ) : IRequest<ErrorOr<RegisterResult>>;
 }

@@ -7,7 +7,7 @@ using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Authentication.Commands
 {
-    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<User>>
+    public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<RegisterResult>>
     {
         private readonly UserManager<User> _userManager;
         private readonly ILogger<RegisterCommandHandler> _logger;
@@ -18,7 +18,7 @@ namespace Quizer.Application.Authentication.Commands
             _logger = logger;
         }
 
-        public async Task<ErrorOr<User>> Handle(RegisterCommand command, CancellationToken cancellationToken)
+        public async Task<ErrorOr<RegisterResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
         {
             if ((await _userManager.FindByEmailAsync(command.Email)) is not null)
                 return Errors.User.DuplicateEmail;
@@ -34,7 +34,7 @@ namespace Quizer.Application.Authentication.Commands
 
             _logger.LogInformation("Registered: {@Result}", result);
 
-            return user;
+            return new RegisterResult(user);
         }
     }
 }

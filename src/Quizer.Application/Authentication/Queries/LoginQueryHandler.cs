@@ -1,36 +1,41 @@
 ﻿using ErrorOr;
 using MediatR;
-using Quizer.Application.Authentication.Common;
+using Microsoft.AspNetCore.Identity;
 using Quizer.Application.Common.Interfaces.Authentication;
+using Quizer.Domain.Common.Errors;
+using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Authentication.Queries
 {
-    public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<AuthenticationResult>>
+    public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult>>
     {
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public LoginQueryHandler(IJwtTokenGenerator jwtTokenGenerator)
+        public LoginQueryHandler(IJwtTokenGenerator jwtTokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _jwtTokenGenerator = jwtTokenGenerator;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
-        public async Task<ErrorOr<AuthenticationResult>> Handle(LoginQuery query, CancellationToken cancellation)
+        public async Task<ErrorOr<LoginResult>> Handle(LoginQuery query, CancellationToken cancellation)
         {
-            //if (await _userRepository.GetUserByEmail(query.Email) is not User user)
-            //{
-            //    return Errors.Authentication.InvalidCredentials;
-            //}
+            var user = await _userManager.FindByEmailAsync(query.Email);
+            if (user is null)
+                return Errors.Authentication.InvalidCredentials;
 
-            //if(user.Password != query.Password)
-            //{
-            //    return Errors.Authentication.InvalidCredentials;
-            //}
+            var result = await _signInManager.PasswordSignInAsync(user, query.Password, isPersistent: false, lockoutOnFailure: false);
 
-            //var token = _jwtTokenGenerator.GenerateToken(user);
+            if (!result.Succeeded)
+                return Errors.Authentication.InvalidCredentials;
 
-            return new AuthenticationResult(
-                null,
-                string.Empty);
+            var token = _jwtTokenGenerator.GenerateToken(user);
+
+            return new LoginResult(
+                user,
+                token);
         }
     }
 }

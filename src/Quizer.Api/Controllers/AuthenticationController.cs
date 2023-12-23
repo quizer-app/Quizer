@@ -29,7 +29,7 @@ namespace Quizer.Api.Controllers
             var authResult = await _mediator.Send(command);
 
             return authResult.Match(
-                authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+                authResult => Ok(_mapper.Map<RegisterResponse>(authResult)),
                 Problem
                 );
         }
@@ -42,7 +42,7 @@ namespace Quizer.Api.Controllers
             var authResult = await _mediator.Send(query);
 
             return authResult.Match(
-                authResult => Ok(_mapper.Map<AuthenticationResponse>(authResult)),
+                authResult => Ok(_mapper.Map<LoginResponse>(authResult)),
                 Problem
                 );
         }

@@ -1,6 +1,5 @@
 ﻿using Mapster;
 using Quizer.Application.Authentication.Commands;
-using Quizer.Application.Authentication.Common;
 using Quizer.Application.Authentication.Queries;
 using Quizer.Contracts.Authentication;
 
@@ -14,7 +13,10 @@ namespace Quizer.Api.Common.Mapping
 
             config.NewConfig<LoginRequest, LoginQuery>();
 
-            config.NewConfig<AuthenticationResult, AuthenticationResponse>()
+            config.NewConfig<LoginResult, LoginResponse>()
+                .Map(dest => dest, src => src.User);
+
+            config.NewConfig<RegisterResult, RegisterResponse>()
                 .Map(dest => dest, src => src.User);
         }
     }
