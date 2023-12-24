@@ -1,6 +1,7 @@
 ﻿using Quizer.Domain.Common.Models;
 using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuizAggregate.Entities;
+using Quizer.Domain.QuizAggregate.Events;
 
 namespace Quizer.Domain.QuizAggregate
 {
@@ -44,7 +45,7 @@ namespace Quizer.Domain.QuizAggregate
             AverageRating averageRating,
             List<Question> questions)
         {
-            return new(
+            var quiz = new Quiz(
                 QuizId.CreateUnique(),
                 userId,
                 name,
@@ -53,6 +54,10 @@ namespace Quizer.Domain.QuizAggregate
                 questions,
                 DateTime.UtcNow,
                 DateTime.UtcNow);
+
+            quiz.AddDomainEvent(new QuizCreated(quiz));
+
+            return quiz;
         }
 
 #pragma warning disable CS8618

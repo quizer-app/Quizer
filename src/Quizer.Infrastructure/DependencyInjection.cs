@@ -11,6 +11,7 @@ using Quizer.Application.Common.Interfaces.Services;
 using Quizer.Domain.UserAggregate;
 using Quizer.Infrastructure.Authentication;
 using Quizer.Infrastructure.Persistance;
+using Quizer.Infrastructure.Persistance.Interceptors;
 using Quizer.Infrastructure.Persistance.Repositories;
 using Quizer.Infrastructure.Services;
 using System.Text;
@@ -48,6 +49,8 @@ namespace Quizer.Infrastructure
                 .AddDefaultTokenProviders()
                 .AddUserManager<UserManager<User>>()
                 .AddSignInManager<SignInManager<User>>();
+
+            services.AddScoped<PublishDomainEventsInterceptor>();
 
             services.AddScoped<IQuizRepository, QuizRepository>();
 

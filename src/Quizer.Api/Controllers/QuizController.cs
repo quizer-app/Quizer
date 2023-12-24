@@ -14,10 +14,10 @@ namespace Quizer.Api.Controllers
     
     public class QuizController : ApiController
     {
-        private readonly IMediator _mediator;
+        private readonly ISender _mediator;
         private readonly IMapper _mapper;
 
-        public QuizController(IMediator mediator, IMapper mapper)
+        public QuizController(ISender mediator, IMapper mapper)
         {
             _mediator = mediator;
             _mapper = mapper;
