@@ -35,9 +35,9 @@ namespace Quizer.Api.Controllers
                 Problem);
         }
 
-        [HttpGet("id/{id}")]
+        [HttpGet("id/{id:guid}")]
         [AllowAnonymous]
-        public async Task<IActionResult> GetQuizById(string id)
+        public async Task<IActionResult> GetQuizById(Guid id)
         {
             var query = new GetQuizQuery(id, null);
             var result = await _mediator.Send(query);
@@ -70,6 +70,12 @@ namespace Quizer.Api.Controllers
             return result.Match(
                 quiz => Ok(_mapper.Map<QuizResponse>(quiz)),
                 Problem);
+        }
+
+        [HttpDelete("{id:guid}")]
+        public async Task<IActionResult> DeleteQuiz(Guid id)
+        {
+            var command = new DeleteQuizCommand(id);
         }
     }
 }

@@ -5,6 +5,6 @@ using Quizer.Domain.QuizAggregate;
 namespace Quizer.Application.Quizes.Queries.GetQuiz
 {
     public record GetQuizQuery(
-        string? QuizId,
+        Guid? QuizId,
         string? Name) : IRequest<ErrorOr<Quiz>>;
 }

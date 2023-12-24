@@ -16,26 +16,19 @@ namespace Quizer.Domain.QuizAggregate
         public AverageRating AverageRating { get; private set; }
         public IReadOnlyList<Question> Questions => _questions.AsReadOnly();
 
-        public DateTime CreatedAt { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
-
         private Quiz(
             QuizId id,
             Guid userId,
             string name,
             string description,
             AverageRating averageRating,
-            List<Question> questions,
-            DateTime createdAt,
-            DateTime updatedAt) : base(id)
+            List<Question> questions) : base(id)
         {
             Name = name;
             UserId = userId;
             Description = description;
             AverageRating = averageRating;
             _questions = questions;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
         }
 
         public static Quiz Create(
@@ -51,13 +44,27 @@ namespace Quizer.Domain.QuizAggregate
                 name,
                 description,
                 averageRating,
-                questions,
-                DateTime.UtcNow,
-                DateTime.UtcNow);
+                questions);
 
             quiz.AddDomainEvent(new QuizCreated(quiz));
 
             return quiz;
+        }
+
+        public void Update(
+            string name,
+            string description)
+        {
+            base.Update();
+            Name = name;
+            Description = description;
+
+            this.AddDomainEvent(new QuizUpdated(this));
+        }
+
+        public static void Delete(Quiz quiz)
+        {
+            quiz.AddDomainEvent(new QuizDeleted(quiz));
         }
 
 #pragma warning disable CS8618

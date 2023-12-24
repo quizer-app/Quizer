@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using Quizer.Application.Quizes.Commands.CreateQuiz;
+using Quizer.Application.Quizes.Commands.DeleteQuiz;
 using Quizer.Contracts.Quiz;
 using Quizer.Domain.QuizAggregate;
 using Quizer.Domain.QuizAggregate.Entities;
@@ -10,7 +11,7 @@ namespace Quizer.Api.Common.Mapping
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<(CreateQuizRequest Request, string UserId), CreateQuizCommand>()
+            config.NewConfig<(CreateQuizRequest Request, string UserId), DeleteQuizCommand>()
                 .Map(dest => dest.UserId, src => new Guid(src.UserId))
                 .Map(dest => dest, src => src.Request);
 

@@ -1,4 +1,5 @@
 ﻿using Quizer.Domain.Common.Models;
+using Quizer.Domain.QuizAggregate.Events;
 using Quizer.Domain.QuizAggregate.ValueObjects;
 
 namespace Quizer.Domain.QuizAggregate.Entities
@@ -16,7 +17,25 @@ namespace Quizer.Domain.QuizAggregate.Entities
 
         public static Question Create(string questionText, string answer)
         {
-            return new(QuestionId.CreateUnique(), questionText, answer);
+            var question = new Question(QuestionId.CreateUnique(), questionText, answer);
+
+            question.AddDomainEvent(new QuestionCreated(question));
+
+            return question;
+        }
+
+        public void Update(string questionText, string answer)
+        {
+            base.Update();
+            QuestionText = questionText;
+            Answer = answer;
+
+            this.AddDomainEvent(new QuestionUpdated(this));
+        }
+
+        public static void Delete(Question question)
+        {
+            question.AddDomainEvent(new QuestionDeleted(question));
         }
 
 #pragma warning disable CS8618

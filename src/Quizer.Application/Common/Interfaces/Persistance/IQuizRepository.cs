@@ -8,5 +8,6 @@ namespace Quizer.Application.Common.Interfaces.Persistance
         Task<List<Quiz>> GetAll(Guid? userId = null);
         Task<Quiz?> Get(QuizId id);
         Task<Quiz?> Get(string name);
+        void Delete(Quiz quiz);
     }
 }

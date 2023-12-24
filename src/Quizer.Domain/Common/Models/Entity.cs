@@ -6,11 +6,19 @@
         private readonly List<IDomainEvent> _domainEvents = new();
         public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
         public TId Id { get; protected set; }
-
+        public DateTime CreatedAt { get; private set; }
+        public DateTime UpdatedAt { get; private set; }
 
         protected Entity(TId id)
         {
             Id = id;
+            CreatedAt = DateTime.Now;
+            UpdatedAt = DateTime.Now;
+        }
+
+        public void Update()
+        {
+            UpdatedAt = DateTime.Now;
         }
 
         public override bool Equals(object? obj)

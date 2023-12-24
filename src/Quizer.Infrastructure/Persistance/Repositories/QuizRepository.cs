@@ -16,7 +16,11 @@ namespace Quizer.Infrastructure.Persistance.Repositories
         public async Task Add(Quiz quiz)
         {
             await _context.Quizes.AddAsync(quiz);
-            await _context.SaveChangesAsync();
+        }
+
+        public void Delete(Quiz quiz)
+        {
+            _context.Quizes.Remove(quiz);
         }
 
         public async Task<Quiz?> Get(QuizId id)
