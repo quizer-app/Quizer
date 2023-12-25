@@ -1,9 +1,8 @@
 ﻿using Quizer.Domain.UserAggregate;
 
-namespace Quizer.Application.Common.Interfaces.Authentication
+namespace Quizer.Application.Common.Interfaces.Authentication;
+
+public interface IJwtTokenGenerator
 {
-    public interface IJwtTokenGenerator
-    {
-        string GenerateToken(User user);
-    }
+    string GenerateToken(User user);
 }

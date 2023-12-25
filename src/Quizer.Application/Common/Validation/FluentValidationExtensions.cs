@@ -1,16 +1,15 @@
 ﻿using FluentValidation;
 
-namespace Quizer.Application.Common.Validation
+namespace Quizer.Application.Common.Validation;
+
+public static class FluentValidationExtensions
 {
-    public static class FluentValidationExtensions
+    public static IRuleBuilderOptions<T, string?> BeValidGuid<T>(this IRuleBuilder<T, string?> ruleBuilder)
     {
-        public static IRuleBuilderOptions<T, string?> BeValidGuid<T>(this IRuleBuilder<T, string?> ruleBuilder)
+        return ruleBuilder.Must((rootObject, propertyValue, context) =>
         {
-            return ruleBuilder.Must((rootObject, propertyValue, context) =>
-            {
-                return propertyValue is null || Guid.TryParse(propertyValue?.ToString(), out _);
-            })
-            .WithMessage("Invalid GUID format.");
-        }
+            return propertyValue is null || Guid.TryParse(propertyValue?.ToString(), out _);
+        })
+        .WithMessage("Invalid GUID format.");
     }
 }

@@ -1,8 +1,7 @@
 ﻿
-namespace Quizer.Application.Common.Interfaces.Persistance
+namespace Quizer.Application.Common.Interfaces.Persistance;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        Task SaveChangesAsync(CancellationToken cancellationToken = default);
-    }
+    Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }

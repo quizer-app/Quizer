@@ -1,15 +1,14 @@
 ﻿using FluentValidation;
 using Quizer.Application.Common.Validation;
 
-namespace Quizer.Application.Quizes.Queries.GetQuizes
+namespace Quizer.Application.Quizes.Queries.GetQuizes;
+
+public class GetQuizesValidator : AbstractValidator<GetQuizesQuery>
 {
-    public class GetQuizesValidator : AbstractValidator<GetQuizesQuery>
+    public GetQuizesValidator()
     {
-        public GetQuizesValidator()
-        {
-            RuleFor(q => q.UserId)
-                .BeValidGuid()
-                .When(q => !string.IsNullOrEmpty(q.UserId));
-        }
+        RuleFor(q => q.UserId)
+            .BeValidGuid()
+            .When(q => !string.IsNullOrEmpty(q.UserId));
     }
 }

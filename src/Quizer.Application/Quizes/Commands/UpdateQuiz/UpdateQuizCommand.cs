@@ -2,10 +2,9 @@
 using MediatR;
 using Quizer.Domain.QuizAggregate;
 
-namespace Quizer.Application.Quizes.Commands.UpdateQuiz
-{
-    public record UpdateQuizCommand(
-        Guid QuizId,
-        string Name,
-        string Description) : IRequest<ErrorOr<QuizId>>;
-}
+namespace Quizer.Application.Quizes.Commands.UpdateQuiz;
+
+public record UpdateQuizCommand(
+    Guid QuizId,
+    string Name,
+    string Description) : IRequest<ErrorOr<QuizId>>;

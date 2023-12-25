@@ -4,21 +4,20 @@ using Microsoft.Extensions.DependencyInjection;
 using Quizer.Application.Common.Behaviors;
 using System.Reflection;
 
-namespace Quizer.Application
+namespace Quizer.Application;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        public static IServiceCollection AddApplication(this IServiceCollection services)
-        {
-            var assembly = Assembly.GetExecutingAssembly();
+        var assembly = Assembly.GetExecutingAssembly();
 
-            services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly));
+        services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly));
 
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
 
-            services.AddValidatorsFromAssembly(assembly);
-            return services;
-        }
+        services.AddValidatorsFromAssembly(assembly);
+        return services;
     }
 }

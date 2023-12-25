@@ -2,38 +2,37 @@
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
 
-namespace Quizer.Application.Common.Behaviors
+namespace Quizer.Application.Common.Behaviors;
+
+public sealed class UnitOfWorkBehavior<TRequest, TResponse> :
+    IPipelineBehavior<TRequest, TResponse>
+        where TRequest : IRequest<TResponse>
+        where TResponse : IErrorOr
 {
-    public sealed class UnitOfWorkBehavior<TRequest, TResponse> :
-        IPipelineBehavior<TRequest, TResponse>
-            where TRequest : IRequest<TResponse>
-            where TResponse : IErrorOr
+    private readonly IUnitOfWork _unitOfWork;
+
+    public UnitOfWorkBehavior(IUnitOfWork unitOfWork)
     {
-        private readonly IUnitOfWork _unitOfWork;
+        _unitOfWork = unitOfWork;
+    }
 
-        public UnitOfWorkBehavior(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
+    public async Task<TResponse> Handle(
+        TRequest request,
+        RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken)
+    {
+        if (IsNotCommand())
+            return await next();
 
-        public async Task<TResponse> Handle(
-            TRequest request,
-            RequestHandlerDelegate<TResponse> next,
-            CancellationToken cancellationToken)
-        {
-            if (IsNotCommand())
-                return await next();
+        var result = await next();
 
-            var result = await next();
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+        return result;
+    }
 
-            return result;
-        }
-
-        private static bool IsNotCommand()
-        {
-            return !typeof(TRequest).Name.EndsWith("Command");
-        }
+    private static bool IsNotCommand()
+    {
+        return !typeof(TRequest).Name.EndsWith("Command");
     }
 }
