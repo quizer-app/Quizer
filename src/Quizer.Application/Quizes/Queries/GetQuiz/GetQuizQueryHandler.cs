@@ -25,7 +25,7 @@ namespace Quizer.Application.Quizes.Queries.GetQuiz
             }
             if (request.QuizId is not null)
             {
-                var quiz = await _quizRepository.Get(QuizId.Create(new Guid(request.QuizId)));
+                var quiz = await _quizRepository.Get(QuizId.Create((Guid)request.QuizId));
                 if (quiz is null) return Errors.Quiz.NotFound;
                 return quiz;
             }

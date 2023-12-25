@@ -1,13 +1,14 @@
 ﻿using ErrorOr;
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
+using Quizer.Domain.Common.Errors;
 using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuizAggregate;
 using Quizer.Domain.QuizAggregate.Entities;
 
 namespace Quizer.Application.Quizes.Commands.CreateQuiz
 {
-    public class CreateQuizCommandHandler : IRequestHandler<CreateQuizCommand, ErrorOr<Quiz>>
+    public class CreateQuizCommandHandler : IRequestHandler<CreateQuizCommand, ErrorOr<QuizId>>
     {
         private readonly IQuizRepository _quizRepository;
 
@@ -16,7 +17,7 @@ namespace Quizer.Application.Quizes.Commands.CreateQuiz
             _quizRepository = quizRepository;
         }
 
-        public async Task<ErrorOr<Quiz>> Handle(CreateQuizCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<QuizId>> Handle(CreateQuizCommand request, CancellationToken cancellationToken)
         {
             var quiz = Quiz.Create(
                 request.Name,
@@ -30,7 +31,7 @@ namespace Quizer.Application.Quizes.Commands.CreateQuiz
 
             await _quizRepository.Add(quiz);
 
-            return quiz;
+            return (QuizId)quiz.Id;
         }
     }
 }

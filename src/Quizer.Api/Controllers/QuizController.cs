@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Quizes.Commands.CreateQuiz;
+using Quizer.Application.Quizes.Commands.DeleteQuiz;
 using Quizer.Application.Quizes.Queries.GetQuiz;
 using Quizer.Application.Quizes.Queries.GetQuizes;
 using Quizer.Contracts.Quiz;
@@ -68,7 +69,7 @@ namespace Quizer.Api.Controllers
             var result = await _mediator.Send(command);
 
             return result.Match(
-                quiz => Ok(_mapper.Map<QuizResponse>(quiz)),
+                quizId => Ok(_mapper.Map<QuizIdResponse>(quizId)),
                 Problem);
         }
 
@@ -76,6 +77,11 @@ namespace Quizer.Api.Controllers
         public async Task<IActionResult> DeleteQuiz(Guid id)
         {
             var command = new DeleteQuizCommand(id);
+            var result = await _mediator.Send(command);
+
+            return result.Match(
+                quizId => Ok(_mapper.Map<QuizIdResponse>(quizId)),
+                Problem);
         }
     }
 }

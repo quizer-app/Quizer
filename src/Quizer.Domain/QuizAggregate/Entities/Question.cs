@@ -33,9 +33,9 @@ namespace Quizer.Domain.QuizAggregate.Entities
             this.AddDomainEvent(new QuestionUpdated(this));
         }
 
-        public static void Delete(Question question)
+        public void Delete()
         {
-            question.AddDomainEvent(new QuestionDeleted(question));
+            this.AddDomainEvent(new QuestionDeleted(this));
         }
 
 #pragma warning disable CS8618

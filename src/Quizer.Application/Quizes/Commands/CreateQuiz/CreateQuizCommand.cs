@@ -9,7 +9,7 @@ namespace Quizer.Application.Quizes.Commands.CreateQuiz
         string Description,
         Guid UserId,
         List<QuestionCommand> Questions
-        ) : IRequest<ErrorOr<Quiz>>;
+        ) : IRequest<ErrorOr<QuizId>>;
 
     public record QuestionCommand(
         string QuestionText,

@@ -62,9 +62,9 @@ namespace Quizer.Domain.QuizAggregate
             this.AddDomainEvent(new QuizUpdated(this));
         }
 
-        public static void Delete(Quiz quiz)
+        public void Delete()
         {
-            quiz.AddDomainEvent(new QuizDeleted(quiz));
+            this.AddDomainEvent(new QuizDeleted(this));
         }
 
 #pragma warning disable CS8618
