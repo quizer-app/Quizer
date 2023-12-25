@@ -1,4 +1,5 @@
 using Quizer.Api;
+using Quizer.Api.Common.Settings;
 using Quizer.Application;
 using Quizer.Infrastructure;
 using Serilog;
@@ -18,11 +19,14 @@ var builder = WebApplication.CreateBuilder(args);
 Log.Logger =
     new LoggerConfiguration()
         .ReadFrom.Configuration(builder.Configuration)
-        .CreateLogger();
+.CreateLogger();
+
+var swaggerSettings = new SwaggerSettings();
+builder.Configuration.Bind(SwaggerSettings.SectionName, swaggerSettings);
 
 var app = builder.Build();
 {
-    if (app.Environment.IsDevelopment())
+    if (swaggerSettings.Enabled)
     {
         app.UseSwagger();
         app.UseSwaggerUI();
