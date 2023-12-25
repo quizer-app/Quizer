@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>d5aba78c-3529-4cb4-8caf-891dfecd83de</UserSecretsId>
-	<ContainerImageTags>1.0.0;latest</ContainerImageTags>
+	<ContainerImageTags>latest</ContainerImageTags>
 	<ContainerRegistry>ghcr.io</ContainerRegistry>
 	<ContainerRepository>quizer-app/quizer</ContainerRepository>
   </PropertyGroup>
