@@ -1,7 +1,6 @@
-﻿namespace Quizer.Api.Common.Http
+﻿namespace Quizer.Api.Common.Http;
+
+public static class HttpContextItemKeys
 {
-    public static class HttpContextItemKeys
-    {
-        public const string Errors = "errors";
-    }
+    public const string Errors = "errors";
 }

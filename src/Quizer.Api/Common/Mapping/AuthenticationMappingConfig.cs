@@ -3,21 +3,20 @@ using Quizer.Application.Authentication.Commands;
 using Quizer.Application.Authentication.Queries;
 using Quizer.Contracts.Authentication;
 
-namespace Quizer.Api.Common.Mapping
+namespace Quizer.Api.Common.Mapping;
+
+public class AuthenticationMappingConfig : IRegister
 {
-    public class AuthenticationMappingConfig : IRegister
+    public void Register(TypeAdapterConfig config)
     {
-        public void Register(TypeAdapterConfig config)
-        {
-            config.NewConfig<RegisterRequest, RegisterCommand>();
+        config.NewConfig<RegisterRequest, RegisterCommand>();
 
-            config.NewConfig<LoginRequest, LoginQuery>();
+        config.NewConfig<LoginRequest, LoginQuery>();
 
-            config.NewConfig<LoginResult, LoginResponse>()
-                .Map(dest => dest, src => src.User);
+        config.NewConfig<LoginResult, LoginResponse>()
+            .Map(dest => dest, src => src.User);
 
-            config.NewConfig<RegisterResult, RegisterResponse>()
-                .Map(dest => dest, src => src.User);
-        }
+        config.NewConfig<RegisterResult, RegisterResponse>()
+            .Map(dest => dest, src => src.User);
     }
 }

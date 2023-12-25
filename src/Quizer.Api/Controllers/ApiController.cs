@@ -4,56 +4,55 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Quizer.Api.Common.Http;
 
-namespace Quizer.Api.Controllers
+namespace Quizer.Api.Controllers;
+
+[ApiController]
+[Authorize]
+public class ApiController : ControllerBase
 {
-    [ApiController]
-    [Authorize]
-    public class ApiController : ControllerBase
+    protected IActionResult Problem(List<Error> errors)
     {
-        protected IActionResult Problem(List<Error> errors)
+        if(errors.Count == 0)
         {
-            if(errors.Count == 0)
-            {
-                return Problem();
-            }
-
-            if (errors.All(error => error.Type == ErrorType.Validation))
-            {
-                return ValidationProblem(errors);
-            }
-
-            HttpContext.Items.Add(HttpContextItemKeys.Errors, errors);
-            
-            return Problem(errors[0]);
+            return Problem();
         }
 
-        private IActionResult Problem(Error error)
+        if (errors.All(error => error.Type == ErrorType.Validation))
         {
-            var statusCode = error.Type switch
-            {
-                ErrorType.Failure => StatusCodes.Status500InternalServerError,
-                ErrorType.Unexpected => StatusCodes.Status500InternalServerError,
-                ErrorType.Validation => StatusCodes.Status400BadRequest,
-                ErrorType.Conflict => StatusCodes.Status409Conflict,
-                ErrorType.NotFound => StatusCodes.Status404NotFound,
-                ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
-                _ => StatusCodes.Status500InternalServerError
-            };
-
-            return Problem(statusCode: statusCode, title: error.Description);
+            return ValidationProblem(errors);
         }
 
-        private IActionResult ValidationProblem(List<Error> errors)
-        {
-            var modelState = new ModelStateDictionary();
+        HttpContext.Items.Add(HttpContextItemKeys.Errors, errors);
+        
+        return Problem(errors[0]);
+    }
 
-            foreach (var error in errors)
-            {
-                modelState.AddModelError(
-                    error.Code,
-                    error.Description);
-            }
-            return ValidationProblem(modelState);
+    private IActionResult Problem(Error error)
+    {
+        var statusCode = error.Type switch
+        {
+            ErrorType.Failure => StatusCodes.Status500InternalServerError,
+            ErrorType.Unexpected => StatusCodes.Status500InternalServerError,
+            ErrorType.Validation => StatusCodes.Status400BadRequest,
+            ErrorType.Conflict => StatusCodes.Status409Conflict,
+            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            ErrorType.Unauthorized => StatusCodes.Status401Unauthorized,
+            _ => StatusCodes.Status500InternalServerError
+        };
+
+        return Problem(statusCode: statusCode, title: error.Description);
+    }
+
+    private IActionResult ValidationProblem(List<Error> errors)
+    {
+        var modelState = new ModelStateDictionary();
+
+        foreach (var error in errors)
+        {
+            modelState.AddModelError(
+                error.Code,
+                error.Description);
         }
+        return ValidationProblem(modelState);
     }
 }

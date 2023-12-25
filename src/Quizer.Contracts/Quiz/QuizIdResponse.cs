@@ -1,4 +1,3 @@
-﻿namespace Quizer.Contracts.Quiz
-{
-    public record QuizIdResponse(string Id);
-}
+﻿namespace Quizer.Contracts.Quiz;
+
+public record QuizIdResponse(string Id);
