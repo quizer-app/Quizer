@@ -15,6 +15,7 @@ namespace Quizer.Application
             services.AddMediatR(config => config.RegisterServicesFromAssembly(assembly));
 
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
 
             services.AddValidatorsFromAssembly(assembly);
             return services;

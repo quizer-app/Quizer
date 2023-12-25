@@ -16,7 +16,7 @@
             UpdatedAt = DateTime.Now;
         }
 
-        public void Update()
+        protected void Update()
         {
             UpdatedAt = DateTime.Now;
         }

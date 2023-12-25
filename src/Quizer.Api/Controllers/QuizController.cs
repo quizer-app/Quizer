@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Quizes.Commands.CreateQuiz;
 using Quizer.Application.Quizes.Commands.DeleteQuiz;
+using Quizer.Application.Quizes.Commands.UpdateQuiz;
 using Quizer.Application.Quizes.Queries.GetQuiz;
 using Quizer.Application.Quizes.Queries.GetQuizes;
 using Quizer.Contracts.Quiz;
@@ -66,6 +67,19 @@ namespace Quizer.Api.Controllers
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             var command = _mapper.Map<CreateQuizCommand>((request, userId));
+            var result = await _mediator.Send(command);
+
+            return result.Match(
+                quizId => Ok(_mapper.Map<QuizIdResponse>(quizId)),
+                Problem);
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateQuiz(
+            Guid id,
+            [FromBody] UpdateQuizRequest request)
+        {
+            var command = _mapper.Map<UpdateQuizCommand>((request, id));
             var result = await _mediator.Send(command);
 
             return result.Match(

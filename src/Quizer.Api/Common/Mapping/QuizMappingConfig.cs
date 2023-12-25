@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using Quizer.Application.Quizes.Commands.CreateQuiz;
+using Quizer.Application.Quizes.Commands.UpdateQuiz;
 using Quizer.Contracts.Quiz;
 using Quizer.Domain.QuizAggregate;
 using Quizer.Domain.QuizAggregate.Entities;
@@ -12,6 +13,10 @@ namespace Quizer.Api.Common.Mapping
         {
             config.NewConfig<(CreateQuizRequest Request, string UserId), CreateQuizCommand>()
                 .Map(dest => dest.UserId, src => new Guid(src.UserId))
+                .Map(dest => dest, src => src.Request);
+
+            config.NewConfig<(UpdateQuizRequest Request, Guid QuizId), UpdateQuizCommand>()
+                .Map(dest => dest.QuizId, src => src.QuizId)
                 .Map(dest => dest, src => src.Request);
 
             config.NewConfig<QuestionRequest, QuestionCommand>()
