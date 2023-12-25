@@ -1,8 +1,7 @@
 ﻿using MediatR;
 
-namespace Quizer.Domain.Common.Models
+namespace Quizer.Domain.Common.Models;
+
+public interface IDomainEvent : INotification
 {
-    public interface IDomainEvent : INotification
-    {
-    }
 }

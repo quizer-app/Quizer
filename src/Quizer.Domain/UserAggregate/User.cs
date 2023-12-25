@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Quizer.Domain.UserAggregate
+namespace Quizer.Domain.UserAggregate;
+
+public class User : IdentityUser
 {
-    public class User : IdentityUser
+    public User() : base()
     {
-        public User() : base()
-        {
-            
-        }
+        
     }
 }

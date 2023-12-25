@@ -1,24 +1,23 @@
 ﻿using Quizer.Domain.Common.Models;
 
-namespace Quizer.Domain.Common.ValueObjects
+namespace Quizer.Domain.Common.ValueObjects;
+
+public sealed class Rating : ValueObject
 {
-    public sealed class Rating : ValueObject
+    public Rating(int value)
     {
-        public Rating(int value)
-        {
-            Value = value;
-        }
+        Value = value;
+    }
 
-        public int Value { get; private set; }
+    public int Value { get; private set; }
 
-        public static Rating Create(int value)
-        {
-            return new Rating(value);
-        }
+    public static Rating Create(int value)
+    {
+        return new Rating(value);
+    }
 
-        public override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return Value;
-        }
+    public override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Value;
     }
 }

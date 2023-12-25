@@ -1,9 +1,8 @@
-﻿namespace Quizer.Domain.Common.Models
-{
-    public interface IHasDomainEvents
-    {
-        IReadOnlyList<IDomainEvent> DomainEvents { get; }
+﻿namespace Quizer.Domain.Common.Models;
 
-        public void ClearDomainEvents();
-    }
+public interface IHasDomainEvents
+{
+    IReadOnlyList<IDomainEvent> DomainEvents { get; }
+
+    public void ClearDomainEvents();
 }
