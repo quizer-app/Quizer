@@ -19,6 +19,9 @@ namespace Quizer.Application.Quizes.Commands.CreateQuiz
 
         public async Task<ErrorOr<QuizId>> Handle(CreateQuizCommand request, CancellationToken cancellationToken)
         {
+            if ((await _quizRepository.Get(request.Name)) is not null)
+                return Errors.Quiz.DuplicateName;
+
             var quiz = Quiz.Create(
                 request.Name,
                 request.Description,

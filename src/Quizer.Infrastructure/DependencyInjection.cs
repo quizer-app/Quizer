@@ -52,6 +52,7 @@ namespace Quizer.Infrastructure
 
             services.AddScoped<PublishDomainEventsInterceptor>();
 
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IQuizRepository, QuizRepository>();
 
             return services;
