@@ -24,8 +24,9 @@ public class QuizMappingConfig : IRegister
 
         config.NewConfig<Quiz, QuizResponse>()
             .Map(dest => dest.Id, src => src.Id.Value.ToString())
-            .Map(dest => dest.Id, src => src.UserId.ToString())
-            .Map(dest => dest.AverageRating, src => src.AverageRating.Value);
+            .Map(dest => dest.UserId, src => src.UserId.ToString())
+            .Map(dest => dest.AverageRating, src => src.AverageRating.Value)
+            .Map(dest => dest.NumberOfRatings, src => src.AverageRating.NumRatings);
 
         config.NewConfig<Question, QuestionResponse>()
             .Map(dest => dest.Id, src => src.Id.Value)

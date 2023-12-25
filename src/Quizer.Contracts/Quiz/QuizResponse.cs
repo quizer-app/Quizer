@@ -6,6 +6,7 @@ public record QuizResponse(
     string Name,
     string Description,
     double AverageRating,
+    int NumberOfRatings,
     IReadOnlyList<QuestionResponse> Questions
     );
 

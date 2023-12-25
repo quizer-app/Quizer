@@ -1,7 +1,11 @@
-﻿using Quizer.Domain.Common.Models;
+﻿using ErrorOr;
+using FluentValidation.Results;
+using Quizer.Domain.Common.Models;
 using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuizAggregate.Entities;
 using Quizer.Domain.QuizAggregate.Events;
+using Quizer.Domain.QuizAggregate.Validation;
+using static Quizer.Domain.Common.Errors.Errors;
 
 namespace Quizer.Domain.QuizAggregate;
 
@@ -31,7 +35,14 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         _questions = questions;
     }
 
-    public static Quiz Create(
+    private ErrorOr<bool> Validate()
+    {
+        var validator = new QuizValidator();
+        var validationResult = validator.Validate(this);
+        return base.GetValidationErrors(validationResult);
+    }
+
+    public static ErrorOr<Quiz> Create(
         string name,
         string description,
         Guid userId,
@@ -46,12 +57,15 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
             averageRating,
             questions);
 
+        var result = quiz.Validate();
+        if (result.IsError) return result.Errors;
+
         quiz.AddDomainEvent(new QuizCreated(quiz));
 
         return quiz;
     }
 
-    public void Update(
+    public ErrorOr<bool> Update(
         string name,
         string description)
     {
@@ -59,12 +73,22 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         Name = name;
         Description = description;
 
+        var result = this.Validate();
+        if (result.IsError) return result.Errors;
+
         this.AddDomainEvent(new QuizUpdated(this));
+
+        return true;
     }
 
     public void Delete()
     {
         this.AddDomainEvent(new QuizDeleted(this));
+    }
+
+    public void AddQuestion(Question question)
+    {
+        _questions.Add(question);
     }
 
 #pragma warning disable CS8618

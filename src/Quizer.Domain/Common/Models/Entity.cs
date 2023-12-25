@@ -1,4 +1,8 @@
-﻿namespace Quizer.Domain.Common.Models;
+﻿using ErrorOr;
+using FluentValidation.Results;
+using Quizer.Domain.QuizAggregate.Validation;
+
+namespace Quizer.Domain.Common.Models;
 
 public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
     where TId : notnull
@@ -14,6 +18,21 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
         Id = id;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
+    }
+
+    protected ErrorOr<bool> GetValidationErrors(ValidationResult validationResult)
+    {
+        if (validationResult.IsValid)
+        {
+            return true;
+        }
+
+        var errors = validationResult.Errors
+            .ConvertAll(validationFailure => Error.Validation(
+                validationFailure.PropertyName,
+                validationFailure.ErrorMessage));
+
+        return errors;
     }
 
     protected void Update()

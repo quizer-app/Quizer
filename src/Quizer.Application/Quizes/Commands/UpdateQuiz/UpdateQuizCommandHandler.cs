@@ -24,7 +24,9 @@ public class UpdateQuizCommandHandler : IRequestHandler<UpdateQuizCommand, Error
             return Errors.Quiz.NotFound;
 
         var id = (QuizId)quiz.Id;
-        quiz.Update(request.Name, request.Description);
+
+        var result = quiz.Update(request.Name, request.Description);
+        if (result.IsError) return result.Errors;
         
         return id;
     }

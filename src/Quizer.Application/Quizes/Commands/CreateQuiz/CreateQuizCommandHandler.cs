@@ -22,15 +22,35 @@ public class CreateQuizCommandHandler : IRequestHandler<CreateQuizCommand, Error
         if ((await _quizRepository.Get(request.Name)) is not null)
             return Errors.Quiz.DuplicateName;
 
-        var quiz = Quiz.Create(
+        var errors = new List<Error>();
+
+        var questionResults = request.Questions
+                .ConvertAll(q => Question.Create(
+                    q.QuestionText,
+                    q.Answer));
+
+        foreach (var questionResult in questionResults)
+            if (questionResult.IsError)
+                errors.AddRange(questionResult.Errors);
+
+        var questions = questionResults
+            .ConvertAll(q => q.Value);
+
+        var result = Quiz.Create(
             request.Name,
             request.Description,
             request.UserId,
             AverageRating.CreateNew(),
-            request.Questions
-                .ConvertAll(q => Question.Create(
-                    q.QuestionText,
-                    q.Answer)));
+            questions
+            );
+
+        if (result.IsError)
+            errors.AddRange(result.Errors);
+
+        if(errors.Any())
+            return errors;
+
+        var quiz = result.Value;
 
         await _quizRepository.Add(quiz);
 
