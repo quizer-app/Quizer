@@ -10,9 +10,9 @@ using Quizer.Application.Quizes.Queries.GetQuizes;
 using Quizer.Contracts.Quiz;
 using System.Security.Claims;
 
-namespace Quizer.Api.Controllers;
+namespace Quizer.Api.Controllers.V1;
 
-[Route("[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 
 public class QuizController : ApiController
 {
@@ -31,7 +31,7 @@ public class QuizController : ApiController
     {
         var query = new GetQuizesQuery(userId);
         var result = await _mediator.Send(query);
-        
+
         return result.Match(
             quizes => Ok(_mapper.Map<List<QuizResponse>>(quizes)),
             Problem);

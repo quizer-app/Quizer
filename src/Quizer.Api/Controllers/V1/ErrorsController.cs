@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Quizer.Api.Controllers;
+namespace Quizer.Api.Controllers.V1;
 
 [ApiController]
-[Route("error")]
+[ApiVersion(1.0)]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class ErrorsController : ControllerBase
 {
     [HttpPost]

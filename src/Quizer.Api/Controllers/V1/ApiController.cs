@@ -1,18 +1,20 @@
-﻿using ErrorOr;
+﻿using Asp.Versioning;
+using ErrorOr;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Quizer.Api.Common.Http;
 
-namespace Quizer.Api.Controllers;
+namespace Quizer.Api.Controllers.V1;
 
 [ApiController]
 [Authorize]
+[ApiVersion(1.0)]
 public class ApiController : ControllerBase
 {
     protected IActionResult Problem(List<Error> errors)
     {
-        if(errors.Count == 0)
+        if (errors.Count == 0)
         {
             return Problem();
         }
@@ -23,7 +25,7 @@ public class ApiController : ControllerBase
         }
 
         HttpContext.Items.Add(HttpContextItemKeys.Errors, errors);
-        
+
         return Problem(errors[0]);
     }
 
