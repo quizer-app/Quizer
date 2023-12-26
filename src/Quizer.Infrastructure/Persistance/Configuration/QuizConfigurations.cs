@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Quizer.Domain.QuizAggregate;
-using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Infrastructure.Persistance.Configuration;
 
@@ -10,16 +9,22 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
     public void Configure(EntityTypeBuilder<Quiz> builder)
     {
         ConfigureQuizTable(builder);
-        ConfigureQuestionsTable(builder);
+        ConfigureQuizQuestionIdsTable(builder);
     }
 
-    private static void ConfigureQuestionsTable(EntityTypeBuilder<Quiz> builder)
+    private static void ConfigureQuizQuestionIdsTable(EntityTypeBuilder<Quiz> builder)
     {
-        builder.OwnsMany(q => q.QuestionIds, qb =>
+        builder.OwnsMany(q => q.QuestionIds, qs =>
         {
-            qb.ToTable("QuizQuestionIds");
+            qs.ToTable("QuizQuestionIds");
 
-            // TODO: implement + add config for questions
+            qs.WithOwner().HasForeignKey("QuizId");
+
+            qs.HasKey("Id");
+
+            qs.Property(i => i.Value)
+                .HasColumnName("TestQuestionId")
+                .ValueGeneratedNever();
         });
 
         builder.Metadata.FindNavigation(nameof(Quiz.QuestionIds))!
@@ -32,6 +37,9 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
 
         builder.HasKey(q => q.Id);
 
+        builder.HasIndex(q => new { q.UserName, q.Name })
+            .IsUnique();
+
         builder.Property(q => q.Id)
             .ValueGeneratedNever()
             .HasConversion(
@@ -40,14 +48,10 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
                 );
 
         builder.Property(q => q.Name)
-            .HasMaxLength(100)
-            .IsRequired();
-
-        builder.HasIndex(q => new { q.UserName, q.Name }).IsUnique();
+            .HasMaxLength(100);
 
         builder.Property(q => q.Description)
-            .HasMaxLength(1000)
-            .IsRequired();
+            .HasMaxLength(1000);
 
         builder.OwnsOne(q => q.AverageRating);
     }

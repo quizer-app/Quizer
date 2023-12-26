@@ -3,6 +3,7 @@ using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Common.Errors;
 using Quizer.Domain.QuestionAggregate;
+using Quizer.Domain.QuestionAggregate.Entities;
 
 namespace Quizer.Application.Quizes.Commands.UpdateQuestion;
 
@@ -20,11 +21,13 @@ public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionComman
         var question = await _questionRepository.Get(QuestionId.Create(request.QuestionId));
         if (question is null) return Errors.Question.NotFound;
 
-        // TODO: update
-        //question.Update(request.QuestionText, request.Answer);
+        var result = question.Update(
+            request.QuestionText,
+            request.Answers
+                .ConvertAll(a => Answer.Create(a.Text, a.IsCorrect).Value));
 
-        //return question.Id;
+        if (result.IsError) return result.Errors;
 
-        return QuestionId.CreateUnique();
+        return (QuestionId)question.Id;
     }
 }

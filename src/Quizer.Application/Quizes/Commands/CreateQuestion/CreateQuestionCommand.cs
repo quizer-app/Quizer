@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
+using Quizer.Application.Quizes.Common;
 using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Application.Quizes.Commands.CreateQuestion;
@@ -7,5 +8,5 @@ namespace Quizer.Application.Quizes.Commands.CreateQuestion;
 public record CreateQuestionCommand(
     Guid QuizId,
     string QuestionText,
-    string Answer
+    List<CreateQuestionAnswer> Answers
     ) : IRequest<ErrorOr<QuestionId>>;

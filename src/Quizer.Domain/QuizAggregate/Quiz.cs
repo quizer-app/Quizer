@@ -87,14 +87,16 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         this.AddDomainEvent(new QuizDeleted(this));
     }
 
-    public void AddQuestion(QuestionId questionId)
+    public void AddQuestion(Question question)
     {
-        _questionIds.Add(questionId);
+        base.Update();
+        _questionIds.Add((QuestionId)question.Id);
     }
 
-    public void DeleteQuestion(QuestionId questionId)
+    public void DeleteQuestion(Question question)
     {
-        _questionIds.Remove(questionId);
+        base.Update();
+        _questionIds.Remove((QuestionId)question.Id);
     }
 
 #pragma warning disable CS8618

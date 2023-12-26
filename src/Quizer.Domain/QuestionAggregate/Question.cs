@@ -15,7 +15,11 @@ public sealed class Question : AggregateRoot<QuestionId, Guid>
 
     private List<Answer> _answers;
 
-    private Question(QuestionId id, QuizId quizId, string questionText, List<Answer> answers) : base(id)
+    private Question(
+        QuestionId id,
+        QuizId quizId,
+        string questionText,
+        List<Answer> answers) : base(id)
     {
         QuizId = quizId;
         QuestionText = questionText;
@@ -29,7 +33,10 @@ public sealed class Question : AggregateRoot<QuestionId, Guid>
         return base.GetValidationErrors(validationResult);
     }
 
-    public static ErrorOr<Question> Create(QuizId quizId, string questionText, List<Answer> answers)
+    public static ErrorOr<Question> Create(
+        QuizId quizId,
+        string questionText,
+        List<Answer> answers)
     {
         var question = new Question(
             QuestionId.CreateUnique(),
@@ -45,7 +52,9 @@ public sealed class Question : AggregateRoot<QuestionId, Guid>
         return question;
     }
 
-    public ErrorOr<bool> Update(string questionText, List<Answer> answers)
+    public ErrorOr<bool> Update(
+        string questionText,
+        List<Answer> answers)
     {
         base.Update();
         QuestionText = questionText;

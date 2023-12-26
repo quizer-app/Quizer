@@ -7,23 +7,29 @@ namespace Quizer.Domain.QuestionAggregate.Entities;
 public sealed class Answer : Entity<AnswerId>
 {
     public string Text { get; private set; }
+    public bool IsCorrect { get; private set; }
 
-    private Answer(AnswerId id, string answer) : base(id)
+    private Answer(
+        AnswerId id,
+        string answer,
+        bool isCorrect) : base(id)
     {
         Text = answer;
+        IsCorrect = isCorrect;
     }
 
-    public static ErrorOr<Answer> Create(string answer)
+    public static ErrorOr<Answer> Create(string answer, bool isCorrect)
     {
-        var question = new Answer(AnswerId.CreateUnique(), answer);
+        var question = new Answer(AnswerId.CreateUnique(), answer, isCorrect);
 
         return question;
     }
 
-    public ErrorOr<bool> Update(string answer)
+    public ErrorOr<bool> Update(string answer, bool isCorrect)
     {
         base.Update();
         Text = answer;
+        IsCorrect = true;
 
         return true;
     }
