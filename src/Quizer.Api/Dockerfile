@@ -7,11 +7,11 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Quizer.Api/Quizer.Api.csproj", "Quizer.Api/"]
-COPY ["Quizer.Contracts/Quizer.Contracts.csproj", "Quizer.Contracts/"]
-COPY ["Quizer.Application/Quizer.Application.csproj", "Quizer.Application/"]
-COPY ["Quizer.Domain/Quizer.Domain.csproj", "Quizer.Domain/"]
-COPY ["Quizer.Infrastructure/Quizer.Infrastructure.csproj", "Quizer.Infrastructure/"]
+COPY ["src/Quizer.Api/Quizer.Api.csproj", "Quizer.Api/"]
+COPY ["src/Quizer.Contracts/Quizer.Contracts.csproj", "Quizer.Contracts/"]
+COPY ["src/Quizer.Application/Quizer.Application.csproj", "Quizer.Application/"]
+COPY ["src/Quizer.Domain/Quizer.Domain.csproj", "Quizer.Domain/"]
+COPY ["src/Quizer.Infrastructure/Quizer.Infrastructure.csproj", "Quizer.Infrastructure/"]
 RUN dotnet restore "Quizer.Api/Quizer.Api.csproj"
 COPY . .
 WORKDIR "/src/Quizer.Api"
