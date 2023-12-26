@@ -6,16 +6,16 @@ using Quizer.Application.Authentication.Commands;
 using Quizer.Application.Authentication.Queries;
 using Quizer.Contracts.Authentication;
 
-namespace Quizer.Api.Controllers;
+namespace Quizer.Api.Controllers.V1;
 
-[Route("auth")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [AllowAnonymous]
-public class AuthenticationController : ApiController
+public class AuthController : ApiController
 {
     private readonly ISender _mediator;
     private readonly IMapper _mapper;
 
-    public AuthenticationController(ISender mediator, IMapper mapper)
+    public AuthController(ISender mediator, IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;

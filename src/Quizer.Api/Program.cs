@@ -21,15 +21,24 @@ Log.Logger =
         .ReadFrom.Configuration(builder.Configuration)
 .CreateLogger();
 
-var swaggerSettings = new SwaggerSettings();
-builder.Configuration.Bind(SwaggerSettings.SectionName, swaggerSettings);
-
 var app = builder.Build();
 {
+    var swaggerSettings = new SwaggerSettings();
+    builder.Configuration.Bind(SwaggerSettings.SectionName, swaggerSettings);
+
     if (swaggerSettings.Enabled)
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(
+            options =>
+            {
+                foreach (var description in app.DescribeApiVersions())
+                {
+                    options.SwaggerEndpoint(
+                        $"/swagger/{description.GroupName}/swagger.json",
+                        description.GroupName);
+                }
+            });
     }
     app.UseSerilogRequestLogging();
 
@@ -39,7 +48,7 @@ var app = builder.Build();
     
     app.UseAuthentication();
     app.UseAuthorization();
-    
+
     app.MapControllers();
     app.Run();
 }

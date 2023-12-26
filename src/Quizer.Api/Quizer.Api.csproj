@@ -6,16 +6,11 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>d5aba78c-3529-4cb4-8caf-891dfecd83de</UserSecretsId>
-	<ContainerImageTags>latest</ContainerImageTags>
-	<ContainerRegistry>ghcr.io</ContainerRegistry>
-	<ContainerRepository>quizer-app/quizer</ContainerRepository>
   </PropertyGroup>
 
-    <ItemGroup>
-	    <ContainerPort Include="80" Type="tcp" />
-    </ItemGroup>
-	
   <ItemGroup>
+    <PackageReference Include="Asp.Versioning.Http" Version="8.0.0" />
+    <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.0.0" />
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
