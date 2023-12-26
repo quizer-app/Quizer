@@ -6,15 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
     <UserSecretsId>d5aba78c-3529-4cb4-8caf-891dfecd83de</UserSecretsId>
-	<ContainerImageTags>latest</ContainerImageTags>
-	<ContainerRegistry>ghcr.io</ContainerRegistry>
-	<ContainerRepository>quizer-app/quizer</ContainerRepository>
   </PropertyGroup>
 
-    <ItemGroup>
-	    <ContainerPort Include="80" Type="tcp" />
-    </ItemGroup>
-	
   <ItemGroup>
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />

@@ -4,5 +4,5 @@ services:
     image: ghcr.io/quizer-app/quizer:latest
     container_name: quizer
     volumes:
-      - ./appsettings.json:/home/runner/work/Quizer/Quizer/src/Quizer.Api/appsettings.Production.json
+      - ./appsettings.json:/app/src/Quizer.Api/appsettings.Production.json
     restart: unless-stopped
