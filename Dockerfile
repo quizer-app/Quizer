@@ -12,6 +12,7 @@ COPY ["src/Quizer.Contracts/Quizer.Contracts.csproj", "Quizer.Contracts/"]
 COPY ["src/Quizer.Application/Quizer.Application.csproj", "Quizer.Application/"]
 COPY ["src/Quizer.Domain/Quizer.Domain.csproj", "Quizer.Domain/"]
 COPY ["src/Quizer.Infrastructure/Quizer.Infrastructure.csproj", "Quizer.Infrastructure/"]
+COPY ["Dockerfile", "Quizer.Api"]
 RUN dotnet restore "Quizer.Api/Quizer.Api.csproj"
 COPY . .
 WORKDIR "/src/Quizer.Api"
