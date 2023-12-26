@@ -7,15 +7,15 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/Quizer.Api/Quizer.Api.csproj", "./src/Quizer.Api/"]
-COPY ["src/Quizer.Contracts/Quizer.Contracts.csproj", "./src/Quizer.Contracts/"]
-COPY ["src/Quizer.Application/Quizer.Application.csproj", "./src/Quizer.Application/"]
-COPY ["src/Quizer.Domain/Quizer.Domain.csproj", "./src/Quizer.Domain/"]
-COPY ["src/Quizer.Infrastructure/Quizer.Infrastructure.csproj", "./src/Quizer.Infrastructure/"]
-RUN dotnet restore "./src/Quizer.Api/Quizer.Api.csproj"
+COPY ["src/Quizer.Api/Quizer.Api.csproj", "Quizer.Api/"]
+COPY ["src/Quizer.Contracts/Quizer.Contracts.csproj", "Quizer.Contracts/"]
+COPY ["src/Quizer.Application/Quizer.Application.csproj", "Quizer.Application/"]
+COPY ["src/Quizer.Domain/Quizer.Domain.csproj", "Quizer.Domain/"]
+COPY ["src/Quizer.Infrastructure/Quizer.Infrastructure.csproj", "Quizer.Infrastructure/"]
+RUN dotnet restore "Quizer.Api/Quizer.Api.csproj"
 COPY . .
 WORKDIR "/src/Quizer.Api"
-RUN dotnet build "./Quizer.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "Quizer.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
