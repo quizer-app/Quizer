@@ -29,7 +29,7 @@ public class CreateQuizCommandHandler : IRequestHandler<CreateQuizCommand, Error
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
         string userName = user is null || user.UserName is null ? "Anonymous" : user.UserName;
 
-        if ((await _quizRepository.Get(userName, request.Name)) is not null)
+        if ((await _quizRepository.GetQuiz(userName, request.Name)) is not null)
             return Errors.Quiz.DuplicateName;
 
         var errors = new List<Error>();
@@ -66,7 +66,7 @@ public class CreateQuizCommandHandler : IRequestHandler<CreateQuizCommand, Error
 
         var quiz = result.Value;
 
-        await _quizRepository.Add(quiz);
+        await _quizRepository.AddQuiz(quiz);
 
         return (QuizId)quiz.Id;
     }

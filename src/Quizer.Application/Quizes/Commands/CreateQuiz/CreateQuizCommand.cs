@@ -8,9 +8,9 @@ public record CreateQuizCommand(
     string Name,
     string Description,
     Guid UserId,
-    List<QuestionCommand> Questions
+    List<CreateQuizQuestionCommand> Questions
     ) : IRequest<ErrorOr<QuizId>>;
 
-public record QuestionCommand(
+public record CreateQuizQuestionCommand(
     string QuestionText,
     string Answer);

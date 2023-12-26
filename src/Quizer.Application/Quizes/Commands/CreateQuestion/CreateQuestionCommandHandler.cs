@@ -19,7 +19,7 @@ public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionComman
 
     public async Task<ErrorOr<QuestionId>> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
     {
-        var quiz = await _quizRepository.Get(QuizId.Create(request.QuizId));
+        var quiz = await _quizRepository.GetQuiz(QuizId.Create(request.QuizId));
 
         if (quiz is null)
             return Errors.Quiz.NotFound;

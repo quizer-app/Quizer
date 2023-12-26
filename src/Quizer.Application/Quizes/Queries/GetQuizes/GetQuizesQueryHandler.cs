@@ -17,6 +17,6 @@ public class GetQuizesQueryHandler : IRequestHandler<GetQuizesQuery, ErrorOr<Lis
     public async Task<ErrorOr<List<Quiz>>> Handle(GetQuizesQuery request, CancellationToken cancellationToken)
     {
         Guid? userId = request.UserId is null ? null : new Guid(request.UserId);
-        return await _quizRepository.GetAll(userId);
+        return await _quizRepository.GetAllQuestions(userId);
     }
 }

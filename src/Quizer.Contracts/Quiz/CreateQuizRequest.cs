@@ -3,9 +3,5 @@
 public record CreateQuizRequest(
     string Name,
     string Description,
-    List<QuestionRequest> Questions
+    List<CreateQuestionRequest> Questions
     );
-
-public record QuestionRequest(
-    string Question,
-    string Answer);

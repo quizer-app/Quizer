@@ -11,9 +11,3 @@ public record QuizResponse(
     int NumberOfRatings,
     IReadOnlyList<QuestionResponse> Questions
     );
-
-public record QuestionResponse(
-    string Id,
-    string Question,
-    string Answer
-    );
