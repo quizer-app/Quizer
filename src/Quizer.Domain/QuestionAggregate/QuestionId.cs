@@ -1,14 +1,12 @@
 ﻿using Quizer.Domain.Common.Models;
 
-namespace Quizer.Domain.QuizAggregate.ValueObjects;
+namespace Quizer.Domain.QuestionAggregate;
 
-public sealed class QuestionId : ValueObject
+public sealed class QuestionId : AggregateRootId<Guid>
 {
-    public Guid Value { get; private set; }
 
-    private QuestionId(Guid value)
+    private QuestionId(Guid value) : base(value)
     {
-        Value = value;
     }
 
     public static QuestionId CreateUnique()

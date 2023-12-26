@@ -1,6 +1,8 @@
 ﻿namespace Quizer.Domain.Common.Models;
 
-public abstract class AggregateRootId<TId> : ValueObject
+public abstract class AggregateRootId<TId> : EntityId<TId>
 {
-    public abstract TId Value { get; protected set; }
+    protected AggregateRootId(TId value) : base(value)
+    {
+    }
 }

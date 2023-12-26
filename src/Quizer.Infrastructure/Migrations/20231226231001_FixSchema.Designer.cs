@@ -12,8 +12,8 @@ using Quizer.Infrastructure.Persistance;
 namespace Quizer.Infrastructure.Migrations
 {
     [DbContext(typeof(QuizerDbContext))]
-    [Migration("20231223201027_UpdateUser")]
-    partial class UpdateUser
+    [Migration("20231226231001_FixSchema")]
+    partial class FixSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,7 +54,10 @@ namespace Quizer.Infrastructure.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text");
@@ -76,7 +79,10 @@ namespace Quizer.Infrastructure.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text");
@@ -151,6 +157,30 @@ namespace Quizer.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Quizer.Domain.QuestionAggregate.Question", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("QuestionText")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<Guid>("QuizId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Questions", (string)null);
+                });
+
             modelBuilder.Entity("Quizer.Domain.QuizAggregate.Quiz", b =>
                 {
                     b.Property<Guid>("Id")
@@ -169,13 +199,24 @@ namespace Quizer.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserName", "Name")
+                        .IsUnique();
 
                     b.ToTable("Quizes", (string)null);
                 });
@@ -295,6 +336,44 @@ namespace Quizer.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Quizer.Domain.QuestionAggregate.Question", b =>
+                {
+                    b.OwnsMany("Quizer.Domain.QuestionAggregate.Entities.Answer", "Answers", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid")
+                                .HasColumnName("AnswerId");
+
+                            b1.Property<Guid>("QuestionId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<DateTime>("CreatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.Property<bool>("IsCorrect")
+                                .HasColumnType("boolean");
+
+                            b1.Property<string>("Text")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("character varying(200)");
+
+                            b1.Property<DateTime>("UpdatedAt")
+                                .HasColumnType("timestamp with time zone");
+
+                            b1.HasKey("Id", "QuestionId");
+
+                            b1.HasIndex("QuestionId");
+
+                            b1.ToTable("QuestionAnswers", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("QuestionId");
+                        });
+
+                    b.Navigation("Answers");
+                });
+
             modelBuilder.Entity("Quizer.Domain.QuizAggregate.Quiz", b =>
                 {
                     b.OwnsOne("Quizer.Domain.Common.ValueObjects.AverageRating", "AverageRating", b1 =>
@@ -316,30 +395,27 @@ namespace Quizer.Infrastructure.Migrations
                                 .HasForeignKey("QuizId");
                         });
 
-                    b.OwnsMany("Quizer.Domain.QuizAggregate.Entities.Question", "Questions", b1 =>
+                    b.OwnsMany("Quizer.Domain.QuestionAggregate.QuestionId", "QuestionIds", b1 =>
                         {
-                            b1.Property<Guid>("Id")
-                                .HasColumnType("uuid")
-                                .HasColumnName("QuestionId");
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
 
                             b1.Property<Guid>("QuizId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<string>("Answer")
-                                .IsRequired()
-                                .HasMaxLength(500)
-                                .HasColumnType("character varying(500)");
+                            b1.Property<Guid>("Value")
+                                .HasColumnType("uuid")
+                                .HasColumnName("QuestionId");
 
-                            b1.Property<string>("QuestionText")
-                                .IsRequired()
-                                .HasMaxLength(300)
-                                .HasColumnType("character varying(300)");
-
-                            b1.HasKey("Id", "QuizId");
+                            b1.HasKey("Id");
 
                             b1.HasIndex("QuizId");
 
-                            b1.ToTable("Questions", (string)null);
+                            b1.ToTable("QuizQuestionIds", (string)null);
+
 
                             b1.WithOwner()
                                 .HasForeignKey("QuizId");
@@ -348,7 +424,7 @@ namespace Quizer.Infrastructure.Migrations
                     b.Navigation("AverageRating")
                         .IsRequired();
 
-                    b.Navigation("Questions");
+                    b.Navigation("QuestionIds");
                 });
 #pragma warning restore 612, 618
         }

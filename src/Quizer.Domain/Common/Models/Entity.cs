@@ -1,6 +1,5 @@
 ﻿using ErrorOr;
 using FluentValidation.Results;
-using Quizer.Domain.QuizAggregate.Validation;
 
 namespace Quizer.Domain.Common.Models;
 

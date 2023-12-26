@@ -7,10 +7,5 @@ namespace Quizer.Application.Quizes.Commands.CreateQuiz;
 public record CreateQuizCommand(
     string Name,
     string Description,
-    Guid UserId,
-    List<QuestionCommand> Questions
+    Guid UserId
     ) : IRequest<ErrorOr<QuizId>>;
-
-public record QuestionCommand(
-    string QuestionText,
-    string Answer);

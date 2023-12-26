@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Application.Services.Slugify;
 using Quizer.Domain.Common.Errors;
-using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuizAggregate;
-using Quizer.Domain.QuizAggregate.Entities;
 using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Quizes.Commands.CreateQuiz;
@@ -32,20 +30,6 @@ public class CreateQuizCommandHandler : IRequestHandler<CreateQuizCommand, Error
         if ((await _quizRepository.Get(userName, request.Name)) is not null)
             return Errors.Quiz.DuplicateName;
 
-        var errors = new List<Error>();
-
-        var questionResults = request.Questions
-                .ConvertAll(q => Question.Create(
-                    q.QuestionText,
-                    q.Answer));
-
-        foreach (var questionResult in questionResults)
-            if (questionResult.IsError)
-                errors.AddRange(questionResult.Errors);
-
-        var questions = questionResults
-            .ConvertAll(q => q.Value);
-
         string slug = _slugifyService.GenerateSlug(request.Name);
 
         var result = Quiz.Create(
@@ -53,16 +37,11 @@ public class CreateQuizCommandHandler : IRequestHandler<CreateQuizCommand, Error
             slug,
             request.Description,
             request.UserId,
-            userName,
-            AverageRating.CreateNew(),
-            questions
+            userName
             );
 
         if (result.IsError)
-            errors.AddRange(result.Errors);
-
-        if(errors.Any())
-            return errors;
+            return result.Errors;
 
         var quiz = result.Value;
 

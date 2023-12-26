@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Quizer.Domain.QuizAggregate;
-using Quizer.Domain.QuizAggregate.ValueObjects;
 
 namespace Quizer.Infrastructure.Persistance.Configuration;
 
@@ -10,37 +9,25 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
     public void Configure(EntityTypeBuilder<Quiz> builder)
     {
         ConfigureQuizTable(builder);
-        ConfigureQuestionsTable(builder);
+        ConfigureQuizQuestionIdsTable(builder);
     }
 
-    private static void ConfigureQuestionsTable(EntityTypeBuilder<Quiz> builder)
+    private static void ConfigureQuizQuestionIdsTable(EntityTypeBuilder<Quiz> builder)
     {
-        builder.OwnsMany(q => q.Questions, qb =>
+        builder.OwnsMany(q => q.QuestionIds, qs =>
         {
-            qb.ToTable("Questions");
+            qs.ToTable("QuizQuestionIds");
 
-            qb.WithOwner().HasForeignKey("QuizId");
+            qs.WithOwner().HasForeignKey("QuizId");
 
-            qb.HasKey("Id", "QuizId");
+            qs.HasKey("Id");
 
-            qb.Property(qs => qs.Id)
-                .ValueGeneratedNever()
+            qs.Property(i => i.Value)
                 .HasColumnName("QuestionId")
-                .HasConversion(
-                    id => id.Value,
-                    value => QuestionId.Create(value)
-                    );
-
-            qb.Property(qs => qs.QuestionText)
-                .HasMaxLength(300)
-                .IsRequired();
-
-            qb.Property(qs => qs.Answer)
-                .HasMaxLength(500)
-                .IsRequired();
+                .ValueGeneratedNever();
         });
 
-        builder.Metadata.FindNavigation(nameof(Quiz.Questions))!
+        builder.Metadata.FindNavigation(nameof(Quiz.QuestionIds))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 
@@ -50,6 +37,9 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
 
         builder.HasKey(q => q.Id);
 
+        builder.HasIndex(q => new { q.UserName, q.Name })
+            .IsUnique();
+
         builder.Property(q => q.Id)
             .ValueGeneratedNever()
             .HasConversion(
@@ -58,14 +48,10 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
                 );
 
         builder.Property(q => q.Name)
-            .HasMaxLength(100)
-            .IsRequired();
-
-        builder.HasIndex(q => new { q.UserName, q.Name }).IsUnique();
+            .HasMaxLength(100);
 
         builder.Property(q => q.Description)
-            .HasMaxLength(1000)
-            .IsRequired();
+            .HasMaxLength(1000);
 
         builder.OwnsOne(q => q.AverageRating);
     }

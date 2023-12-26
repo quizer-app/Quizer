@@ -1,12 +1,13 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Quizer.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialSchema : Migration
+    public partial class FixSchema : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,7 +31,6 @@ namespace Quizer.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "text", nullable: false),
-                    Discriminator = table.Column<string>(type: "character varying(13)", maxLength: 13, nullable: false),
                     UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -52,12 +52,29 @@ namespace Quizer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Questions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    QuizId = table.Column<Guid>(type: "uuid", nullable: false),
+                    QuestionText = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Questions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Quizes",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserName = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    Slug = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
                     AverageRating_Value = table.Column<double>(type: "double precision", nullable: false),
                     AverageRating_NumRatings = table.Column<int>(type: "integer", nullable: false),
@@ -73,7 +90,8 @@ namespace Quizer.Infrastructure.Migrations
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     RoleId = table.Column<string>(type: "text", nullable: false),
                     ClaimType = table.Column<string>(type: "text", nullable: true),
                     ClaimValue = table.Column<string>(type: "text", nullable: true)
@@ -93,7 +111,8 @@ namespace Quizer.Infrastructure.Migrations
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<string>(type: "text", nullable: false),
                     ClaimType = table.Column<string>(type: "text", nullable: true),
                     ClaimValue = table.Column<string>(type: "text", nullable: true)
@@ -174,19 +193,41 @@ namespace Quizer.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Questions",
+                name: "QuestionAnswers",
                 columns: table => new
                 {
+                    AnswerId = table.Column<Guid>(type: "uuid", nullable: false),
                     QuestionId = table.Column<Guid>(type: "uuid", nullable: false),
-                    QuizId = table.Column<Guid>(type: "uuid", nullable: false),
-                    QuestionText = table.Column<string>(type: "character varying(300)", maxLength: 300, nullable: false),
-                    Answer = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false)
+                    Text = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
+                    IsCorrect = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Questions", x => new { x.QuestionId, x.QuizId });
+                    table.PrimaryKey("PK_QuestionAnswers", x => new { x.AnswerId, x.QuestionId });
                     table.ForeignKey(
-                        name: "FK_Questions_Quizes_QuizId",
+                        name: "FK_QuestionAnswers_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuizQuestionIds",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    QuizId = table.Column<Guid>(type: "uuid", nullable: false),
+                    QuestionId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuizQuestionIds", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_QuizQuestionIds_Quizes_QuizId",
                         column: x => x.QuizId,
                         principalTable: "Quizes",
                         principalColumn: "Id",
@@ -231,9 +272,20 @@ namespace Quizer.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Questions_QuizId",
-                table: "Questions",
+                name: "IX_QuestionAnswers_QuestionId",
+                table: "QuestionAnswers",
+                column: "QuestionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_QuizQuestionIds_QuizId",
+                table: "QuizQuestionIds",
                 column: "QuizId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Quizes_UserName_Name",
+                table: "Quizes",
+                columns: new[] { "UserName", "Name" },
+                unique: true);
         }
 
         /// <inheritdoc />
@@ -255,13 +307,19 @@ namespace Quizer.Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "QuestionAnswers");
+
+            migrationBuilder.DropTable(
+                name: "QuizQuestionIds");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "Quizes");

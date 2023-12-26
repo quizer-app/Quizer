@@ -1,19 +1,19 @@
 ﻿using Quizer.Domain.Common.Models;
 
-namespace Quizer.Domain.QuizAggregate;
+namespace Quizer.Domain.QuestionAggregate.ValueObjects;
 
-public sealed class QuizId : AggregateRootId<Guid>
+public sealed class AnswerId : EntityId<Guid>
 {
-    private QuizId(Guid value) : base(value)
+    public AnswerId(Guid value) : base(value)
     {
     }
 
-    public static QuizId CreateUnique()
+    public static AnswerId CreateUnique()
     {
         return new(Guid.NewGuid());
     }
 
-    public static QuizId Create(Guid value)
+    public static AnswerId Create(Guid value)
     {
         return new(value);
     }
