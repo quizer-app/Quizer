@@ -19,8 +19,8 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
                 description.GroupName,
                 new OpenApiInfo()
                 {
-                    Title = "Example API",
-                    Description = "An example API",
+                    Title = "Quizer API",
+                    Description = "An API for the Quizer App",
                     Version = description.ApiVersion.ToString(),
                 });
         }
