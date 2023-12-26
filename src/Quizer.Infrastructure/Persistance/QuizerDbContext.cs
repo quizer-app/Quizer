@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Quizer.Domain.UserAggregate;
 using Quizer.Infrastructure.Persistance.Interceptors;
 using Quizer.Domain.Common.Models;
-using Quizer.Domain.QuizAggregate.Entities;
+using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Infrastructure.Persistance;
 

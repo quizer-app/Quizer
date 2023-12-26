@@ -1,20 +1,25 @@
 ﻿using ErrorOr;
 using Quizer.Domain.Common.Models;
-using Quizer.Domain.QuizAggregate.Events;
-using Quizer.Domain.QuizAggregate.Validation;
-using Quizer.Domain.QuizAggregate.ValueObjects;
+using Quizer.Domain.QuestionAggregate.Entities;
+using Quizer.Domain.QuestionAggregate.Events;
+using Quizer.Domain.QuestionAggregate.Validation;
+using Quizer.Domain.QuizAggregate;
 
-namespace Quizer.Domain.QuizAggregate.Entities;
+namespace Quizer.Domain.QuestionAggregate;
 
-public sealed class Question : Entity<QuestionId>
+public sealed class Question : AggregateRoot<QuestionId, Guid>
 {
+    public QuizId QuizId { get; private set; }
     public string QuestionText { get; private set; }
-    public string Answer { get; private set; }
+    public IReadOnlyList<Answer> Answers => _answers.AsReadOnly();
 
-    private Question(QuestionId id, string questionText, string answer) : base(id)
+    private List<Answer> _answers;
+
+    private Question(QuestionId id, QuizId quizId, string questionText, List<Answer> answers) : base(id)
     {
+        QuizId = quizId;
         QuestionText = questionText;
-        Answer = answer;
+        _answers = answers;
     }
 
     private ErrorOr<bool> Validate()
@@ -24,9 +29,13 @@ public sealed class Question : Entity<QuestionId>
         return base.GetValidationErrors(validationResult);
     }
 
-    public static ErrorOr<Question> Create(string questionText, string answer)
+    public static ErrorOr<Question> Create(QuizId quizId, string questionText, List<Answer> answers)
     {
-        var question = new Question(QuestionId.CreateUnique(), questionText, answer);
+        var question = new Question(
+            QuestionId.CreateUnique(),
+            quizId,
+            questionText,
+            answers);
 
         var result = question.Validate();
         if (result.IsError) return result.Errors;
@@ -36,16 +45,14 @@ public sealed class Question : Entity<QuestionId>
         return question;
     }
 
-    public ErrorOr<bool> Update(string questionText, string answer)
+    public ErrorOr<bool> Update(string questionText, List<Answer> answers)
     {
         base.Update();
         QuestionText = questionText;
-        Answer = answer;
+        _answers = answers;
 
         var result = this.Validate();
         if (result.IsError) return result.Errors;
-
-        this.AddDomainEvent(new QuestionUpdated(this));
 
         return true;
     }

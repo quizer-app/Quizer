@@ -1,8 +1,7 @@
 ﻿using ErrorOr;
-using FluentValidation.Results;
 using Quizer.Domain.Common.Models;
 using Quizer.Domain.Common.ValueObjects;
-using Quizer.Domain.QuizAggregate.Entities;
+using Quizer.Domain.QuestionAggregate;
 using Quizer.Domain.QuizAggregate.Events;
 using Quizer.Domain.QuizAggregate.Validation;
 
@@ -10,7 +9,7 @@ namespace Quizer.Domain.QuizAggregate;
 
 public sealed class Quiz : AggregateRoot<QuizId, Guid>
 {
-    private readonly List<Question> _questions = new();
+    private readonly List<QuestionId> _questionIds = new();
 
     public Guid UserId { get; private set; }
     public string UserName { get; private set; }
@@ -19,7 +18,7 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     public string Slug { get; private set; }
     public string Description { get; private set; }
     public AverageRating AverageRating { get; private set; }
-    public IReadOnlyList<Question> Questions => _questions.AsReadOnly();
+    public IReadOnlyList<QuestionId> QuestionIds => _questionIds.AsReadOnly();
 
     private Quiz(
         QuizId id,
@@ -28,8 +27,7 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         string description,
         Guid userId,
         string userName,
-        AverageRating averageRating,
-        List<Question> questions) : base(id)
+        AverageRating averageRating) : base(id)
     {
         Name = name;
         Slug = slug;
@@ -37,7 +35,6 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         UserId = userId;
         UserName = userName;
         AverageRating = averageRating;
-        _questions = questions;
     }
 
     private ErrorOr<bool> Validate()
@@ -52,9 +49,7 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         string slug,
         string description,
         Guid userId,
-        string userName,
-        AverageRating averageRating,
-        List<Question> questions)
+        string userName)
     {
         var quiz = new Quiz(
             QuizId.CreateUnique(),
@@ -63,13 +58,10 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
             description,
             userId,
             userName,
-            averageRating,
-            questions);
+            AverageRating.CreateNew());
 
         var result = quiz.Validate();
         if (result.IsError) return result.Errors;
-
-        quiz.AddDomainEvent(new QuizCreated(quiz));
 
         return quiz;
     }
@@ -87,8 +79,6 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         var result = this.Validate();
         if (result.IsError) return result.Errors;
 
-        this.AddDomainEvent(new QuizUpdated(this));
-
         return true;
     }
 
@@ -97,9 +87,14 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         this.AddDomainEvent(new QuizDeleted(this));
     }
 
-    public void AddQuestion(Question question)
+    public void AddQuestion(QuestionId questionId)
     {
-        _questions.Add(question);
+        _questionIds.Add(questionId);
+    }
+
+    public void DeleteQuestion(QuestionId questionId)
+    {
+        _questionIds.Remove(questionId);
     }
 
 #pragma warning disable CS8618

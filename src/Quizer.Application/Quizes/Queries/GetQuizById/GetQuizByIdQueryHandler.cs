@@ -17,7 +17,7 @@ public class GetQuizByIdQueryHandler : IRequestHandler<GetQuizByIdQuery, ErrorOr
 
     public async Task<ErrorOr<Quiz>> Handle(GetQuizByIdQuery request, CancellationToken cancellationToken)
     {
-        var quiz = await _quizRepository.GetQuiz(QuizId.Create(request.QuizId));
+        var quiz = await _quizRepository.Get(QuizId.Create(request.QuizId));
         if (quiz is null) return Errors.Quiz.NotFound;
         return quiz;
     }

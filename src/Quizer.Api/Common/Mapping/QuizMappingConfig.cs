@@ -5,7 +5,7 @@ using Quizer.Application.Quizes.Commands.UpdateQuestion;
 using Quizer.Application.Quizes.Commands.UpdateQuiz;
 using Quizer.Contracts.Quiz;
 using Quizer.Domain.QuizAggregate;
-using Quizer.Domain.QuizAggregate.Entities;
+using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Api.Common.Mapping;
 
@@ -19,9 +19,6 @@ public class QuizMappingConfig : IRegister
 
     private static void RegisterQuestion(TypeAdapterConfig config)
     {
-        config.NewConfig<CreateQuestionRequest, CreateQuizQuestionCommand>()
-            .Map(dest => dest.QuestionText, src => src.Question);
-
         config.NewConfig<Question, QuestionResponse>()
             .Map(dest => dest.Id, src => src.Id.Value)
             .Map(dest => dest.Question, src => src.QuestionText);

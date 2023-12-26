@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Quizer.Domain.QuizAggregate;
-using Quizer.Domain.QuizAggregate.ValueObjects;
+using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Infrastructure.Persistance.Configuration;
 
@@ -15,32 +15,14 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
 
     private static void ConfigureQuestionsTable(EntityTypeBuilder<Quiz> builder)
     {
-        builder.OwnsMany(q => q.Questions, qb =>
+        builder.OwnsMany(q => q.QuestionIds, qb =>
         {
-            qb.ToTable("Questions");
+            qb.ToTable("QuizQuestionIds");
 
-            qb.WithOwner().HasForeignKey("QuizId");
-
-            qb.HasKey("Id", "QuizId");
-
-            qb.Property(qs => qs.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("QuestionId")
-                .HasConversion(
-                    id => id.Value,
-                    value => QuestionId.Create(value)
-                    );
-
-            qb.Property(qs => qs.QuestionText)
-                .HasMaxLength(300)
-                .IsRequired();
-
-            qb.Property(qs => qs.Answer)
-                .HasMaxLength(500)
-                .IsRequired();
+            // TODO: implement + add config for questions
         });
 
-        builder.Metadata.FindNavigation(nameof(Quiz.Questions))!
+        builder.Metadata.FindNavigation(nameof(Quiz.QuestionIds))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 

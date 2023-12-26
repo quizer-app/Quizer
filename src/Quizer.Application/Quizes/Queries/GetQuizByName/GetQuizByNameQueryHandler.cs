@@ -18,7 +18,7 @@ public class GetQuizByNameQueryHandler : IRequestHandler<GetQuizByNameQuery, Err
 
     public async Task<ErrorOr<Quiz>> Handle(GetQuizByNameQuery request, CancellationToken cancellationToken)
     {
-        var quiz = await _quizRepository.GetQuiz(request.UserName, request.QuizName);
+        var quiz = await _quizRepository.Get(request.UserName, request.QuizName);
         if (quiz is null) return Errors.Quiz.NotFound;
 
         return quiz;

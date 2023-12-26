@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
-using Quizer.Domain.QuizAggregate.ValueObjects;
+using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Application.Quizes.Commands.DeleteQuestion;
 

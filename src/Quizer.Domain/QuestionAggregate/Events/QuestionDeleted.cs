@@ -1,6 +1,5 @@
 ﻿using Quizer.Domain.Common.Models;
-using Quizer.Domain.QuizAggregate.Entities;
 
-namespace Quizer.Domain.QuizAggregate.Events;
+namespace Quizer.Domain.QuestionAggregate.Events;
 
 public record QuestionDeleted(Question question) : IDomainEvent;

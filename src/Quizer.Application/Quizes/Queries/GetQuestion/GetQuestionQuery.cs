@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
-using Quizer.Domain.QuizAggregate.Entities;
+using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Application.Quizes.Queries.GetQuestion;
 

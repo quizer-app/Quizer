@@ -2,9 +2,8 @@
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Common.Errors;
+using Quizer.Domain.QuestionAggregate;
 using Quizer.Domain.QuizAggregate;
-using Quizer.Domain.QuizAggregate.Entities;
-using Quizer.Domain.QuizAggregate.ValueObjects;
 
 namespace Quizer.Application.Quizes.Commands.CreateQuestion;
 
@@ -19,17 +18,20 @@ public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionComman
 
     public async Task<ErrorOr<QuestionId>> Handle(CreateQuestionCommand request, CancellationToken cancellationToken)
     {
-        var quiz = await _quizRepository.GetQuiz(QuizId.Create(request.QuizId));
+        var quiz = await _quizRepository.Get(QuizId.Create(request.QuizId));
 
         if (quiz is null)
             return Errors.Quiz.NotFound;
 
-        var result = Question.Create(request.QuestionText, request.Answer);
-        if (result.IsError) return result.Errors;
-        var question = result.Value;
+        // TODO: update
+        //var result = Question.Create(request.QuestionText, request.Answer);
+        //if (result.IsError) return result.Errors;
+        //var question = result.Value;
 
-        quiz.AddQuestion(question);
+        //quiz.AddQuestion(question);
 
-        return question.Id;
+        //return question.Id;
+        
+        return QuestionId.CreateUnique();
     }
 }

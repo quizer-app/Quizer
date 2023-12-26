@@ -17,14 +17,14 @@ public class DeleteQuizCommandHandler : IRequestHandler<DeleteQuizCommand, Error
 
     public async Task<ErrorOr<QuizId>> Handle(DeleteQuizCommand request, CancellationToken cancellationToken)
     {
-        var quiz = await _quizRepository.GetQuiz(QuizId.Create(request.QuizId));
+        var quiz = await _quizRepository.Get(QuizId.Create(request.QuizId));
 
         if (quiz is null)
             return Errors.Quiz.NotFound;
 
         var id = (QuizId)quiz.Id;
         quiz.Delete();
-        _quizRepository.DeleteQuiz(quiz);
+        _quizRepository.Delete(quiz);
 
         return id;
     }

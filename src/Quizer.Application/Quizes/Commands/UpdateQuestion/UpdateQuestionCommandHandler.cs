@@ -2,26 +2,29 @@
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Common.Errors;
-using Quizer.Domain.QuizAggregate.ValueObjects;
+using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Application.Quizes.Commands.UpdateQuestion;
 
 public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionCommand, ErrorOr<QuestionId>>
 {
-    private readonly IQuizRepository _quizRepository;
+    private readonly IQuestionRepository _questionRepository;
 
-    public UpdateQuestionCommandHandler(IQuizRepository quizRepository)
+    public UpdateQuestionCommandHandler(IQuestionRepository questionRepository)
     {
-        _quizRepository = quizRepository;
+        _questionRepository = questionRepository;
     }
 
     public async Task<ErrorOr<QuestionId>> Handle(UpdateQuestionCommand request, CancellationToken cancellationToken)
     {
-        var question = await _quizRepository.GetQuestion(QuestionId.Create(request.QuestionId));
+        var question = await _questionRepository.Get(QuestionId.Create(request.QuestionId));
         if (question is null) return Errors.Question.NotFound;
 
-        question.Update(request.QuestionText, request.Answer);
+        // TODO: update
+        //question.Update(request.QuestionText, request.Answer);
 
-        return question.Id;
+        //return question.Id;
+
+        return QuestionId.CreateUnique();
     }
 }
