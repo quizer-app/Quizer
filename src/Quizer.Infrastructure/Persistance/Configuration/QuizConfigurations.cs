@@ -61,7 +61,7 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
             .HasMaxLength(100)
             .IsRequired();
 
-        builder.HasIndex(q => q.Name).IsUnique();
+        builder.HasIndex(q => new { q.UserName, q.Name }).IsUnique();
 
         builder.Property(q => q.Description)
             .HasMaxLength(1000)

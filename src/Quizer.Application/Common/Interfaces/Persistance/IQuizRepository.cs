@@ -7,6 +7,6 @@ public interface IQuizRepository
     Task Add(Quiz quiz);
     Task<List<Quiz>> GetAll(Guid? userId = null);
     Task<Quiz?> Get(QuizId id);
-    Task<Quiz?> Get(string name);
+    Task<Quiz?> Get(string userName, string quizName);
     void Delete(Quiz quiz);
 }

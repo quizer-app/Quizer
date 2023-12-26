@@ -5,7 +5,6 @@ using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuizAggregate.Entities;
 using Quizer.Domain.QuizAggregate.Events;
 using Quizer.Domain.QuizAggregate.Validation;
-using static Quizer.Domain.Common.Errors.Errors;
 
 namespace Quizer.Domain.QuizAggregate;
 
@@ -14,23 +13,29 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     private readonly List<Question> _questions = new();
 
     public Guid UserId { get; private set; }
+    public string UserName { get; private set; }
 
     public string Name { get; private set; }
+    public string Slug { get; private set; }
     public string Description { get; private set; }
     public AverageRating AverageRating { get; private set; }
     public IReadOnlyList<Question> Questions => _questions.AsReadOnly();
 
     private Quiz(
         QuizId id,
-        Guid userId,
         string name,
+        string slug,
         string description,
+        Guid userId,
+        string userName,
         AverageRating averageRating,
         List<Question> questions) : base(id)
     {
         Name = name;
-        UserId = userId;
+        Slug = slug;
         Description = description;
+        UserId = userId;
+        UserName = userName;
         AverageRating = averageRating;
         _questions = questions;
     }
@@ -44,16 +49,20 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
 
     public static ErrorOr<Quiz> Create(
         string name,
+        string slug,
         string description,
         Guid userId,
+        string userName,
         AverageRating averageRating,
         List<Question> questions)
     {
         var quiz = new Quiz(
             QuizId.CreateUnique(),
-            userId,
             name,
+            slug,
             description,
+            userId,
+            userName,
             averageRating,
             questions);
 
@@ -67,11 +76,13 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
 
     public ErrorOr<bool> Update(
         string name,
+        string slug,
         string description)
     {
         base.Update();
         Name = name;
         Description = description;
+        Slug = slug;
 
         var result = this.Validate();
         if (result.IsError) return result.Errors;
