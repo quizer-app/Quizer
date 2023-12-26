@@ -6,6 +6,7 @@ using Quizer.Application.Quizes.Commands.CreateQuiz;
 using Quizer.Application.Quizes.Commands.DeleteQuiz;
 using Quizer.Application.Quizes.Commands.UpdateQuiz;
 using Quizer.Application.Quizes.Queries.GetQuizById;
+using Quizer.Application.Quizes.Queries.GetQuizByName;
 using Quizer.Application.Quizes.Queries.GetQuizes;
 using Quizer.Contracts.Quiz;
 using System.Security.Claims;
