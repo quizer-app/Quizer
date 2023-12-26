@@ -2,13 +2,10 @@
 
 namespace Quizer.Domain.QuestionAggregate.ValueObjects;
 
-public sealed class AnswerId : ValueObject
+public sealed class AnswerId : EntityId<Guid>
 {
-    public Guid Value { get; private set; }
-
-    private AnswerId(Guid value)
+    public AnswerId(Guid value) : base(value)
     {
-        Value = value;
     }
 
     public static AnswerId CreateUnique()

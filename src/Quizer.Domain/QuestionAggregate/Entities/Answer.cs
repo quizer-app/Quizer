@@ -29,14 +29,12 @@ public sealed class Answer : Entity<AnswerId>
     {
         base.Update();
         Text = answer;
-        IsCorrect = true;
+        IsCorrect = isCorrect;
 
         return true;
     }
 
 #pragma warning disable CS8618
-    private Answer()
-    {
-    }
+    private Answer() {}
 #pragma warning restore CS8618
 }

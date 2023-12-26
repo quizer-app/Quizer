@@ -100,8 +100,6 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     }
 
 #pragma warning disable CS8618
-    private Quiz()
-    {
-    }
+    private Quiz() {}
 #pragma warning restore CS8618
 }

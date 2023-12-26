@@ -4,11 +4,9 @@ namespace Quizer.Domain.QuestionAggregate;
 
 public sealed class QuestionId : AggregateRootId<Guid>
 {
-    public override Guid Value { get; protected set; }
 
-    private QuestionId(Guid value)
+    private QuestionId(Guid value) : base(value)
     {
-        Value = value;
     }
 
     public static QuestionId CreateUnique()

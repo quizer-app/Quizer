@@ -72,8 +72,6 @@ public sealed class Question : AggregateRoot<QuestionId, Guid>
     }
 
 #pragma warning disable CS8618
-    private Question()
-    {
-    }
+    private Question() {}
 #pragma warning restore CS8618
 }

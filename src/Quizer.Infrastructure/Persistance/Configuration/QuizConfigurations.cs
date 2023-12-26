@@ -23,7 +23,7 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
             qs.HasKey("Id");
 
             qs.Property(i => i.Value)
-                .HasColumnName("TestQuestionId")
+                .HasColumnName("QuestionId")
                 .ValueGeneratedNever();
         });
 
