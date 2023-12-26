@@ -13,8 +13,8 @@ COPY ["src/Quizer.Application/Quizer.Application.csproj", "Quizer.Application/"]
 COPY ["src/Quizer.Domain/Quizer.Domain.csproj", "Quizer.Domain/"]
 COPY ["src/Quizer.Infrastructure/Quizer.Infrastructure.csproj", "Quizer.Infrastructure/"]
 RUN dotnet restore "Quizer.Api/Quizer.Api.csproj"
-COPY . .
 WORKDIR "/src/Quizer.Api"
+COPY . .
 RUN dotnet build "./Quizer.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
