@@ -28,9 +28,9 @@ public class QuizRepository : IQuizRepository
         return await _context.Quizes.FirstOrDefaultAsync(q => q.Id == id);
     }
 
-    public async Task<Quiz?> Get(string name)
+    public async Task<Quiz?> Get(string userName, string quizName)
     {
-        return await _context.Quizes.FirstOrDefaultAsync(q => q.Name == name);
+        return await _context.Quizes.FirstOrDefaultAsync(q => q.UserName == userName && q.Name == quizName);
     }
 
     public async Task<List<Quiz>> GetAll(Guid? userId = null)

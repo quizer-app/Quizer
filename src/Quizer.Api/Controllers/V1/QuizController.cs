@@ -5,7 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Quizes.Commands.CreateQuiz;
 using Quizer.Application.Quizes.Commands.DeleteQuiz;
 using Quizer.Application.Quizes.Commands.UpdateQuiz;
-using Quizer.Application.Quizes.Queries.GetQuiz;
+using Quizer.Application.Quizes.Queries.GetQuizById;
+using Quizer.Application.Quizes.Queries.GetQuizByName;
 using Quizer.Application.Quizes.Queries.GetQuizes;
 using Quizer.Contracts.Quiz;
 using System.Security.Claims;
@@ -37,11 +38,11 @@ public class QuizController : ApiController
             Problem);
     }
 
-    [HttpGet("id/{id:guid}")]
+    [HttpGet("{id:guid}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetQuizById(Guid id)
     {
-        var query = new GetQuizQuery(id, null);
+        var query = new GetQuizByIdQuery(id);
         var result = await _mediator.Send(query);
 
         return result.Match(
@@ -49,11 +50,11 @@ public class QuizController : ApiController
             Problem);
     }
 
-    [HttpGet("name/{name}")]
+    [HttpGet("{userName}/{quizName}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetQuizByName(string name)
+    public async Task<IActionResult> GetQuizByName(string userName, string quizName)
     {
-        var query = new GetQuizQuery(null, name);
+        var query = new GetQuizByNameQuery(userName, quizName);
         var result = await _mediator.Send(query);
 
         return result.Match(

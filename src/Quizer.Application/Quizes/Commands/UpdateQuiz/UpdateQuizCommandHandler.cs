@@ -2,6 +2,7 @@
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Application.Quizes.Commands.UpdateQuiz;
+using Quizer.Application.Services.Slugify;
 using Quizer.Domain.Common.Errors;
 using Quizer.Domain.QuizAggregate;
 
@@ -10,10 +11,12 @@ namespace Quizer.Application.Quizes.Commands.DeleteQuiz;
 public class UpdateQuizCommandHandler : IRequestHandler<UpdateQuizCommand, ErrorOr<QuizId>>
 {
     private readonly IQuizRepository _quizRepository;
+    private readonly ISlugifyService _slugifyService;
 
-    public UpdateQuizCommandHandler(IQuizRepository quizRepository)
+    public UpdateQuizCommandHandler(IQuizRepository quizRepository, ISlugifyService slugifyService)
     {
         _quizRepository = quizRepository;
+        _slugifyService = slugifyService;
     }
 
     public async Task<ErrorOr<QuizId>> Handle(UpdateQuizCommand request, CancellationToken cancellationToken)
@@ -25,7 +28,9 @@ public class UpdateQuizCommandHandler : IRequestHandler<UpdateQuizCommand, Error
 
         var id = (QuizId)quiz.Id;
 
-        var result = quiz.Update(request.Name, request.Description);
+        string slug = _slugifyService.GenerateSlug(request.Name);
+
+        var result = quiz.Update(request.Name, slug, request.Description);
         if (result.IsError) return result.Errors;
         
         return id;

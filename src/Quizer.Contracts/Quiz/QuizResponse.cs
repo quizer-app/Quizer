@@ -3,7 +3,9 @@
 public record QuizResponse(
     string Id,
     string UserId,
+    string UserName,
     string Name,
+    string Slug,
     string Description,
     double AverageRating,
     int NumberOfRatings,
