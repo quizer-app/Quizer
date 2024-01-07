@@ -50,11 +50,11 @@ public class QuizController : ApiController
             Problem);
     }
 
-    [HttpGet("{userName}/{quizName}")]
+    [HttpGet("{userName}/{quizSlug}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetQuizByName(string userName, string quizName)
+    public async Task<IActionResult> GetQuizByName(string userName, string quizSlug)
     {
-        var query = new GetQuizByNameQuery(userName, quizName);
+        var query = new GetQuizByNameQuery(userName, quizSlug);
         var result = await _mediator.Send(query);
 
         return result.Match(

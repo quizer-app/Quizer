@@ -33,14 +33,17 @@ public static class DependencyInjection
         return services;
     }
 
-    public static IServiceCollection AddPersistance(this IServiceCollection services, ConfigurationManager configuration)
+    public static IServiceCollection AddPersistance(
+        this IServiceCollection services,
+        ConfigurationManager configuration)
     {
         services
             .AddDbContext<QuizerDbContext>(options =>
                 options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services
-            .AddIdentity<User, IdentityRole>(options => {
+            .AddIdentity<User, IdentityRole>(options =>
+            {
                 options.SignIn.RequireConfirmedEmail = false;
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequiredLength = 8;
@@ -52,6 +55,13 @@ public static class DependencyInjection
 
         services.AddScoped<PublishDomainEventsInterceptor>();
 
+        services.AddRepositories();
+
+        return services;
+    }
+
+    private static IServiceCollection AddRepositories(this IServiceCollection services)
+    {
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IQuizRepository, QuizRepository>();
         services.AddScoped<IQuestionRepository, QuestionRepository>();
