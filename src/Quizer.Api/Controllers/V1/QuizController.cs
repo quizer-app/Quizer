@@ -38,11 +38,11 @@ public class QuizController : ApiController
             Problem);
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{quizId:guid}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetQuizById(Guid id)
+    public async Task<IActionResult> GetQuizById(Guid quizId)
     {
-        var query = new GetQuizByIdQuery(id);
+        var query = new GetQuizByIdQuery(quizId);
         var result = await _mediator.Send(query);
 
         return result.Match(
@@ -75,12 +75,12 @@ public class QuizController : ApiController
             Problem);
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("{quizId:guid}")]
     public async Task<IActionResult> UpdateQuiz(
-        Guid id,
+        Guid quizId,
         [FromBody] UpdateQuizRequest request)
     {
-        var command = _mapper.Map<UpdateQuizCommand>((request, id));
+        var command = _mapper.Map<UpdateQuizCommand>((request, quizId));
         var result = await _mediator.Send(command);
 
         return result.Match(
@@ -88,10 +88,10 @@ public class QuizController : ApiController
             Problem);
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteQuiz(Guid id)
+    [HttpDelete("{quizId:guid}")]
+    public async Task<IActionResult> DeleteQuiz(Guid quizId)
     {
-        var command = new DeleteQuizCommand(id);
+        var command = new DeleteQuizCommand(quizId);
         var result = await _mediator.Send(command);
 
         return result.Match(

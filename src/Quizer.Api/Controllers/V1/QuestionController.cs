@@ -23,11 +23,11 @@ public class QuestionController : ApiController
         _mapper = mapper;
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{questionId:guid}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetQuestion(Guid id)
+    public async Task<IActionResult> GetQuestion(Guid questionId)
     {
-        var query = new GetQuestionQuery(id);
+        var query = new GetQuestionQuery(questionId);
         var result = await _mediator.Send(query);
 
         return result.Match(
@@ -61,10 +61,10 @@ public class QuestionController : ApiController
             Problem);
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteQuestion(Guid id)
+    [HttpDelete("{questionId:guid}")]
+    public async Task<IActionResult> DeleteQuestion(Guid questionId)
     {
-        var command = new DeleteQuestionCommand(id);
+        var command = new DeleteQuestionCommand(questionId);
         var result = await _mediator.Send(command);
 
         return result.Match(

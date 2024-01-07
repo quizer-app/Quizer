@@ -8,6 +8,7 @@ using Quizer.Domain.QuizAggregate;
 using Quizer.Domain.QuestionAggregate;
 using Quizer.Contracts.Question;
 using Quizer.Application.Quizes.Common;
+using Quizer.Domain.QuestionAggregate.Entities;
 
 namespace Quizer.Api.Common.Mapping;
 
@@ -23,11 +24,16 @@ public class QuizMappingConfig : IRegister
     {
         config.NewConfig<Question, QuestionResponse>()
             .Map(dest => dest.Id, src => src.Id.Value.ToString())
-            .Map(dest => dest.Question, src => src.QuestionText);
+            .Map(dest => dest.Question, src => src.QuestionText)
+            .Map(dest => dest.Answers, src => src.Answers);
+
+        config.NewConfig<Answer, AnswerResponse>()
+            .Map(dest => dest, src => src);
 
         config.NewConfig<(UpdateQuestionRequest Request, Guid QuestionId), UpdateQuestionCommand>()
             .Map(dest => dest.QuestionId, src => src.QuestionId)
             .Map(dest => dest.QuestionText, src => src.Request.Question)
+            .Map(dest => dest.Answers, src => src.Request.Answers)
             .Map(dest => dest, src => src.Request);
 
         config.NewConfig<(CreateQuestionRequest Request, Guid QuizId), CreateQuestionCommand>()
@@ -38,6 +44,9 @@ public class QuizMappingConfig : IRegister
 
         config.NewConfig<CreateQuestionAnswer, AnswerRequest>()
             .Map(dest => dest, src => src);
+
+        config.NewConfig<QuestionId, QuestionIdResponse>()
+            .Map(dest => dest.Id, src => src.Value.ToString());
     }
 
     private static void RegisterQuiz(TypeAdapterConfig config)

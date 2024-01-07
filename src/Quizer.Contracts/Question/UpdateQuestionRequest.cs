@@ -2,5 +2,4 @@
 
 public record UpdateQuestionRequest(
     string Question,
-    string Answer
-    );
+    List<AnswerRequest> Answers);
