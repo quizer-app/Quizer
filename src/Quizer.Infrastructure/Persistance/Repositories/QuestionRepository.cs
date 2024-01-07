@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.QuestionAggregate;
+using Quizer.Domain.QuizAggregate;
 
 namespace Quizer.Infrastructure.Persistance.Repositories;
 
@@ -23,13 +24,15 @@ public class QuestionRepository : IQuestionRepository
         _context.Questions.Remove(question);
     }
 
-    public async Task<Question?> Get(QuestionId id)
+    public async Task<Question?> Get(QuestionId questionId)
     {
-        return await _context.Questions.FirstOrDefaultAsync(qs => qs.Id == id);
+        return await _context.Questions.FirstOrDefaultAsync(qs => qs.Id == questionId);
     }
 
-    public async Task<List<Question>> GetAllQuestions()
+    public async Task<List<Question>> GetAllQuestions(QuizId quizId)
     {
-        return await _context.Questions.ToListAsync();
+        return await _context.Questions
+            .Where(question => question.QuizId == quizId)
+            .ToListAsync();
     }
 }

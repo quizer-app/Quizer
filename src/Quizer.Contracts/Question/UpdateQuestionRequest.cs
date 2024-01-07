@@ -1,4 +1,4 @@
-﻿namespace Quizer.Contracts.Quiz;
+﻿namespace Quizer.Contracts.Question;
 
 public record UpdateQuestionRequest(
     string Question,

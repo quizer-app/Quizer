@@ -34,7 +34,7 @@ public class QuizController : ApiController
         var result = await _mediator.Send(query);
 
         return result.Match(
-            quizes => Ok(_mapper.Map<List<QuizResponse>>(quizes)),
+            quizes => Ok(_mapper.Map<List<ShortQuizResponse>>(quizes)),
             Problem);
     }
 

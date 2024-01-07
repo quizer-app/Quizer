@@ -1,9 +1,9 @@
 ﻿using ErrorOr;
 using MediatR;
-using Quizer.Domain.QuizAggregate;
+using Quizer.Application.Quizes.Common;
 
 namespace Quizer.Application.Quizes.Queries.GetQuizByName;
 
 public record GetQuizByNameQuery(
     string UserName,
-    string QuizName) : IRequest<ErrorOr<Quiz>>;
+    string QuizName) : IRequest<ErrorOr<DetailedQuizResult>>;
