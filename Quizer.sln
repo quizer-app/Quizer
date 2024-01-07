@@ -9,13 +9,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1230AD7A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quizer.Api", "src\Quizer.Api\Quizer.Api.csproj", "{FC9B55C1-56EF-453D-A6AC-74C38B011E2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizer.Contracts", "src\Quizer.Contracts\Quizer.Contracts.csproj", "{9D53B1F1-F781-4CBB-B3B4-A660D00487D9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quizer.Contracts", "src\Quizer.Contracts\Quizer.Contracts.csproj", "{9D53B1F1-F781-4CBB-B3B4-A660D00487D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizer.Application", "src\Quizer.Application\Quizer.Application.csproj", "{38AC9614-809E-419D-A209-023F9C2AFE75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quizer.Application", "src\Quizer.Application\Quizer.Application.csproj", "{38AC9614-809E-419D-A209-023F9C2AFE75}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quizer.Infrastructure", "src\Quizer.Infrastructure\Quizer.Infrastructure.csproj", "{644F4CCF-BCCE-4AB5-AD20-D1D8E9174A84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizer.Domain", "src\Quizer.Domain\Quizer.Domain.csproj", "{22E70F95-D56C-4122-8317-F28B3A9F9620}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quizer.Domain", "src\Quizer.Domain\Quizer.Domain.csproj", "{22E70F95-D56C-4122-8317-F28B3A9F9620}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{782A4A52-68F2-4C39-811F-5D0862E581B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
