@@ -5,7 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <UserSecretsId>d5aba78c-3529-4cb4-8caf-891dfecd83de</UserSecretsId>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +31,10 @@
     <ProjectReference Include="..\Quizer.Application\Quizer.Application.csproj" />
     <ProjectReference Include="..\Quizer.Contracts\Quizer.Contracts.csproj" />
     <ProjectReference Include="..\Quizer.Infrastructure\Quizer.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo.cs" />
   </ItemGroup>
 
 </Project>
