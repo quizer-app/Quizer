@@ -4,11 +4,13 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Diacritics" Version="3.3.18" />
     <PackageReference Include="ErrorOr" Version="1.9.0" />
+    <PackageReference Include="FluentEmail.SendGrid" Version="3.0.2" />
     <PackageReference Include="FluentValidation" Version="11.9.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="MediatR" Version="12.2.0" />
@@ -16,6 +18,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Quizer.Domain\Quizer.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\AssemblyInfo.cs" />
   </ItemGroup>
 
 </Project>

@@ -17,10 +17,15 @@ public static class DependencyInjection
 
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
         services.AddValidatorsFromAssembly(assembly);
 
         services.AddServices();
+
+        services
+            .AddFluentEmail("quizer@elotoja.com")
+            .AddSendGridSender("API_KEY");
 
         return services;
     }

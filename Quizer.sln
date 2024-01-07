@@ -19,6 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quizer.Domain", "src\Quizer
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFiles", "SolutionFiles", "{782A4A52-68F2-4C39-811F-5D0862E581B6}"
 	ProjectSection(SolutionItems) = preProject
+		AssemblyInfo.cs = AssemblyInfo.cs
 		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
