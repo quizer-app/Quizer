@@ -4,7 +4,6 @@ using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Common.Errors;
 using Quizer.Domain.QuestionAggregate;
 using Quizer.Domain.QuestionAggregate.Entities;
-using Quizer.Domain.QuestionAggregate.ValueObjects;
 using Quizer.Domain.QuizAggregate;
 
 namespace Quizer.Application.Quizes.Commands.CreateQuestion;
@@ -13,12 +12,10 @@ public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionComman
 {
     private readonly IQuizRepository _quizRepository;
     private readonly IQuestionRepository _questionRepository;
-    private readonly IUnitOfWork _unitOfWork;
 
-    public CreateQuestionCommandHandler(IQuizRepository quizRepository, IUnitOfWork unitOfWork, IQuestionRepository questionRepository)
+    public CreateQuestionCommandHandler(IQuizRepository quizRepository, IQuestionRepository questionRepository)
     {
         _quizRepository = quizRepository;
-        _unitOfWork = unitOfWork;
         _questionRepository = questionRepository;
     }
 

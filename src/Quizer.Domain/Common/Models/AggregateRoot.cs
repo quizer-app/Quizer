@@ -8,6 +8,8 @@ public abstract class AggregateRoot<TId, TIdType> : Entity<TId>
     protected AggregateRoot(TId id)
     {
         Id = id;
+        UpdatedAt = DateTime.UtcNow;
+        CreatedAt = DateTime.UtcNow;
     }
 
 #pragma warning disable CS8618

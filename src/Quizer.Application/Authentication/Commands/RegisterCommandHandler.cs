@@ -31,6 +31,10 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<R
             Email = command.Email,
         };
         var result = await _userManager.CreateAsync(user, command.Password);
+        if(!result.Succeeded)
+            return result.Errors
+                .Select(error => Error.Validation(error.Code, error.Description))
+                .ToList();
 
         _logger.LogInformation("Registered: {@Result}", result);
 

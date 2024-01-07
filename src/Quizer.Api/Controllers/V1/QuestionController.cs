@@ -6,7 +6,7 @@ using Quizer.Application.Quizes.Commands.CreateQuestion;
 using Quizer.Application.Quizes.Commands.DeleteQuestion;
 using Quizer.Application.Quizes.Commands.UpdateQuestion;
 using Quizer.Application.Quizes.Queries.GetQuestion;
-using Quizer.Contracts.Quiz;
+using Quizer.Contracts.Question;
 
 namespace Quizer.Api.Controllers.V1;
 
@@ -23,11 +23,11 @@ public class QuestionController : ApiController
         _mapper = mapper;
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{questionId:guid}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetQuestion(Guid id)
+    public async Task<IActionResult> GetQuestion(Guid questionId)
     {
-        var query = new GetQuestionQuery(id);
+        var query = new GetQuestionQuery(questionId);
         var result = await _mediator.Send(query);
 
         return result.Match(
@@ -35,11 +35,12 @@ public class QuestionController : ApiController
             Problem);
     }
 
-    [HttpPost]
+    [HttpPost("{quizId:guid}")]
     public async Task<IActionResult> CreateQuestion(
-        CreateQuestionRequest request)
+        Guid quizId,
+        [FromBody] CreateQuestionRequest request)
     {
-        var command = _mapper.Map<CreateQuestionCommand>(request);
+        var command = _mapper.Map<CreateQuestionCommand>((request, quizId));
         var result = await _mediator.Send(command);
 
         return result.Match(
@@ -47,12 +48,12 @@ public class QuestionController : ApiController
             Problem);
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("{questionId:guid}")]
     public async Task<IActionResult> UpdateQuestion(
-        Guid id,
+        Guid questionId,
         [FromBody] UpdateQuestionRequest request)
     {
-        var command = _mapper.Map<UpdateQuestionCommand>((request, id));
+        var command = _mapper.Map<UpdateQuestionCommand>((request, questionId));
         var result = await _mediator.Send(command);
 
         return result.Match(
@@ -60,10 +61,10 @@ public class QuestionController : ApiController
             Problem);
     }
 
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteQuestion(Guid id)
+    [HttpDelete("{questionId:guid}")]
+    public async Task<IActionResult> DeleteQuestion(Guid questionId)
     {
-        var command = new DeleteQuestionCommand(id);
+        var command = new DeleteQuestionCommand(questionId);
         var result = await _mediator.Send(command);
 
         return result.Match(

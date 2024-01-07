@@ -18,7 +18,7 @@ public sealed class Answer : Entity<AnswerId>
         IsCorrect = isCorrect;
     }
 
-    public static ErrorOr<Answer> Create(string answer, bool isCorrect)
+    public static ErrorOr<Answer> Create(string answer, bool isCorrect = false)
     {
         var question = new Answer(AnswerId.CreateUnique(), answer, isCorrect);
 

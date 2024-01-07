@@ -1,3 +1,3 @@
-﻿namespace Quizer.Contracts.Quiz;
+﻿namespace Quizer.Contracts.Question;
 
 public record QuestionIdResponse(string Id);

@@ -9,8 +9,8 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
     private readonly List<IDomainEvent> _domainEvents = new();
     public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
     public TId Id { get; protected set; }
-    public DateTime CreatedAt { get; private set; }
-    public DateTime UpdatedAt { get; private set; }
+    public DateTime CreatedAt { get; protected set; }
+    public DateTime UpdatedAt { get; protected set; }
 
     protected Entity(TId id)
     {

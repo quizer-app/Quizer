@@ -2,6 +2,5 @@
 
 public record CreateQuizRequest(
     string Name,
-    string Description,
-    List<CreateQuestionRequest> Questions
+    string Description
     );
