@@ -18,6 +18,8 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     public string Slug { get; private set; }
     public string Description { get; private set; }
     public AverageRating AverageRating { get; private set; }
+    
+    public string Location => $"{UserName}/{Slug}";
     public IReadOnlyList<QuestionId> QuestionIds => _questionIds.AsReadOnly();
 
     private Quiz(
