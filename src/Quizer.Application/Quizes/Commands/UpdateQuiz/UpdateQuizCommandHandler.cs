@@ -1,19 +1,18 @@
 ﻿using ErrorOr;
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
-using Quizer.Application.Quizes.Commands.UpdateQuiz;
 using Quizer.Application.Services.Slugify;
 using Quizer.Domain.Common.Errors;
 using Quizer.Domain.QuizAggregate;
 
-namespace Quizer.Application.Quizes.Commands.DeleteQuiz;
+namespace Quizer.Application.Quizes.Commands.UpdateQuiz;
 
-public class UpdateQuizCommandHandler : IRequestHandler<UpdateQuizCommand, ErrorOr<QuizId>>
+public class UpdateQuizImageCommandHandler : IRequestHandler<UpdateQuizCommand, ErrorOr<QuizId>>
 {
     private readonly IQuizRepository _quizRepository;
     private readonly ISlugifyService _slugifyService;
 
-    public UpdateQuizCommandHandler(IQuizRepository quizRepository, ISlugifyService slugifyService)
+    public UpdateQuizImageCommandHandler(IQuizRepository quizRepository, ISlugifyService slugifyService)
     {
         _quizRepository = quizRepository;
         _slugifyService = slugifyService;
