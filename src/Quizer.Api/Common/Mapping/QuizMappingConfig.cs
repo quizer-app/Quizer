@@ -9,8 +9,6 @@ using Quizer.Domain.QuestionAggregate;
 using Quizer.Contracts.Question;
 using Quizer.Application.Quizes.Common;
 using Quizer.Domain.QuestionAggregate.Entities;
-using Quizer.Contracts.Common;
-using Quizer.Application.Utils;
 
 namespace Quizer.Api.Common.Mapping;
 

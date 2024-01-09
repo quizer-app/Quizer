@@ -19,6 +19,7 @@ public static class ApplicationConfiguration
 
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseStaticFiles();
 
         app.MapControllers();
         app.Run();
