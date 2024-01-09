@@ -2,7 +2,7 @@
 
 # Set the source and destination directories
 source_dir="/src/images"
-destination_dir="/src/wwwroot/images"
+destination_dir="./src/Quizer.Api/Quizer.Api.csproj/bin/Release/net8.0/wwwroot/images"
 
 # Create the destination directory if it doesn't exist
 mkdir -p "$destination_dir"
