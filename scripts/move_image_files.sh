@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Set the source and destination directories
-source_dir="../images"
-destination_dir="../wwwroot/images"
+source_dir="/src/images"
+destination_dir="/src/wwwroot/images"
 
 # Create the destination directory if it doesn't exist
 mkdir -p "$destination_dir"
