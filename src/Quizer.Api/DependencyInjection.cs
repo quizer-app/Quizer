@@ -19,6 +19,18 @@ public static class DependencyInjection
 
         services.AddMappings();
 
+        services.AddCors(options =>
+        {
+            options.AddPolicy(
+                name: "cors",
+                policy =>
+                {
+                    policy.WithOrigins(
+                        "https://quizer.local.elotoja.com",
+                        "http://localhost:5173");
+                });
+        });
+
         return services;
     }
 
