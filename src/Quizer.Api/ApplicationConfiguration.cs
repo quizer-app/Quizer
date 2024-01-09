@@ -15,7 +15,7 @@ public static class ApplicationConfiguration
 
         app.UseHttpsRedirection();
 
-        app.UseCors("cors");
+        app.UseCors(CorsSettings.PolicyName);
 
         app.UseAuthentication();
         app.UseAuthorization();

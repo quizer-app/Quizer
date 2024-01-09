@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services
         .AddApplication()
         .AddInfractructure(builder.Configuration)
-        .AddPresentation();
+        .AddPresentation(builder.Configuration);
 }
 
 Log.Logger =
