@@ -41,8 +41,7 @@ public static class DependencyInjection
             .AddDbContext<QuizerDbContext>(options =>
             {
                 options
-                    .UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
-                    .UseSnakeCaseNamingConvention();
+                    .UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
             });
 
 
