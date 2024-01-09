@@ -12,8 +12,8 @@ using Quizer.Infrastructure.Persistance;
 namespace Quizer.Infrastructure.Migrations
 {
     [DbContext(typeof(QuizerDbContext))]
-    [Migration("20231226231001_FixSchema")]
-    partial class FixSchema
+    [Migration("20240109012116_InitialSchema")]
+    partial class InitialSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

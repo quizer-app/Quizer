@@ -39,7 +39,11 @@ public static class DependencyInjection
     {
         services
             .AddDbContext<QuizerDbContext>(options =>
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            {
+                options
+                    .UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+            });
+
 
         services
             .AddIdentity<User, IdentityRole>(options =>
