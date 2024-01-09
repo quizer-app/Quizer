@@ -18,7 +18,7 @@ public class UpdateQuizImageCommandHandler : IRequestHandler<UpdateQuizImageComm
 
     public async Task<ErrorOr<QuizId>> Handle(UpdateQuizImageCommand request, CancellationToken cancellationToken)
     {
-        string[] correctExtensions = { ".jpg", ".jpeg", ".png" };
+        string[] correctExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
 
         if (!IsCorrectExtension(request.File.FileName, correctExtensions))
             return Errors.Image.WrongFormat(correctExtensions);
