@@ -8,6 +8,7 @@ namespace Quizer.Infrastructure.Persistance.Repositories;
 public class QuizRepository : IQuizRepository
 {
     private readonly QuizerDbContext _context;
+    public IQueryable<Quiz> Quizes => _context.Quizes;
 
     public QuizRepository(QuizerDbContext context)
     {
@@ -32,13 +33,5 @@ public class QuizRepository : IQuizRepository
     public async Task<Quiz?> Get(string userName, string quizSlug)
     {
         return await _context.Quizes.FirstOrDefaultAsync(q => q.UserName == userName && q.Slug == quizSlug);
-    }
-
-    public async Task<List<Quiz>> GetAll(Guid? userId = null)
-    {
-        if (userId is null)
-            return await _context.Quizes.ToListAsync();
-        else
-            return await _context.Quizes.Where(q => q.UserId == userId).ToListAsync();
     }
 }

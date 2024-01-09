@@ -1,11 +1,13 @@
 ﻿using ErrorOr;
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
+using Quizer.Application.Utils;
 using Quizer.Domain.QuizAggregate;
+using System.Linq.Expressions;
 
 namespace Quizer.Application.Quizes.Queries.GetQuizes;
 
-public class GetQuizesQueryHandler : IRequestHandler<GetQuizesQuery, ErrorOr<List<Quiz>>>
+public class GetQuizesQueryHandler : IRequestHandler<GetQuizesQuery, ErrorOr<PagedList<Quiz>>>
 {
     private readonly IQuizRepository _quizRepository;
 
@@ -14,9 +16,40 @@ public class GetQuizesQueryHandler : IRequestHandler<GetQuizesQuery, ErrorOr<Lis
         _quizRepository = quizRepository;
     }
 
-    public async Task<ErrorOr<List<Quiz>>> Handle(GetQuizesQuery request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<PagedList<Quiz>>> Handle(GetQuizesQuery request, CancellationToken cancellationToken)
     {
-        Guid? userId = request.UserId is null ? null : new Guid(request.UserId);
-        return await _quizRepository.GetAll(userId);
+        IQueryable<Quiz> quizesQuery = _quizRepository.Quizes;
+
+        if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+        {
+            quizesQuery = quizesQuery.Where(q =>
+                q.Name.Contains(request.SearchTerm) ||
+                q.UserName.Contains(request.SearchTerm));
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.UserName))
+        {
+            quizesQuery = quizesQuery.Where(q => q.UserName == request.UserName);
+        }
+
+        Expression<Func<Quiz, object>> keySelector = request.SortColumn?.ToLower() switch
+        {
+            "name" => q => q.Name,
+            "userName" => q => q.UserName,
+            "createdAt" => q => q.CreatedAt,
+            _ => q => q.CreatedAt
+        };
+
+        if (request.SortOrder?.ToLower() == "desc")
+        {
+            quizesQuery = quizesQuery.OrderByDescending(keySelector);
+        }
+        else
+        {
+            quizesQuery = quizesQuery.OrderBy(keySelector);
+        }
+
+        var quizes = await PagedList<Quiz>.CreateAsync(quizesQuery, request.PageNumber, request.PageSize);
+        return quizes;
     }
 }

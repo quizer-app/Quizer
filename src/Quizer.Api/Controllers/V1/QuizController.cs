@@ -8,6 +8,7 @@ using Quizer.Application.Quizes.Commands.UpdateQuiz;
 using Quizer.Application.Quizes.Queries.GetQuizById;
 using Quizer.Application.Quizes.Queries.GetQuizByName;
 using Quizer.Application.Quizes.Queries.GetQuizes;
+using Quizer.Contracts.Common;
 using Quizer.Contracts.Quiz;
 using System.Security.Claims;
 
@@ -28,13 +29,26 @@ public class QuizController : ApiController
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetQuizes(string? userId = null)
+    public async Task<IActionResult> GetQuizes(
+        string? searchTerm,
+        string? sortColumn,
+        string? sortOrder,
+        int pageNumber,
+        int pageSize,
+        string? userName)
     {
-        var query = new GetQuizesQuery(userId);
+        var query = new GetQuizesQuery(
+            searchTerm,
+            sortColumn,
+            sortOrder,
+            pageNumber,
+            pageSize,
+            userName);
+
         var result = await _mediator.Send(query);
 
         return result.Match(
-            quizes => Ok(_mapper.Map<List<ShortQuizResponse>>(quizes)),
+            quizes => Ok(_mapper.Map<PaginatedResponse<ShortQuizResponse>>(quizes)),
             Problem);
     }
 
