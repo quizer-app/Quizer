@@ -8,8 +8,10 @@ public record QuizResponse(
     string UserName,
     string Name,
     string Slug,
+    string Location,
     string Description,
     double AverageRating,
     int NumberOfRatings,
-    IReadOnlyList<QuestionResponse> Questions
+    IReadOnlyList<QuestionResponse> Questions,
+    DateTime CreatedAt
     );
