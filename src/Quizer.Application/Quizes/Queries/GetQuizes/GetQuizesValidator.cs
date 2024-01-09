@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using Quizer.Application.Common.Validation;
 
 namespace Quizer.Application.Quizes.Queries.GetQuizes;
 
@@ -7,8 +6,11 @@ public class GetQuizesValidator : AbstractValidator<GetQuizesQuery>
 {
     public GetQuizesValidator()
     {
-        RuleFor(q => q.UserId)
-            .BeValidGuid()
-            .When(q => !string.IsNullOrEmpty(q.UserId));
+        RuleFor(q => q.PageSize)
+            .GreaterThanOrEqualTo(1)
+            .LessThanOrEqualTo(100);
+
+        RuleFor(q => q.PageNumber)
+            .GreaterThanOrEqualTo(1);
     }
 }
