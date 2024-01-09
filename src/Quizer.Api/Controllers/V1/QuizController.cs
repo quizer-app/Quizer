@@ -9,6 +9,7 @@ using Quizer.Application.Quizes.Commands.UpdateQuizImage;
 using Quizer.Application.Quizes.Queries.GetQuizById;
 using Quizer.Application.Quizes.Queries.GetQuizByName;
 using Quizer.Application.Quizes.Queries.GetQuizes;
+using Quizer.Application.Quizes.Queries.GetQuizImage;
 using Quizer.Application.Services.Image;
 using Quizer.Contracts.Common;
 using Quizer.Contracts.Quiz;
@@ -22,13 +23,11 @@ public class QuizController : ApiController
 {
     private readonly ISender _mediator;
     private readonly IMapper _mapper;
-    private readonly IImageService _imageService;
 
-    public QuizController(ISender mediator, IMapper mapper, IImageService imageService)
+    public QuizController(ISender mediator, IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;
-        _imageService = imageService;
     }
 
     [HttpGet]
@@ -110,11 +109,12 @@ public class QuizController : ApiController
     [HttpGet("{quizId:guid}/image")]
     public async Task<IActionResult> GetQuizImage([FromRoute] Guid quizId)
     {
-        string imagePath = _imageService.GetImagePath("quiz", quizId);
+        var query = new GetQuizImageQuery(quizId);
+        var result = await _mediator.Send(query);
 
-        var imageData = System.IO.File.ReadAllBytes(imagePath);
-
-        return File(imageData, "image/webp");
+        return result.Match(
+            image => File(image.ImageData, image.Mime),
+            Problem);
     }
 
     [AllowAnonymous]
