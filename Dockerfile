@@ -9,6 +9,10 @@ RUN dotnet publish "./src/Quizer.Api/Quizer.Api.csproj" -c $BUILD_CONFIGURATION 
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 USER app
+
+VOLUME /app/logs
+VOLUME /app/wwwroot
+
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
