@@ -5,13 +5,19 @@ using Asp.Versioning;
 using Microsoft.Extensions.Options;
 using Quizer.Api.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using Quizer.Api.Common.Settings;
 
 namespace Quizer.Api;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddPresentation(this IServiceCollection services)
+    public static IServiceCollection AddPresentation(
+        this IServiceCollection services,
+        ConfigurationManager configuration)
     {
+        var corsSettings = new CorsSettings();
+        configuration.Bind(CorsSettings.SectionName, corsSettings);
+
         services.AddApiVersioning();
 
         services.AddControllers();
@@ -22,12 +28,10 @@ public static class DependencyInjection
         services.AddCors(options =>
         {
             options.AddPolicy(
-                name: "cors",
+                name: CorsSettings.PolicyName,
                 policy =>
                 {
-                    policy.WithOrigins(
-                        "https://quizer.local.elotoja.com",
-                        "http://localhost:5173");
+                    policy.WithOrigins(corsSettings.Origins);
                 });
         });
 

@@ -1,8 +1,7 @@
-﻿namespace Quizer.Api.Common.Settings
+﻿namespace Quizer.Api.Common.Settings;
+
+public class SwaggerSettings
 {
-    public class SwaggerSettings
-    {
-        public const string SectionName = "Swagger";
-        public bool Enabled { get; init; }
-    }
+    public const string SectionName = "Swagger";
+    public bool Enabled { get; init; }
 }
