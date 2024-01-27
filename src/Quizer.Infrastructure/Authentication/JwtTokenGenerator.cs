@@ -71,7 +71,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         return new JwtSecurityTokenHandler().WriteToken(securityToken);
     }
 
-    public bool ValidateRefreshToken(string refreshToken)
+    public async Task<bool> ValidateRefreshToken(string refreshToken)
     {
         var validationParameters = new TokenValidationParameters
         {
@@ -87,16 +87,8 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         };
         var tokenHandler = new JwtSecurityTokenHandler();
 
-        try
-        {
-            SecurityToken validatedToken;
-            ClaimsPrincipal principal = tokenHandler.ValidateToken(refreshToken, validationParameters, out validatedToken);
-            return true;
-        }
-        catch (SecurityTokenException)
-        {
-            return false;
-        }
+        var result = await tokenHandler.ValidateTokenAsync(refreshToken, validationParameters);
+        return result.IsValid;
     }
 
     private List<Claim> CreateClaims(User user)

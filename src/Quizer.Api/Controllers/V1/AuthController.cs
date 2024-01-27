@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Quizer.Application.Authentication.Commands.RefreshToken;
 using Quizer.Application.Authentication.Commands.Register;
 using Quizer.Application.Authentication.Queries.Login;
 using Quizer.Contracts.Authentication;
@@ -73,7 +74,7 @@ public class AuthController : ApiController
         var authResult = await _mediator.Send(query);
 
         return authResult.Match(
-            authResult => Ok(_mapper.Map<RefreshTokenResponse>(authResult)),
+            token => Ok(new RefreshTokenResponse(token)),
             Problem
             );
     }

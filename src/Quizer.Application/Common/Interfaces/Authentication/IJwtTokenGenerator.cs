@@ -7,5 +7,5 @@ public interface IJwtTokenGenerator
     string GenerateAccessToken(User user);
     string GenerateRefreshToken(User user);
     string GenerateAccessToken(string refreshToken);
-    bool ValidateRefreshToken(string refreshToken);
+    Task<bool> ValidateRefreshToken(string refreshToken);
 }
