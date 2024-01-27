@@ -17,7 +17,7 @@ namespace Quizer.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -218,6 +218,25 @@ namespace Quizer.Infrastructure.Migrations
                     b.ToTable("Quizes", (string)null);
                 });
 
+            modelBuilder.Entity("Quizer.Domain.RefreshTokenAggregate.RefreshToken", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsValid")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RefreshTokens", (string)null);
+                });
+
             modelBuilder.Entity("Quizer.Domain.UserAggregate.User", b =>
                 {
                     b.Property<string>("Id")
@@ -413,6 +432,7 @@ namespace Quizer.Infrastructure.Migrations
 
                             b1.ToTable("QuizQuestionIds", (string)null);
 
+                            b1.HasDiscriminator().HasValue("QuestionId");
 
                             b1.WithOwner()
                                 .HasForeignKey("QuizId");
