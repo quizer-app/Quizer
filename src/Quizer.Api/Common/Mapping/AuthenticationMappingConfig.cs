@@ -1,6 +1,6 @@
 ﻿using Mapster;
-using Quizer.Application.Authentication.Commands;
-using Quizer.Application.Authentication.Queries;
+using Quizer.Application.Authentication.Commands.Register;
+using Quizer.Application.Authentication.Queries.Login;
 using Quizer.Contracts.Authentication;
 
 namespace Quizer.Api.Common.Mapping;

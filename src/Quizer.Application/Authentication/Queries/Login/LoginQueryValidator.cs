@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Quizer.Application.Authentication.Queries;
+namespace Quizer.Application.Authentication.Queries.Login;
 
 public class LoginQueryValidator : AbstractValidator<LoginQuery>
 {

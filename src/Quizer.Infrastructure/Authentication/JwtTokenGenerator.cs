@@ -36,6 +36,25 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         return new JwtSecurityTokenHandler().WriteToken(securityToken);
     }
 
+    public string GenerateAccessToken(string refreshToken)
+    {
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var jwtToken = tokenHandler.ReadJwtToken(refreshToken);
+
+        SigningCredentials signingCredentials = CreateSigningCredentials();
+        List<Claim> claims = jwtToken.Claims.ToList();
+
+        var securityToken = new JwtSecurityToken(
+            claims: claims,
+            signingCredentials: signingCredentials,
+            issuer: _jwtSettings.Issuer,
+            audience: _jwtSettings.Audience,
+            expires: _dateTimeProvider.UtcNow.AddDays(_jwtSettings.AccessTokenExpiryMinutes)
+            );
+
+        return new JwtSecurityTokenHandler().WriteToken(securityToken);
+    }
+
     public string GenerateRefreshToken(User user)
     {
         SigningCredentials signingCredentials = CreateSigningCredentials();
@@ -50,6 +69,34 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             );
 
         return new JwtSecurityTokenHandler().WriteToken(securityToken);
+    }
+
+    public bool ValidateRefreshToken(string refreshToken)
+    {
+        var validationParameters = new TokenValidationParameters
+        {
+            ValidateActor = true,
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            RequireExpirationTime = true,
+            ValidIssuer = _jwtSettings.Issuer,
+            ValidAudience = _jwtSettings.Audience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret))
+        };
+        var tokenHandler = new JwtSecurityTokenHandler();
+
+        try
+        {
+            SecurityToken validatedToken;
+            ClaimsPrincipal principal = tokenHandler.ValidateToken(refreshToken, validationParameters, out validatedToken);
+            return true;
+        }
+        catch (SecurityTokenException)
+        {
+            return false;
+        }
     }
 
     private List<Claim> CreateClaims(User user)

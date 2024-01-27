@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace Quizer.Application.Authentication.Commands;
+namespace Quizer.Application.Authentication.Commands.Register;
 
 public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {

@@ -5,7 +5,7 @@ using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Domain.Common.Errors;
 using Quizer.Domain.UserAggregate;
 
-namespace Quizer.Application.Authentication.Queries;
+namespace Quizer.Application.Authentication.Queries.Login;
 
 public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult>>
 {

@@ -3,8 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Quizer.Application.Authentication.Commands;
-using Quizer.Application.Authentication.Queries;
+using Quizer.Application.Authentication.Commands.Register;
+using Quizer.Application.Authentication.Queries.Login;
 using Quizer.Contracts.Authentication;
 using Quizer.Infrastructure.Authentication;
 
@@ -45,7 +45,7 @@ public class AuthController : ApiController
 
         var authResult = await _mediator.Send(query);
 
-        var expirationTime = true ? DateTime.UtcNow.AddDays(_jwtSettings.Value.RefreshTokenExpiryDays) : default;
+        DateTimeOffset? expirationTime = request.RememberMe ? DateTimeOffset.UtcNow.AddDays(_jwtSettings.Value.RefreshTokenExpiryDays) : null;
         if (!authResult.IsError)
             Response.Cookies.Append("refreshToken", authResult.Value.RefreshToken, new CookieOptions
             {
@@ -61,16 +61,20 @@ public class AuthController : ApiController
             );
     }
 
-    //[HttpPost("refresh")]
-    //public async Task<IActionResult> RefreshToken(RefreshTokenRequest request)
-    //{
-    //    var query = _mapper.Map<RefreshTokenQuery>(request);
+    [HttpPost("refresh")]
+    public async Task<IActionResult> RefreshToken()
+    {
+        string? refreshToken = Request.Cookies["refreshToken"];
+        if (refreshToken is null)
+            return Unauthorized();
 
-    //    var authResult = await _mediator.Send(query);
+        var query = new RefreshTokenCommand(refreshToken);
 
-    //    return authResult.Match(
-    //        authResult => Ok(_mapper.Map<RefreshTokenResponse>(authResult)),
-    //        Problem
-    //        );
-    //}
+        var authResult = await _mediator.Send(query);
+
+        return authResult.Match(
+            authResult => Ok(_mapper.Map<RefreshTokenResponse>(authResult)),
+            Problem
+            );
+    }
 }
