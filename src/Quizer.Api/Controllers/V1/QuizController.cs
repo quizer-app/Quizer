@@ -10,7 +10,6 @@ using Quizer.Application.Quizes.Queries.GetQuizById;
 using Quizer.Application.Quizes.Queries.GetQuizByName;
 using Quizer.Application.Quizes.Queries.GetQuizes;
 using Quizer.Application.Quizes.Queries.GetQuizImage;
-using Quizer.Application.Services.Image;
 using Quizer.Contracts.Common;
 using Quizer.Contracts.Quiz;
 using System.Security.Claims;
@@ -31,7 +30,6 @@ public class QuizController : ApiController
     }
 
     [HttpGet]
-    [AllowAnonymous]
     public async Task<IActionResult> GetQuizes(
         string? searchTerm,
         string? sortColumn,
