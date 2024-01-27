@@ -435,8 +435,6 @@ namespace Quizer.Infrastructure.Migrations
 
                             b1.ToTable("QuizQuestionIds", (string)null);
 
-                            b1.HasDiscriminator().HasValue("QuestionId");
-
                             b1.WithOwner()
                                 .HasForeignKey("QuizId");
                         });

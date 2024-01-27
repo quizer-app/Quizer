@@ -6,13 +6,17 @@ services:
     container_name: quizer.api
     build:
       context: .
-      dockerfile: src/Dockerfile
+      dockerfile: ./Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=5001
     ports:
-      - 5000:8080
-      - 5001:8081
+      - 5000:5000
+      - 5001:5001
 
   quizer.database:
-    image: postgres:latest
+    image: postgres:16.1-alpine3.19
     container_name: quizer.database
     environment:
       - POSTGRES_DB=quizer
