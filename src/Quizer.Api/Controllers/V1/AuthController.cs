@@ -3,9 +3,9 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Quizer.Application.Authentication.Commands.Login;
 using Quizer.Application.Authentication.Commands.RefreshToken;
 using Quizer.Application.Authentication.Commands.Register;
-using Quizer.Application.Authentication.Queries.Login;
 using Quizer.Contracts.Authentication;
 using Quizer.Infrastructure.Authentication;
 
@@ -42,7 +42,7 @@ public class AuthController : ApiController
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
-        var query = _mapper.Map<LoginQuery>(request);
+        var query = _mapper.Map<LoginCommand>(request);
 
         var result = await _mediator.Send(query);
 

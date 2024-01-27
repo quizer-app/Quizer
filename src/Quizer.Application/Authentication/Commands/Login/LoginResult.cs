@@ -1,6 +1,6 @@
 ﻿using Quizer.Domain.UserAggregate;
 
-namespace Quizer.Application.Authentication.Queries.Login;
+namespace Quizer.Application.Authentication.Commands.Login;
 
 public record LoginResult(
     User User,
