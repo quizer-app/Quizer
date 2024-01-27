@@ -31,10 +31,10 @@ public class AuthController : ApiController
     {
         var command = _mapper.Map<RegisterCommand>(request);
 
-        var authResult = await _mediator.Send(command);
+        var result = await _mediator.Send(command);
 
-        return authResult.Match(
-            authResult => Ok(_mapper.Map<RegisterResponse>(authResult)),
+        return result.Match(
+            data => Ok(_mapper.Map<RegisterResponse>(data)),
             Problem
             );
     }
@@ -44,11 +44,11 @@ public class AuthController : ApiController
     {
         var query = _mapper.Map<LoginQuery>(request);
 
-        var authResult = await _mediator.Send(query);
+        var result = await _mediator.Send(query);
 
         DateTimeOffset? expirationTime = request.RememberMe ? DateTimeOffset.UtcNow.AddDays(_jwtSettings.Value.RefreshTokenExpiryDays) : null;
-        if (!authResult.IsError)
-            Response.Cookies.Append("refreshToken", authResult.Value.RefreshToken, new CookieOptions
+        if (!result.IsError)
+            Response.Cookies.Append("refreshToken", result.Value.RefreshToken, new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
@@ -56,8 +56,8 @@ public class AuthController : ApiController
                 Expires = expirationTime
             });
 
-        return authResult.Match(
-            authResult => Ok(_mapper.Map<LoginResponse>(authResult)),
+        return result.Match(
+            data => Ok(_mapper.Map<LoginResponse>(data)),
             Problem
             );
     }
@@ -71,9 +71,9 @@ public class AuthController : ApiController
 
         var query = new RefreshTokenCommand(refreshToken);
 
-        var authResult = await _mediator.Send(query);
+        var result = await _mediator.Send(query);
 
-        return authResult.Match(
+        return result.Match(
             token => Ok(new RefreshTokenResponse(token)),
             Problem
             );
