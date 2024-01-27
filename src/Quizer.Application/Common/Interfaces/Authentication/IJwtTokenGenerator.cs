@@ -4,5 +4,6 @@ namespace Quizer.Application.Common.Interfaces.Authentication;
 
 public interface IJwtTokenGenerator
 {
-    string GenerateToken(User user);
+    string GenerateAccessToken(User user);
+    string GenerateRefreshToken(User user);
 }

@@ -20,29 +20,54 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         _jwtSettings = jwtSettings.Value;
     }
 
-    public string GenerateToken(User user)
+    public string GenerateAccessToken(User user)
     {
-        var signingCredentials = new SigningCredentials(
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
-            SecurityAlgorithms.HmacSha512Signature
-        );
-
-        var claims = new List<Claim>
-        {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            //new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName),
-            //new Claim(JwtRegisteredClaimNames.FamilyName, user.LastName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+        SigningCredentials signingCredentials = CreateSigningCredentials();
+        List<Claim> claims = CreateClaims(user);
 
         var securityToken = new JwtSecurityToken(
             claims: claims,
             signingCredentials: signingCredentials,
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
-            expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.ExpiryMinutes)
+            expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes)
             );
 
         return new JwtSecurityTokenHandler().WriteToken(securityToken);
+    }
+
+    public string GenerateRefreshToken(User user)
+    {
+        SigningCredentials signingCredentials = CreateSigningCredentials();
+        List<Claim> claims = CreateClaims(user);
+
+        var securityToken = new JwtSecurityToken(
+            claims: claims,
+            signingCredentials: signingCredentials,
+            issuer: _jwtSettings.Issuer,
+            audience: _jwtSettings.Audience,
+            expires: _dateTimeProvider.UtcNow.AddDays(_jwtSettings.RefreshTokenExpiryDays)
+            );
+
+        return new JwtSecurityTokenHandler().WriteToken(securityToken);
+    }
+
+    private List<Claim> CreateClaims(User user)
+    {
+        return new List<Claim>
+        {
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.GivenName, user.UserName!),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+        };
+    }
+
+    private SigningCredentials CreateSigningCredentials()
+    {
+        return new SigningCredentials(
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Secret)),
+            SecurityAlgorithms.HmacSha512Signature
+        );
     }
 }

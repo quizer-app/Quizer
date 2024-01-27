@@ -31,10 +31,12 @@ public class LoginQueryHandler : IRequestHandler<LoginQuery, ErrorOr<LoginResult
         if (!result.Succeeded)
             return Errors.Authentication.InvalidCredentials;
 
-        var token = _jwtTokenGenerator.GenerateToken(user);
+        var accessToken = _jwtTokenGenerator.GenerateAccessToken(user);
+        var refreshToken = _jwtTokenGenerator.GenerateRefreshToken(user);
 
         return new LoginResult(
             user,
-            token);
+            accessToken,
+            refreshToken);
     }
 }

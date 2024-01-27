@@ -4,5 +4,6 @@ namespace Quizer.Application.Authentication.Queries;
 
 public record LoginResult(
     User User,
-    string Token
+    string AccessToken,
+    string RefreshToken
 );
