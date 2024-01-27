@@ -1,8 +1,24 @@
-version: "3"
+version: '3.4'
+
 services:
-  quizer:
-    image: ghcr.io/quizer-app/quizer:latest
-    container_name: quizer
+  quizer.api:
+    image: ${DOCKER_REGISTRY-}quizerapi
+    container_name: quizer.api
+    build:
+      context: .
+      dockerfile: src/Dockerfile
+    ports:
+      - 5000:8080
+      - 5001:8081
+
+  quizer.database:
+    image: postgres:latest
+    container_name: quizer.database
+    environment:
+      - POSTGRES_DB=quizer
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     volumes:
-      - ./appsettings.json:/app/src/Quizer.Api/appsettings.Production.json
-    restart: unless-stopped
+      - ./.containers/quizer-db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
