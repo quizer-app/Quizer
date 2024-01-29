@@ -1,8 +1,28 @@
-version: "3"
+version: '3.4'
+
 services:
-  quizer:
-    image: ghcr.io/quizer-app/quizer:latest
-    container_name: quizer
+  quizer.api:
+    image: ${DOCKER_REGISTRY-}quizerapi
+    container_name: quizer.api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=5000
+      - ASPNETCORE_HTTPS_PORTS=5001
+    ports:
+      - 5000:5000
+      - 5001:5001
+
+  quizer.database:
+    image: postgres:16.1-alpine3.19
+    container_name: quizer.database
+    environment:
+      - POSTGRES_DB=quizer
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     volumes:
-      - ./appsettings.json:/app/src/Quizer.Api/appsettings.Production.json
-    restart: unless-stopped
+      - ./.containers/quizer-db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432

@@ -5,14 +5,14 @@ using Microsoft.Extensions.Logging;
 using Quizer.Domain.Common.Errors;
 using Quizer.Domain.UserAggregate;
 
-namespace Quizer.Application.Authentication.Commands;
+namespace Quizer.Application.Authentication.Commands.Register;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<RegisterResult>>
+public class RefreshTokenCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<RegisterResult>>
 {
     private readonly UserManager<User> _userManager;
-    private readonly ILogger<RegisterCommandHandler> _logger;
+    private readonly ILogger<RefreshTokenCommandHandler> _logger;
 
-    public RegisterCommandHandler(UserManager<User> userManager, ILogger<RegisterCommandHandler> logger)
+    public RefreshTokenCommandHandler(UserManager<User> userManager, ILogger<RefreshTokenCommandHandler> logger)
     {
         _userManager = userManager;
         _logger = logger;
@@ -20,9 +20,9 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<R
 
     public async Task<ErrorOr<RegisterResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
     {
-        if ((await _userManager.FindByEmailAsync(command.Email)) is not null)
+        if (await _userManager.FindByEmailAsync(command.Email) is not null)
             return Errors.User.DuplicateEmail;
-        if ((await _userManager.FindByNameAsync(command.Username)) is not null)
+        if (await _userManager.FindByNameAsync(command.Username) is not null)
             return Errors.User.DuplicateUsername;
 
         var user = new User
@@ -31,7 +31,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<R
             Email = command.Email,
         };
         var result = await _userManager.CreateAsync(user, command.Password);
-        if(!result.Succeeded)
+        if (!result.Succeeded)
             return result.Errors
                 .Select(error => Error.Validation(error.Code, error.Description))
                 .ToList();

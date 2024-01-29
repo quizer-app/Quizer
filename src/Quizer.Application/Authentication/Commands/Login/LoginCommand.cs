@@ -1,9 +1,9 @@
 ﻿using ErrorOr;
 using MediatR;
 
-namespace Quizer.Application.Authentication.Queries;
+namespace Quizer.Application.Authentication.Commands.Login;
 
-public record LoginQuery(
+public record LoginCommand(
     string Email,
     string Password
     ) : IRequest<ErrorOr<LoginResult>>;
