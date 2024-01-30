@@ -52,7 +52,7 @@ public class AuthController : ApiController
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.Lax,
                 Expires = expirationTime
             });
 
