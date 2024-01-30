@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Services;
@@ -13,17 +14,19 @@ public class JwtTokenProvider : IJwtTokenProvider
 {
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly JwtSettings _jwtSettings;
+    private readonly UserManager<User> _userManager;
 
-    public JwtTokenProvider(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtSettings)
+    public JwtTokenProvider(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtSettings, UserManager<User> userManager)
     {
         _dateTimeProvider = dateTimeProvider;
         _jwtSettings = jwtSettings.Value;
+        _userManager = userManager;
     }
 
-    public string GenerateAccessToken(User user)
+    public async Task<string> GenerateAccessToken(User user)
     {
         SigningCredentials signingCredentials = CreateSigningCredentials();
-        List<Claim> claims = CreateClaims(user);
+        List<Claim> claims = await CreateClaims(user);
 
         var securityToken = new JwtSecurityToken(
             claims: claims,
@@ -55,10 +58,10 @@ public class JwtTokenProvider : IJwtTokenProvider
         return new JwtSecurityTokenHandler().WriteToken(securityToken);
     }
 
-    public string GenerateRefreshToken(User user)
+    public async Task<string> GenerateRefreshToken(User user)
     {
         SigningCredentials signingCredentials = CreateSigningCredentials();
-        List<Claim> claims = CreateClaims(user);
+        List<Claim> claims = await CreateClaims(user);
 
         var securityToken = new JwtSecurityToken(
             claims: claims,
@@ -91,7 +94,7 @@ public class JwtTokenProvider : IJwtTokenProvider
         return result.IsValid;
     }
 
-    private List<Claim> CreateClaims(User user)
+    private async Task<List<Claim>> CreateClaims(User user)
     {
         var claims = new List<Claim>
         {
@@ -100,6 +103,9 @@ public class JwtTokenProvider : IJwtTokenProvider
             new (JwtRegisteredClaimNames.GivenName, user.UserName!),
             new (JwtRegisteredClaimNames.Email, user.Email!),
         };
+
+        var userClaims = await _userManager.GetClaimsAsync(user);
+        claims.AddRange(userClaims);
 
         return claims;
     }

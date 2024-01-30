@@ -6,6 +6,7 @@ using Quizer.Domain.QuestionAggregate;
 namespace Quizer.Application.Quizes.Commands.CreateQuestion;
 
 public record CreateQuestionCommand(
+    Guid UserId,
     Guid QuizId,
     string QuestionText,
     List<CreateQuestionAnswer> Answers

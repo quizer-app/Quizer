@@ -30,14 +30,16 @@ public class QuizMappingConfig : IRegister
         config.NewConfig<Answer, AnswerResponse>()
             .Map(dest => dest, src => src);
 
-        config.NewConfig<(UpdateQuestionRequest Request, Guid QuestionId), UpdateQuestionCommand>()
+        config.NewConfig<(UpdateQuestionRequest Request, Guid? UserId, Guid QuestionId), UpdateQuestionCommand>()
             .Map(dest => dest.QuestionId, src => src.QuestionId)
+            .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest.QuestionText, src => src.Request.Question)
             .Map(dest => dest.Answers, src => src.Request.Answers)
             .Map(dest => dest, src => src.Request);
 
-        config.NewConfig<(CreateQuestionRequest Request, Guid QuizId), CreateQuestionCommand>()
+        config.NewConfig<(CreateQuestionRequest Request, Guid? UserId, Guid QuizId), CreateQuestionCommand>()
             .Map(dest => dest.QuizId, src => src.QuizId)
+            .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest.QuestionText, src => src.Request.Question)
             .Map(dest => dest.Answers, src => src.Request.Answers)
             .Map(dest => dest, src => src.Request);
@@ -51,11 +53,12 @@ public class QuizMappingConfig : IRegister
 
     private static void RegisterQuiz(TypeAdapterConfig config)
     {
-        config.NewConfig<(CreateQuizRequest Request, string UserId), CreateQuizCommand>()
-            .Map(dest => dest.UserId, src => new Guid(src.UserId))
+        config.NewConfig<(CreateQuizRequest Request, Guid? UserId), CreateQuizCommand>()
+            .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest, src => src.Request);
 
-        config.NewConfig<(UpdateQuizRequest Request, Guid QuizId), UpdateQuizCommand>()
+        config.NewConfig<(UpdateQuizRequest Request, Guid? UserId, Guid QuizId), UpdateQuizCommand>()
+            .Map(dest => dest.UserId, src => src.UserId)
             .Map(dest => dest.QuizId, src => src.QuizId)
             .Map(dest => dest, src => src.Request);
 
@@ -64,13 +67,15 @@ public class QuizMappingConfig : IRegister
 
         config.NewConfig<Quiz, ShortQuizResponse>()
             .Map(dest => dest.Id, src => src.Id.Value.ToString())
-            .Map(dest => dest.UserId, src => src.UserId.ToString())
+            .Map(dest => dest.CreatedBy, src => src.CreatedBy.ToString())
+            .Map(dest => dest.UpdatedBy, src => src.UpdatedBy.ToString())
             .Map(dest => dest.AverageRating, src => src.AverageRating.Value)
             .Map(dest => dest.NumberOfRatings, src => src.AverageRating.NumRatings);
 
         config.NewConfig<DetailedQuizResult, QuizResponse>()
             .Map(dest => dest.Id, src => src.Quiz.Id.Value.ToString())
-            .Map(dest => dest.UserId, src => src.Quiz.UserId.ToString())
+            .Map(dest => dest.CreatedBy, src => src.Quiz.CreatedBy.ToString())
+            .Map(dest => dest.UpdatedBy, src => src.Quiz.UpdatedBy.ToString())
             .Map(dest => dest.AverageRating, src => src.Quiz.AverageRating.Value)
             .Map(dest => dest.NumberOfRatings, src => src.Quiz.AverageRating.NumRatings)
             .Map(dest => dest, src => src.Quiz)

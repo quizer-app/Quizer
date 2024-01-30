@@ -22,6 +22,7 @@ public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionComman
         if (question is null) return Errors.Question.NotFound;
 
         var result = question.Update(
+            request.UserId,
             request.QuestionText,
             request.Answers
                 .ConvertAll(a => Answer.Create(a.Text, a.IsCorrect).Value));

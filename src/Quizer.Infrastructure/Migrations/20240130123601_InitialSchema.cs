@@ -59,7 +59,9 @@ namespace Quizer.Infrastructure.Migrations
                     QuizId = table.Column<Guid>(type: "uuid", nullable: false),
                     QuestionText = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,7 +73,6 @@ namespace Quizer.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserName = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Slug = table.Column<string>(type: "text", nullable: false),
@@ -79,7 +80,9 @@ namespace Quizer.Infrastructure.Migrations
                     AverageRating_Value = table.Column<double>(type: "double precision", nullable: false),
                     AverageRating_NumRatings = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,7 +96,9 @@ namespace Quizer.Infrastructure.Migrations
                     Id = table.Column<string>(type: "text", nullable: false),
                     IsValid = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedBy = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -213,9 +218,7 @@ namespace Quizer.Infrastructure.Migrations
                     AnswerId = table.Column<Guid>(type: "uuid", nullable: false),
                     QuestionId = table.Column<Guid>(type: "uuid", nullable: false),
                     Text = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    IsCorrect = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    IsCorrect = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {

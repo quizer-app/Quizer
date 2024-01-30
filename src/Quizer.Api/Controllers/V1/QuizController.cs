@@ -84,8 +84,7 @@ public class QuizController : ApiController
     public async Task<IActionResult> CreateQuiz(
         CreateQuizRequest request)
     {
-        string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        var command = _mapper.Map<CreateQuizCommand>((request, userId));
+        var command = _mapper.Map<CreateQuizCommand>((request, UserId));
         var result = await _mediator.Send(command);
 
         return result.Match(
@@ -98,7 +97,7 @@ public class QuizController : ApiController
         Guid quizId,
         [FromBody] UpdateQuizRequest request)
     {
-        var command = _mapper.Map<UpdateQuizCommand>((request, quizId));
+        var command = _mapper.Map<UpdateQuizCommand>((request, UserId, quizId));
         var result = await _mediator.Send(command);
 
         return result.Match(

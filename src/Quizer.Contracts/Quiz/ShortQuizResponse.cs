@@ -2,7 +2,6 @@
 
 public record ShortQuizResponse(
     string Id,
-    string UserId,
     string UserName,
     string Name,
     string Slug,
@@ -10,5 +9,8 @@ public record ShortQuizResponse(
     string Description,
     double AverageRating,
     int NumberOfRatings,
-    DateTime CreatedAt
+    string CreatedBy,
+    string UpdatedBy,
+    DateTime CreatedAt,
+    DateTime UpdatedAt
     );

@@ -34,10 +34,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, ErrorOr<LoginRe
         if (!result.Succeeded)
             return Errors.Authentication.InvalidCredentials;
 
-        string accessToken = _jwtTokenGenerator.GenerateAccessToken(user);
-        string refreshToken = _jwtTokenGenerator.GenerateRefreshToken(user);
+        string accessToken = await _jwtTokenGenerator.GenerateAccessToken(user);
+        string refreshToken = await _jwtTokenGenerator.GenerateRefreshToken(user);
 
-        var token = Domain.RefreshTokenAggregate.RefreshToken.Create(user.Id, refreshToken);
+        var token = Domain.RefreshTokenAggregate.RefreshToken.Create(new Guid(user.Id), refreshToken);
         await _refreshTokenRepository.Add(token);
 
         return new LoginResult(

@@ -29,7 +29,12 @@ public class UpdateQuizCommandHandler : IRequestHandler<UpdateQuizCommand, Error
 
         string slug = _slugifyService.GenerateSlug(request.Name);
 
-        var result = quiz.Update(request.Name, slug, request.Description);
+        var result = quiz.Update(
+            request.UserId,
+            request.Name,
+            slug,
+            request.Description);
+
         if (result.IsError) return result.Errors;
         
         return id;

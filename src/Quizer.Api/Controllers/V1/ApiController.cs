@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Quizer.Api.Common.Http;
+using System.Security.Claims;
 
 namespace Quizer.Api.Controllers.V1;
 
@@ -56,5 +57,14 @@ public class ApiController : ControllerBase
                 error.Description);
         }
         return ValidationProblem(modelState);
+    }
+
+    protected Guid? UserId {
+        get
+        {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Guid? userIdGuid = userId is null ? null : new Guid(userId);
+            return userIdGuid;
+        }
     }
 }
