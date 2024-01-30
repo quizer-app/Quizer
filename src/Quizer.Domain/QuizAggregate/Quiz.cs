@@ -20,6 +20,7 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     
     public string Location => $"{UserName}/{Slug}";
     public IReadOnlyList<QuestionId> QuestionIds => _questionIds.AsReadOnly();
+    public int NumberOfQuestions => _questionIds.Count;
 
     private Quiz(
         Guid userId,

@@ -15,6 +15,8 @@ public sealed class HasPermissionAttribute : AuthorizeAttribute, IAuthorizationF
 
     public void OnAuthorization(AuthorizationFilterContext context)
     {
+        // TODO: delete this ?
+
         // Check if the user is authenticated
         if (context.HttpContext.User.Identity is null || !context.HttpContext.User.Identity.IsAuthenticated)
         {

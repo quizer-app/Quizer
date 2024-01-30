@@ -12,7 +12,6 @@ using Quizer.Application.Quizes.Queries.GetQuizes;
 using Quizer.Application.Quizes.Queries.GetQuizImage;
 using Quizer.Contracts.Common;
 using Quizer.Contracts.Quiz;
-using Quizer.Infrastructure.Authentication;
 
 namespace Quizer.Api.Controllers.V1;
 
@@ -78,7 +77,6 @@ public class QuizController : ApiController
             Problem);
     }
 
-    //[HasPermission(Permission.CreateQuiz)]
     [HttpPost]
     public async Task<IActionResult> CreateQuiz(
         CreateQuizRequest request)

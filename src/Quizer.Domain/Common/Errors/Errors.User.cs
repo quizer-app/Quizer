@@ -13,5 +13,9 @@ public static partial class Errors
         public static Error DuplicateUsername => Error.Conflict(
             code: "User.DuplicateUsername",
             description: "Username is already taken.");
+
+        public static Error NotFound => Error.NotFound(
+            code: "User.NotFound",
+            description: "Username with this username was not found");
     }
 }
