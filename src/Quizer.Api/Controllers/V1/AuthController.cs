@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Quizer.Application.Authentication.Commands.Login;
+using Quizer.Application.Authentication.Commands.Logout;
 using Quizer.Application.Authentication.Commands.RefreshToken;
 using Quizer.Application.Authentication.Commands.Register;
 using Quizer.Contracts.Authentication;
@@ -58,6 +59,23 @@ public class AuthController : ApiController
 
         return result.Match(
             data => Ok(_mapper.Map<LoginResponse>(data)),
+            Problem
+            );
+    }
+
+    [HttpDelete("logout")]
+    public async Task<IActionResult> Logout()
+    {
+        string? refreshToken = Request.Cookies["refreshToken"];
+        if (refreshToken is null)
+            return Unauthorized();
+
+        var query = new LogoutCommand(refreshToken);
+
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            data => Ok(_mapper.Map<LogoutResponse>(data)),
             Problem
             );
     }

@@ -1,5 +1,6 @@
 ﻿using Mapster;
 using Quizer.Application.Authentication.Commands.Login;
+using Quizer.Application.Authentication.Commands.Logout;
 using Quizer.Application.Authentication.Commands.Register;
 using Quizer.Contracts.Authentication;
 
@@ -18,5 +19,8 @@ public class AuthenticationMappingConfig : IRegister
 
         config.NewConfig<RegisterResult, RegisterResponse>()
             .Map(dest => dest, src => src.User);
+
+        config.NewConfig<LogoutResult, LogoutResponse>()
+            .Map(dest => dest, src => src);
     }
 }
