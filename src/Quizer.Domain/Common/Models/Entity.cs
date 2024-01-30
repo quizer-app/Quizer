@@ -8,15 +8,12 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
 {
     private readonly List<IDomainEvent> _domainEvents = new();
     public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
+
     public TId Id { get; protected set; }
-    public DateTime CreatedAt { get; protected set; }
-    public DateTime UpdatedAt { get; protected set; }
 
     protected Entity(TId id)
     {
         Id = id;
-        CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
     }
 
     protected ErrorOr<bool> GetValidationErrors(ValidationResult validationResult)
@@ -32,11 +29,6 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
                 validationFailure.ErrorMessage));
 
         return errors;
-    }
-
-    protected void Update()
-    {
-        UpdatedAt = DateTime.UtcNow;
     }
 
     public override bool Equals(object? obj)

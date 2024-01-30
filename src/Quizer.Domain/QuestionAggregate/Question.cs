@@ -16,10 +16,11 @@ public sealed class Question : AggregateRoot<QuestionId, Guid>
     private List<Answer> _answers;
 
     private Question(
+        Guid userId,
         QuestionId id,
         QuizId quizId,
         string questionText,
-        List<Answer> answers) : base(id)
+        List<Answer> answers) : base(id, userId)
     {
         QuizId = quizId;
         QuestionText = questionText;
@@ -34,11 +35,13 @@ public sealed class Question : AggregateRoot<QuestionId, Guid>
     }
 
     public static ErrorOr<Question> Create(
+        Guid userId,
         QuizId quizId,
         string questionText,
         List<Answer> answers)
     {
         var question = new Question(
+            userId,
             QuestionId.CreateUnique(),
             quizId,
             questionText,
@@ -53,10 +56,11 @@ public sealed class Question : AggregateRoot<QuestionId, Guid>
     }
 
     public ErrorOr<bool> Update(
+        Guid userId,
         string questionText,
         List<Answer> answers)
     {
-        base.Update();
+        base.Update(userId);
         QuestionText = questionText;
         _answers = answers;
 

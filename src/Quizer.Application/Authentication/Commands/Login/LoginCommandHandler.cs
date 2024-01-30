@@ -37,7 +37,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, ErrorOr<LoginRe
         string accessToken = _jwtTokenGenerator.GenerateAccessToken(user);
         string refreshToken = _jwtTokenGenerator.GenerateRefreshToken(user);
 
-        var token = Domain.RefreshTokenAggregate.RefreshToken.Create(refreshToken);
+        var token = Domain.RefreshTokenAggregate.RefreshToken.Create(user.Id, refreshToken);
         await _refreshTokenRepository.Add(token);
 
         return new LoginResult(

@@ -33,10 +33,10 @@ public class CreateQuizCommandHandler : IRequestHandler<CreateQuizCommand, Error
         string slug = _slugifyService.GenerateSlug(request.Name);
 
         var result = Quiz.Create(
+            request.UserId,
             request.Name,
             slug,
             request.Description,
-            request.UserId,
             userName
             );
 
