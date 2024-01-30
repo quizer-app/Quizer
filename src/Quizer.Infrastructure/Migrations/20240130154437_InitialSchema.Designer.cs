@@ -12,7 +12,7 @@ using Quizer.Infrastructure.Persistance;
 namespace Quizer.Infrastructure.Migrations
 {
     [DbContext(typeof(QuizerDbContext))]
-    [Migration("20240130123601_InitialSchema")]
+    [Migration("20240130154437_InitialSchema")]
     partial class InitialSchema
     {
         /// <inheritdoc />
@@ -267,6 +267,9 @@ namespace Quizer.Infrastructure.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
@@ -302,6 +305,9 @@ namespace Quizer.Infrastructure.Migrations
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)

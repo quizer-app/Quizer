@@ -11,6 +11,7 @@ public record ShortQuizResponse(
     int NumberOfRatings,
     string CreatedBy,
     string UpdatedBy,
+    int NumberOfQuestions,
     DateTime CreatedAt,
     DateTime UpdatedAt
     );
