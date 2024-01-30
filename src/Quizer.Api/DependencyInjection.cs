@@ -31,7 +31,9 @@ public static class DependencyInjection
                 name: CorsSettings.PolicyName,
                 policy =>
                 {
-                    policy.WithOrigins(corsSettings.Origins);
+                    policy
+                        .WithOrigins(corsSettings.Origins)
+                        .AllowCredentials();
                 });
         });
 
