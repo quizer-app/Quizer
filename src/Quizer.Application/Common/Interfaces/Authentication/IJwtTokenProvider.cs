@@ -2,7 +2,7 @@
 
 namespace Quizer.Application.Common.Interfaces.Authentication;
 
-public interface IJwtTokenGenerator
+public interface IJwtTokenProvider
 {
     string GenerateAccessToken(User user);
     string GenerateRefreshToken(User user);

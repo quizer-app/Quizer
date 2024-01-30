@@ -9,12 +9,12 @@ using System.Text;
 
 namespace Quizer.Infrastructure.Authentication;
 
-public class JwtTokenGenerator : IJwtTokenGenerator
+public class JwtTokenProvider : IJwtTokenProvider
 {
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly JwtSettings _jwtSettings;
 
-    public JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtSettings)
+    public JwtTokenProvider(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtSettings)
     {
         _dateTimeProvider = dateTimeProvider;
         _jwtSettings = jwtSettings.Value;
@@ -93,13 +93,15 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
     private List<Claim> CreateClaims(User user)
     {
-        return new List<Claim>
+        var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.GivenName, user.UserName!),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+            new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new (JwtRegisteredClaimNames.GivenName, user.UserName!),
+            new (JwtRegisteredClaimNames.Email, user.Email!),
         };
+
+        return claims;
     }
 
     private SigningCredentials CreateSigningCredentials()

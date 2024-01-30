@@ -10,12 +10,12 @@ namespace Quizer.Application.Authentication.Commands.Login;
 
 public class LoginCommandHandler : IRequestHandler<LoginCommand, ErrorOr<LoginResult>>
 {
-    private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IJwtTokenProvider _jwtTokenGenerator;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
 
-    public LoginCommandHandler(IJwtTokenGenerator jwtTokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager, IRefreshTokenRepository refreshTokenRepository)
+    public LoginCommandHandler(IJwtTokenProvider jwtTokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager, IRefreshTokenRepository refreshTokenRepository)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
         _userManager = userManager;
