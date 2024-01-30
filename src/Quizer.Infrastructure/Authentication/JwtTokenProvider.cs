@@ -15,12 +15,14 @@ public class JwtTokenProvider : IJwtTokenProvider
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly JwtSettings _jwtSettings;
     private readonly UserManager<User> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public JwtTokenProvider(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtSettings, UserManager<User> userManager)
+    public JwtTokenProvider(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtSettings, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
     {
         _dateTimeProvider = dateTimeProvider;
         _jwtSettings = jwtSettings.Value;
         _userManager = userManager;
+        _roleManager = roleManager;
     }
 
     public async Task<string> GenerateAccessToken(User user)
@@ -106,6 +108,16 @@ public class JwtTokenProvider : IJwtTokenProvider
 
         var userClaims = await _userManager.GetClaimsAsync(user);
         claims.AddRange(userClaims);
+
+        var userRoles = await _userManager.GetRolesAsync(user);
+        foreach (var userRole in userRoles)
+        {
+            var role = await _roleManager.FindByNameAsync(userRole);
+            if(role is null) continue;
+
+            var roleClaims = await _roleManager.GetClaimsAsync(role);
+            claims.AddRange(roleClaims);
+        }
 
         return claims;
     }
