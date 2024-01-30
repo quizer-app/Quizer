@@ -11,10 +11,10 @@ namespace Quizer.Application.Authentication.Commands.RefreshToken;
 public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, ErrorOr<string>>
 {
     private readonly ILogger<RefreshTokenCommandHandler> _logger;
-    private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IJwtTokenProvider _jwtTokenGenerator;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
 
-    public RefreshTokenCommandHandler(ILogger<RefreshTokenCommandHandler> logger, IJwtTokenGenerator jwtTokenGenerator, IRefreshTokenRepository refreshTokenRepository)
+    public RefreshTokenCommandHandler(ILogger<RefreshTokenCommandHandler> logger, IJwtTokenProvider jwtTokenGenerator, IRefreshTokenRepository refreshTokenRepository)
     {
         _logger = logger;
         _jwtTokenGenerator = jwtTokenGenerator;

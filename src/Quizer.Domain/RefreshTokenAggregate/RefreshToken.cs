@@ -7,26 +7,30 @@ public sealed class RefreshToken : AggregateRoot<TokenId, string>
     public bool IsValid { get; private set; }
 
     private RefreshToken(
+        Guid userId,
         TokenId id,
         bool isValid
-        ) : base(id)
+        ) : base(id, userId)
     {
         Id = id;
         IsValid = isValid;
     }
 
     public static RefreshToken Create(
+        Guid userId,
         string token)
     {
         var refreshToken = new RefreshToken(
+            userId,
             TokenId.Create(token),
             true);
 
         return refreshToken;
     }
 
-    public void Invalidate()
+    public void Invalidate(Guid userId)
     {
+        this.Update(userId);
         IsValid = false;
     }
 

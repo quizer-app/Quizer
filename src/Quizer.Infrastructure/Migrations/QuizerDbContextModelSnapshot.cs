@@ -162,6 +162,9 @@ namespace Quizer.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("QuestionText")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -172,6 +175,9 @@ namespace Quizer.Infrastructure.Migrations
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedBy")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -185,6 +191,9 @@ namespace Quizer.Infrastructure.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -203,7 +212,7 @@ namespace Quizer.Infrastructure.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("UpdatedBy")
                         .HasColumnType("uuid");
 
                     b.Property<string>("UserName")
@@ -226,11 +235,17 @@ namespace Quizer.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid");
+
                     b.Property<bool>("IsValid")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("UpdatedBy")
+                        .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
@@ -363,9 +378,6 @@ namespace Quizer.Infrastructure.Migrations
                             b1.Property<Guid>("QuestionId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<DateTime>("CreatedAt")
-                                .HasColumnType("timestamp with time zone");
-
                             b1.Property<bool>("IsCorrect")
                                 .HasColumnType("boolean");
 
@@ -373,9 +385,6 @@ namespace Quizer.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasMaxLength(200)
                                 .HasColumnType("character varying(200)");
-
-                            b1.Property<DateTime>("UpdatedAt")
-                                .HasColumnType("timestamp with time zone");
 
                             b1.HasKey("Id", "QuestionId");
 

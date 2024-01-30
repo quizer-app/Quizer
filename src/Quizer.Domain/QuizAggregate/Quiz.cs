@@ -11,7 +11,6 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
 {
     private readonly List<QuestionId> _questionIds = new();
 
-    public Guid UserId { get; private set; }
     public string UserName { get; private set; }
 
     public string Name { get; private set; }
@@ -23,18 +22,17 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     public IReadOnlyList<QuestionId> QuestionIds => _questionIds.AsReadOnly();
 
     private Quiz(
+        Guid userId,
         QuizId id,
         string name,
         string slug,
         string description,
-        Guid userId,
         string userName,
-        AverageRating averageRating) : base(id)
+        AverageRating averageRating) : base(id, userId)
     {
         Name = name;
         Slug = slug;
         Description = description;
-        UserId = userId;
         UserName = userName;
         AverageRating = averageRating;
     }
@@ -47,18 +45,18 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     }
 
     public static ErrorOr<Quiz> Create(
+        Guid userId,
         string name,
         string slug,
         string description,
-        Guid userId,
         string userName)
     {
         var quiz = new Quiz(
+            userId,
             QuizId.CreateUnique(),
             name,
             slug,
             description,
-            userId,
             userName,
             AverageRating.CreateNew());
 
@@ -69,11 +67,12 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     }
 
     public ErrorOr<bool> Update(
+        Guid userId,
         string name,
         string slug,
         string description)
     {
-        base.Update();
+        base.Update(userId);
         Name = name;
         Description = description;
         Slug = slug;
@@ -89,15 +88,15 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         this.AddDomainEvent(new QuizDeleted(this));
     }
 
-    public void AddQuestion(Question question)
+    public void AddQuestion(Guid userId, Question question)
     {
-        base.Update();
+        base.Update(userId);
         _questionIds.Add((QuestionId)question.Id);
     }
 
-    public void DeleteQuestion(Question question)
+    public void DeleteQuestion(Guid userId, Question question)
     {
-        base.Update();
+        base.Update(userId);
         _questionIds.Remove((QuestionId)question.Id);
     }
 

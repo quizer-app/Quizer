@@ -27,6 +27,7 @@ public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionComman
             return Errors.Quiz.NotFound;
 
         var result = Question.Create(
+            request.UserId,
             (QuizId)quiz.Id,
             request.QuestionText,
             request.Answers
@@ -37,7 +38,9 @@ public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionComman
 
         await _questionRepository.Add(question);
 
-        quiz.AddQuestion(question);
+        quiz.AddQuestion(
+            request.UserId,
+            question);
 
         return (QuestionId)question.Id;
     }

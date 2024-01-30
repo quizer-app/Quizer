@@ -7,12 +7,12 @@ using Quizer.Domain.QuizAggregate;
 
 namespace Quizer.Application.Quizes.Commands.UpdateQuiz;
 
-public class UpdateQuizImageCommandHandler : IRequestHandler<UpdateQuizCommand, ErrorOr<QuizId>>
+public class UpdateQuizCommandHandler : IRequestHandler<UpdateQuizCommand, ErrorOr<QuizId>>
 {
     private readonly IQuizRepository _quizRepository;
     private readonly ISlugifyService _slugifyService;
 
-    public UpdateQuizImageCommandHandler(IQuizRepository quizRepository, ISlugifyService slugifyService)
+    public UpdateQuizCommandHandler(IQuizRepository quizRepository, ISlugifyService slugifyService)
     {
         _quizRepository = quizRepository;
         _slugifyService = slugifyService;
@@ -29,7 +29,12 @@ public class UpdateQuizImageCommandHandler : IRequestHandler<UpdateQuizCommand, 
 
         string slug = _slugifyService.GenerateSlug(request.Name);
 
-        var result = quiz.Update(request.Name, slug, request.Description);
+        var result = quiz.Update(
+            request.UserId,
+            request.Name,
+            slug,
+            request.Description);
+
         if (result.IsError) return result.Errors;
         
         return id;

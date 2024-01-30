@@ -40,7 +40,7 @@ public class QuestionController : ApiController
         Guid quizId,
         [FromBody] CreateQuestionRequest request)
     {
-        var command = _mapper.Map<CreateQuestionCommand>((request, quizId));
+        var command = _mapper.Map<CreateQuestionCommand>((request, UserId, quizId));
         var result = await _mediator.Send(command);
 
         return result.Match(
@@ -53,7 +53,7 @@ public class QuestionController : ApiController
         Guid questionId,
         [FromBody] UpdateQuestionRequest request)
     {
-        var command = _mapper.Map<UpdateQuestionCommand>((request, questionId));
+        var command = _mapper.Map<UpdateQuestionCommand>((request, UserId, questionId));
         var result = await _mediator.Send(command);
 
         return result.Match(
@@ -64,7 +64,7 @@ public class QuestionController : ApiController
     [HttpDelete("{questionId:guid}")]
     public async Task<IActionResult> DeleteQuestion(Guid questionId)
     {
-        var command = new DeleteQuestionCommand(questionId);
+        var command = new DeleteQuestionCommand((Guid)UserId!, questionId);
         var result = await _mediator.Send(command);
 
         return result.Match(

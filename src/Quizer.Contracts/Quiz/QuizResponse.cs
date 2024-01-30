@@ -4,7 +4,6 @@ namespace Quizer.Contracts.Quiz;
 
 public record QuizResponse(
     string Id,
-    string UserId,
     string UserName,
     string Name,
     string Slug,
@@ -13,5 +12,8 @@ public record QuizResponse(
     double AverageRating,
     int NumberOfRatings,
     IReadOnlyList<QuestionResponse> Questions,
-    DateTime CreatedAt
+    string CreatedBy,
+    string UpdatedBy,
+    DateTime CreatedAt,
+    DateTime UpdatedAt
     );

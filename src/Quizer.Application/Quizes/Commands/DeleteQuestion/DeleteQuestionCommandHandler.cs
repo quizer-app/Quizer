@@ -25,7 +25,7 @@ public class DeleteQuestionCommandHandler : IRequestHandler<DeleteQuestionComman
         var quiz = await _quizRepository.Get(question.QuizId);
         if (quiz is null) return Errors.Quiz.NotFound;
 
-        quiz.DeleteQuestion(question);
+        quiz.DeleteQuestion(request.UserId, question);
         _questionRepository.Delete(question);
         question.Delete();
 

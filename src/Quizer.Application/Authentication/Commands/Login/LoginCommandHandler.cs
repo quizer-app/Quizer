@@ -10,12 +10,12 @@ namespace Quizer.Application.Authentication.Commands.Login;
 
 public class LoginCommandHandler : IRequestHandler<LoginCommand, ErrorOr<LoginResult>>
 {
-    private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IJwtTokenProvider _jwtTokenGenerator;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
 
-    public LoginCommandHandler(IJwtTokenGenerator jwtTokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager, IRefreshTokenRepository refreshTokenRepository)
+    public LoginCommandHandler(IJwtTokenProvider jwtTokenGenerator, UserManager<User> userManager, SignInManager<User> signInManager, IRefreshTokenRepository refreshTokenRepository)
     {
         _jwtTokenGenerator = jwtTokenGenerator;
         _userManager = userManager;
@@ -34,10 +34,10 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, ErrorOr<LoginRe
         if (!result.Succeeded)
             return Errors.Authentication.InvalidCredentials;
 
-        string accessToken = _jwtTokenGenerator.GenerateAccessToken(user);
-        string refreshToken = _jwtTokenGenerator.GenerateRefreshToken(user);
+        string accessToken = await _jwtTokenGenerator.GenerateAccessToken(user);
+        string refreshToken = await _jwtTokenGenerator.GenerateRefreshToken(user);
 
-        var token = Domain.RefreshTokenAggregate.RefreshToken.Create(refreshToken);
+        var token = Domain.RefreshTokenAggregate.RefreshToken.Create(new Guid(user.Id), refreshToken);
         await _refreshTokenRepository.Add(token);
 
         return new LoginResult(

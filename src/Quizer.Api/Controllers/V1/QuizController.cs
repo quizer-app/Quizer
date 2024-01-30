@@ -12,7 +12,7 @@ using Quizer.Application.Quizes.Queries.GetQuizes;
 using Quizer.Application.Quizes.Queries.GetQuizImage;
 using Quizer.Contracts.Common;
 using Quizer.Contracts.Quiz;
-using System.Security.Claims;
+using Quizer.Infrastructure.Authentication;
 
 namespace Quizer.Api.Controllers.V1;
 
@@ -29,6 +29,7 @@ public class QuizController : ApiController
         _mapper = mapper;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     public async Task<IActionResult> GetQuizes(
         string? searchTerm,
@@ -53,8 +54,8 @@ public class QuizController : ApiController
             Problem);
     }
 
-    [HttpGet("{quizId:guid}")]
     [AllowAnonymous]
+    [HttpGet("{quizId:guid}")]
     public async Task<IActionResult> GetQuizById(Guid quizId)
     {
         var query = new GetQuizByIdQuery(quizId);
@@ -65,8 +66,8 @@ public class QuizController : ApiController
             Problem);
     }
 
-    [HttpGet("{userName}/{quizSlug}")]
     [AllowAnonymous]
+    [HttpGet("{userName}/{quizSlug}")]
     public async Task<IActionResult> GetQuizByName(string userName, string quizSlug)
     {
         var query = new GetQuizByNameQuery(userName, quizSlug);
@@ -77,12 +78,12 @@ public class QuizController : ApiController
             Problem);
     }
 
+    [HasPermission(Permission.CreateQuiz)]
     [HttpPost]
     public async Task<IActionResult> CreateQuiz(
         CreateQuizRequest request)
     {
-        string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        var command = _mapper.Map<CreateQuizCommand>((request, userId));
+        var command = _mapper.Map<CreateQuizCommand>((request, UserId));
         var result = await _mediator.Send(command);
 
         return result.Match(
@@ -95,7 +96,7 @@ public class QuizController : ApiController
         Guid quizId,
         [FromBody] UpdateQuizRequest request)
     {
-        var command = _mapper.Map<UpdateQuizCommand>((request, quizId));
+        var command = _mapper.Map<UpdateQuizCommand>((request, UserId, quizId));
         var result = await _mediator.Send(command);
 
         return result.Match(

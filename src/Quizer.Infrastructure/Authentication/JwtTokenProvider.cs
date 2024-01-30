@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Services;
@@ -9,21 +10,25 @@ using System.Text;
 
 namespace Quizer.Infrastructure.Authentication;
 
-public class JwtTokenGenerator : IJwtTokenGenerator
+public class JwtTokenProvider : IJwtTokenProvider
 {
     private readonly IDateTimeProvider _dateTimeProvider;
     private readonly JwtSettings _jwtSettings;
+    private readonly UserManager<User> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
 
-    public JwtTokenGenerator(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtSettings)
+    public JwtTokenProvider(IDateTimeProvider dateTimeProvider, IOptions<JwtSettings> jwtSettings, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
     {
         _dateTimeProvider = dateTimeProvider;
         _jwtSettings = jwtSettings.Value;
+        _userManager = userManager;
+        _roleManager = roleManager;
     }
 
-    public string GenerateAccessToken(User user)
+    public async Task<string> GenerateAccessToken(User user)
     {
         SigningCredentials signingCredentials = CreateSigningCredentials();
-        List<Claim> claims = CreateClaims(user);
+        List<Claim> claims = await CreateClaims(user);
 
         var securityToken = new JwtSecurityToken(
             claims: claims,
@@ -55,10 +60,10 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         return new JwtSecurityTokenHandler().WriteToken(securityToken);
     }
 
-    public string GenerateRefreshToken(User user)
+    public async Task<string> GenerateRefreshToken(User user)
     {
         SigningCredentials signingCredentials = CreateSigningCredentials();
-        List<Claim> claims = CreateClaims(user);
+        List<Claim> claims = await CreateClaims(user);
 
         var securityToken = new JwtSecurityToken(
             claims: claims,
@@ -91,15 +96,30 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         return result.IsValid;
     }
 
-    private List<Claim> CreateClaims(User user)
+    private async Task<List<Claim>> CreateClaims(User user)
     {
-        return new List<Claim>
+        var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.GivenName, user.UserName!),
-            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
+            new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new (JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new (JwtRegisteredClaimNames.GivenName, user.UserName!),
+            new (JwtRegisteredClaimNames.Email, user.Email!),
         };
+
+        var userClaims = await _userManager.GetClaimsAsync(user);
+        claims.AddRange(userClaims);
+
+        var userRoles = await _userManager.GetRolesAsync(user);
+        foreach (var userRole in userRoles)
+        {
+            var role = await _roleManager.FindByNameAsync(userRole);
+            if(role is null) continue;
+
+            var roleClaims = await _roleManager.GetClaimsAsync(role);
+            claims.AddRange(roleClaims);
+        }
+
+        return claims;
     }
 
     private SigningCredentials CreateSigningCredentials()

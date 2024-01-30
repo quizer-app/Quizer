@@ -27,7 +27,6 @@ public sealed class Answer : Entity<AnswerId>
 
     public ErrorOr<bool> Update(string answer, bool isCorrect)
     {
-        base.Update();
         Text = answer;
         IsCorrect = isCorrect;
 

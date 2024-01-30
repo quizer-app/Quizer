@@ -1,5 +1,4 @@
 ﻿using Quizer.Api.Common.Settings;
-using Quizer.Infrastructure;
 using Serilog;
 
 namespace Quizer.Api;
@@ -8,11 +7,6 @@ public static class ApplicationConfiguration
 {
     public static WebApplication UsePresentation(this WebApplication app, ConfigurationManager configuration)
     {
-        if(app.Environment.IsDevelopment())
-        {
-            app.UseMigration();
-        }
-
         app.UseVersionedSwagger(configuration);
 
         app.UseSerilogRequestLogging();
