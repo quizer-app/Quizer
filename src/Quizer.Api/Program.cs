@@ -20,6 +20,7 @@ Log.Logger =
 
 var app = builder.Build();
 {
+    await app.MigrateDatabase();
     app.UsePresentation(builder.Configuration);
 }
 

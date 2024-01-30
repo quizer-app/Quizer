@@ -2,5 +2,6 @@
 
 public enum Permission
 {
-    CreateQuiz = 1
+    Admin = 0,
+    CreateQuiz
 }
