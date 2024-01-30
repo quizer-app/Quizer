@@ -33,7 +33,8 @@ public static class DependencyInjection
                 {
                     policy
                         .WithOrigins(corsSettings.Origins)
-                        .AllowCredentials();
+                        .AllowCredentials()
+                        .AllowAnyHeader();
                 });
         });
 
