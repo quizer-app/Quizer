@@ -78,7 +78,7 @@ public class QuizController : ApiController
             Problem);
     }
 
-    [HasPermission(Permission.CreateQuiz)]
+    //[HasPermission(Permission.CreateQuiz)]
     [HttpPost]
     public async Task<IActionResult> CreateQuiz(
         CreateQuizRequest request)
