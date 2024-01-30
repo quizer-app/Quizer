@@ -13,7 +13,6 @@ using Quizer.Application.Quizes.Queries.GetQuizImage;
 using Quizer.Contracts.Common;
 using Quizer.Contracts.Quiz;
 using Quizer.Infrastructure.Authentication;
-using System.Security.Claims;
 
 namespace Quizer.Api.Controllers.V1;
 
