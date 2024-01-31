@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Users.Queries.GetUser;
+using Quizer.Application.Users.Queries.GetUserById;
 using Quizer.Contracts.User;
 
 namespace Quizer.Api.Controllers.V1;
@@ -25,6 +26,19 @@ public class UserController : ApiController
     public async Task<IActionResult> GetUser(string userName)
     {
         var query = new GetUserQuery(userName);
+
+        var result = await _mediator.Send(query);
+
+        return result.Match(
+            quizes => Ok(_mapper.Map<UserResponse>(quizes)),
+            Problem);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("{userId:guid}")]
+    public async Task<IActionResult> GetUserById(Guid userId)
+    {
+        var query = new GetUserByIdQuery(userId);
 
         var result = await _mediator.Send(query);
 
