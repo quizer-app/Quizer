@@ -35,21 +35,21 @@ public static class MigrationExtensions
                 UserName = "admin",
                 Email = "admin@quizer.com",
             };
-            var result = await userManager.CreateAsync(adminUser, "Test123#");
+            await userManager.CreateAsync(adminUser, "Test123#");
         }
 
         var adminRole = await roleManager.FindByNameAsync("Administrator");
         if (adminRole is null)
         {
             adminRole = new IdentityRole("Administrator");
-            var result = await roleManager.CreateAsync(adminRole);
+            await roleManager.CreateAsync(adminRole);
 
             await roleManager.AddClaimAsync(adminRole, new Claim(CustomClaims.Permission, Permission.Admin.ToString()));
         }
 
         if (adminRole.Name is not null && !await userManager.IsInRoleAsync(adminUser, adminRole.Name))
         {
-            var result = await userManager.AddToRoleAsync(adminUser, adminRole.Name);
+            await userManager.AddToRoleAsync(adminUser, adminRole.Name);
         }
     }
 }
