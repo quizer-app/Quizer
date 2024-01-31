@@ -32,7 +32,8 @@ public class QuestionRepository : IQuestionRepository
     public async Task<List<Question>> GetAllQuestions(QuizId quizId)
     {
         return await _context.Questions
-            .Where(question => question.QuizId == quizId)
+            .Where(qs => qs.QuizId == quizId)
+            .OrderBy(qs => qs.CreatedAt)
             .ToListAsync();
     }
 }
