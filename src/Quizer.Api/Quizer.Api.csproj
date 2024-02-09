@@ -42,4 +42,8 @@
     <Compile Include="..\..\AssemblyInfo.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
