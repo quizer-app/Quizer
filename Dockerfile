@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
+
 WORKDIR /src
 COPY . .
 RUN dotnet restore "./src/Quizer.Api/Quizer.Api.csproj"
@@ -12,7 +13,7 @@ EXPOSE 8080
 EXPOSE 8081
 
 VOLUME /app/logs
-VOLUME /app/wwwroot
+VOLUME /files
 
 WORKDIR /app
 COPY --from=build /app .

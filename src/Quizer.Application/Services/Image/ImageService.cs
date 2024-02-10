@@ -1,5 +1,8 @@
-﻿using ImageMagick;
+﻿using ErrorOr;
+using ImageMagick;
 using Microsoft.Extensions.Logging;
+using Quizer.Domain.Common.Errors;
+using Microsoft.AspNetCore.Http;
 
 namespace Quizer.Application.Services.Image;
 
@@ -12,6 +15,28 @@ public class ImageService : IImageService
     {
         _optimizer = new ImageOptimizer();
         _logger = logger;
+    }
+
+    public async Task<ErrorOr<string>> UploadImage(IFormFile file, string imageType, Guid id)
+    {
+        string[] correctExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
+        string[] correctImageTypes = { "quiz" };
+
+        if(!correctImageTypes.Contains(imageType))
+            return Errors.Image.WrongType(correctImageTypes);
+
+        if (!IsCorrectExtension(file.FileName, correctExtensions))
+            return Errors.Image.WrongFormat(correctExtensions);
+
+        string tempFilePath = await SaveTempFile(file);
+
+        string imageDir = GetImageDir(imageType);
+
+        var imageProcessResult = ProcessImage(tempFilePath, imageDir, id);
+        if (imageProcessResult.IsError)
+            return imageProcessResult.Errors;
+
+        return $"/images/{imageType}/{id}";
     }
 
     public string? FormatAndMove(string filePathIn, string dirPathOut, Guid id)
@@ -68,7 +93,7 @@ public class ImageService : IImageService
 
     public string GetImageDir(string imageType)
     {
-        string imageDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", imageType);
+        string imageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "files", "images", imageType);
         if (!Directory.Exists(imageDir))
             Directory.CreateDirectory(imageDir);
 
@@ -85,5 +110,36 @@ public class ImageService : IImageService
         }
 
         return filePath;
+    }
+
+    private async Task<string> SaveTempFile(IFormFile file)
+    {
+        string tempFilePath = Path.GetTempFileName();
+        using (var stream = new FileStream(tempFilePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        return tempFilePath;
+    }
+
+    private bool IsCorrectExtension(string fileName, string[] correctExtensions)
+    {
+        string extension = Path.GetExtension(fileName);
+
+        return correctExtensions.Contains(extension);
+    }
+
+    private ErrorOr<string> ProcessImage(string tempFilePath, string imageDir, Guid id)
+    {
+        string? imagePath = FormatAndMove(tempFilePath, imageDir, id);
+        if (imagePath is null)
+            return Errors.Image.CannotUpload;
+
+        bool resized = Resize(imagePath, 512, 288);
+        if (!resized)
+            return Errors.Image.CannotUpload;
+
+        return imagePath;
     }
 }
