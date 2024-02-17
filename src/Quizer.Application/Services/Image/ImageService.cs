@@ -17,7 +17,7 @@ public class ImageService : IImageService
         _logger = logger;
     }
 
-    public async Task<ErrorOr<string>> UploadImage(IFormFile file, string imageType, Guid id)
+    public async Task<ErrorOr<string>> UploadImage(IFormFile file, string imageType)
     {
         string[] correctExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
         string[] correctImageTypes = { "quiz" };
@@ -32,11 +32,13 @@ public class ImageService : IImageService
 
         string imageDir = GetImageDir(imageType);
 
+        var id = new Guid();
+
         var imageProcessResult = ProcessImage(tempFilePath, imageDir, id);
         if (imageProcessResult.IsError)
             return imageProcessResult.Errors;
 
-        return $"/images/{imageType}/{id}";
+        return $"/images/{imageType}/{id}.webp";
     }
 
     public string? FormatAndMove(string filePathIn, string dirPathOut, Guid id)

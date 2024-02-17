@@ -37,6 +37,8 @@ public class GetQuizesQueryHandler : IRequestHandler<GetQuizesQuery, ErrorOr<Pag
             "name" => q => q.Name,
             "userName" => q => q.UserName,
             "createdAt" => q => q.CreatedAt,
+            "averageRating" => q => q.AverageRating,
+            "numberOfQuestions" => q => q.NumberOfQuestions,
             _ => q => q.CreatedAt
         };
 

@@ -22,7 +22,7 @@ public class ImageController : ApiController
         [FromRoute] Guid id,
         [FromForm(Name = "Data")] IFormFile file)
     {
-        var result = await _imageService.UploadImage(file, imageType, id);
+        var result = await _imageService.UploadImage(file, imageType);
 
         return result.Match(
             Ok,

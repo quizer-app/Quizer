@@ -6,7 +6,7 @@ namespace Quizer.Application.Services.Image
 {
     public interface IImageService
     {
-        Task<ErrorOr<string>> UploadImage(IFormFile file, string imageType, Guid id);
+        Task<ErrorOr<string>> UploadImage(IFormFile file, string imageType);
         string? FormatAndMove(string filePathIn, string dirPathOut, Guid id);
         bool Optimize(string filePath);
         bool Resize(string filePath, int width, int height);

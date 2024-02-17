@@ -23,4 +23,4 @@ memory_mb = 256
 
 [mounts]
 source = "quizer-data"
-destination = "/app/wwwroot"
+destination = "/app"
