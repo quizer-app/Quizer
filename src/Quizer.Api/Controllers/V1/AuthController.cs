@@ -54,7 +54,8 @@ public class AuthController : ApiController
                 HttpOnly = true,
                 Secure = true,
                 SameSite = SameSiteMode.Lax,
-                Expires = expirationTime
+                Expires = expirationTime,
+                Domain = Request.Host.Host
             });
 
         return result.Match(
