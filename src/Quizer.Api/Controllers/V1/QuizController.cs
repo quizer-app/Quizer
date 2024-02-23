@@ -5,11 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Quizes.Commands.CreateQuiz;
 using Quizer.Application.Quizes.Commands.DeleteQuiz;
 using Quizer.Application.Quizes.Commands.UpdateQuiz;
-using Quizer.Application.Quizes.Commands.UpdateQuizImage;
 using Quizer.Application.Quizes.Queries.GetQuizById;
 using Quizer.Application.Quizes.Queries.GetQuizByName;
 using Quizer.Application.Quizes.Queries.GetQuizes;
-using Quizer.Application.Quizes.Queries.GetQuizImage;
 using Quizer.Contracts.Common;
 using Quizer.Contracts.Quiz;
 
@@ -95,32 +93,6 @@ public class QuizController : ApiController
         [FromBody] UpdateQuizRequest request)
     {
         var command = _mapper.Map<UpdateQuizCommand>((request, UserId, quizId));
-        var result = await _mediator.Send(command);
-
-        return result.Match(
-            quizId => Ok(_mapper.Map<QuizIdResponse>(quizId)),
-            Problem);
-    }
-
-    [AllowAnonymous]
-    [HttpGet("{quizId:guid}/image")]
-    public async Task<IActionResult> GetQuizImage([FromRoute] Guid quizId)
-    {
-        var query = new GetQuizImageQuery(quizId);
-        var result = await _mediator.Send(query);
-
-        return result.Match(
-            image => File(image.ImageData, image.Mime),
-            Problem);
-    }
-
-    [AllowAnonymous]
-    [HttpPut("{quizId:guid}/image")]
-    public async Task<IActionResult> UpdateQuizImage(
-        [FromRoute] Guid quizId,
-        [FromForm(Name = "Data")] IFormFile file)
-    {
-        var command = new UpdateQuizImageCommand(quizId, file);
         var result = await _mediator.Send(command);
 
         return result.Match(
