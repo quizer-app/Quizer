@@ -13,8 +13,6 @@ ARG ASPNETCORE_HTTP_PORTS=5000
 
 EXPOSE 5000
 
-# VOLUME /app/logs
-
 WORKDIR /app
 COPY --from=build /app .
 
