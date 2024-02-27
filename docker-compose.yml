@@ -1,4 +1,4 @@
-version: '3.4'
+version: "3.4"
 
 services:
   quizer.api:
@@ -26,3 +26,15 @@ services:
       - ./.containers/quizer-db:/var/lib/postgresql/data
     ports:
       - 5432:5432
+
+  quizer.logs:
+    image: datalust/seq
+    container_name: quizer.logs
+    environment:
+      - ACCEPT_EULA=Y
+    volumes:
+      - ./.containers/quizer-logs:/data
+    ports:
+      - 8080:80
+      - 5341:5341
+    restart: unless-stopped
