@@ -14,6 +14,8 @@ public record QuizResponse(
     IReadOnlyList<QuestionResponse> Questions,
     string CreatedBy,
     string UpdatedBy,
+    string ImageUrl,
+    string ImageId,
     DateTime CreatedAt,
     DateTime UpdatedAt
     );
