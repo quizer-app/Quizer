@@ -16,13 +16,10 @@ public class ImageController : ApiController
     }
 
     [AllowAnonymous]
-    [HttpPost("{imageType}/{id:guid}")]
-    public async Task<IActionResult> UploadImage(
-        [FromRoute] string imageType,
-        [FromRoute] Guid id,
-        [FromForm(Name = "Data")] IFormFile file)
+    [HttpPost("")]
+    public async Task<IActionResult> UploadImage()
     {
-        var result = await _imageService.UploadImage(file, imageType);
+        var result = await _imageService.DirectUpload();
 
         return result.Match(
             Ok,

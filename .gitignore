@@ -4,3 +4,4 @@
 **/logs
 # **/wwwroot
 **/.containers
+**/secrets.json
