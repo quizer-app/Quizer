@@ -78,6 +78,8 @@ public class QuizMappingConfig : IRegister
             .Map(dest => dest.UpdatedBy, src => src.Quiz.UpdatedBy.ToString())
             .Map(dest => dest.AverageRating, src => src.Quiz.AverageRating.Value)
             .Map(dest => dest.NumberOfRatings, src => src.Quiz.AverageRating.NumRatings)
+            .Map(dest => dest.ImageId, src => src.Quiz.Image.ImageId.ToString())
+            .Map(dest => dest.ImageUrl, src => src.Quiz.Image.Url.ToString())
             .Map(dest => dest, src => src.Quiz)
             .Map(dest => dest.Questions, src => src.Questions);
     }
