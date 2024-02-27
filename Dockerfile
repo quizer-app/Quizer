@@ -12,7 +12,7 @@ USER app
 EXPOSE 8080
 EXPOSE 8081
 
-VOLUME /app/logs
+# VOLUME /app/logs
 
 WORKDIR /app
 COPY --from=build /app .
