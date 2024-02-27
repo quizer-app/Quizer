@@ -14,7 +14,6 @@ public static class DependencyInjection
         services.Configure<ImagesSettings>(configuration.GetSection(ImagesSettings.SectionName));
 
         services.AddHttpClient<IImageService, ImageService>();
-
         services.AddTransient<IImageService, ImageService>();
 
         services.AddSingleton<IDiacriticsMapper, DefaultDiacriticsMapper>();

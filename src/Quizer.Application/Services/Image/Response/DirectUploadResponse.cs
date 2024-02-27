@@ -5,14 +5,14 @@ namespace Quizer.Application.Services.Image.Response;
 public class DirectUploadResponse
 {
     [JsonPropertyName("result")]
-    public required Result Result { get; set; }
+    public required DirectUploadResponseResult Result { get; set; }
 
     [JsonPropertyName("success")]
     public required bool Success { get; set; }
 
     [JsonPropertyName("errors")]
-    public required List<MessageDetails> Errors { get; set; }
+    public List<MessageDetails> Errors { get; set; } = new();
 
     [JsonPropertyName("messages")]
-    public required List<MessageDetails> Messages { get; set; } 
+    public List<MessageDetails> Messages { get; set; } = new(); 
 }

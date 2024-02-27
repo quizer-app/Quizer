@@ -2,7 +2,7 @@
 
 namespace Quizer.Application.Services.Image.Response;
 
-public class Result
+public class DirectUploadResponseResult
 {
     [JsonPropertyName("id")]
     public required Guid Id { get; set; }

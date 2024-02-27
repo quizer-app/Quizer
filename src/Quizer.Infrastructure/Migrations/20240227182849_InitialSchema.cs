@@ -79,6 +79,8 @@ namespace Quizer.Infrastructure.Migrations
                     Name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     Slug = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "character varying(1000)", maxLength: 1000, nullable: false),
+                    Image_ImageId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Image_Url = table.Column<string>(type: "text", nullable: false),
                     AverageRating_Value = table.Column<double>(type: "double precision", nullable: false),
                     AverageRating_NumRatings = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),

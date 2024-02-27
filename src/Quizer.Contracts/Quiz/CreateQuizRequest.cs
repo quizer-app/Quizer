@@ -2,5 +2,6 @@
 
 public record CreateQuizRequest(
     string Name,
-    string Description
+    string Description,
+    Guid ImageId
     );
