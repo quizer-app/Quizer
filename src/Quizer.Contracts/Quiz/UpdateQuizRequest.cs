@@ -2,5 +2,6 @@
 
 public record UpdateQuizRequest(
     string Name,
-    string Description
+    string Description,
+    Guid ImageId
     );

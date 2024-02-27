@@ -12,7 +12,7 @@ using Quizer.Infrastructure.Persistance;
 namespace Quizer.Infrastructure.Migrations
 {
     [DbContext(typeof(QuizerDbContext))]
-    [Migration("20240130154437_InitialSchema")]
+    [Migration("20240227182849_InitialSchema")]
     partial class InitialSchema
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace Quizer.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -429,6 +429,26 @@ namespace Quizer.Infrastructure.Migrations
                                 .HasForeignKey("QuizId");
                         });
 
+                    b.OwnsOne("Quizer.Domain.Common.ValueObjects.Image", "Image", b1 =>
+                        {
+                            b1.Property<Guid>("QuizId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<Guid>("ImageId")
+                                .HasColumnType("uuid");
+
+                            b1.Property<string>("Url")
+                                .IsRequired()
+                                .HasColumnType("text");
+
+                            b1.HasKey("QuizId");
+
+                            b1.ToTable("Quizes");
+
+                            b1.WithOwner()
+                                .HasForeignKey("QuizId");
+                        });
+
                     b.OwnsMany("Quizer.Domain.QuestionAggregate.QuestionId", "QuestionIds", b1 =>
                         {
                             b1.Property<int>("Id")
@@ -455,6 +475,9 @@ namespace Quizer.Infrastructure.Migrations
                         });
 
                     b.Navigation("AverageRating")
+                        .IsRequired();
+
+                    b.Navigation("Image")
                         .IsRequired();
 
                     b.Navigation("QuestionIds");

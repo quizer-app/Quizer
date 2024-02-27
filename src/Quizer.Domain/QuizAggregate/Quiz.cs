@@ -16,6 +16,7 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     public string Name { get; private set; }
     public string Slug { get; private set; }
     public string Description { get; private set; }
+    public Image Image { get; private set; }
     public AverageRating AverageRating { get; private set; }
     
     public string Location => $"{UserName}/{Slug}";
@@ -24,6 +25,7 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
 
     private Quiz(
         Guid userId,
+        Image image,
         QuizId id,
         string name,
         string slug,
@@ -35,6 +37,7 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         Slug = slug;
         Description = description;
         UserName = userName;
+        Image = image;
         AverageRating = averageRating;
     }
 
@@ -47,6 +50,7 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
 
     public static ErrorOr<Quiz> Create(
         Guid userId,
+        Image image,
         string name,
         string slug,
         string description,
@@ -54,6 +58,7 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     {
         var quiz = new Quiz(
             userId,
+            image,
             QuizId.CreateUnique(),
             name,
             slug,
@@ -69,6 +74,7 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
 
     public ErrorOr<bool> Update(
         Guid userId,
+        Image image,
         string name,
         string slug,
         string description)
@@ -77,6 +83,7 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         Name = name;
         Description = description;
         Slug = slug;
+        Image = image;
 
         var result = this.Validate();
         if (result.IsError) return result.Errors;

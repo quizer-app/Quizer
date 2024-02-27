@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Services.Image;
+using Quizer.Contracts.Image;
 
 namespace Quizer.Api.Controllers.V1;
 
@@ -16,16 +17,13 @@ public class ImageController : ApiController
     }
 
     [AllowAnonymous]
-    [HttpPost("{imageType}/{id:guid}")]
-    public async Task<IActionResult> UploadImage(
-        [FromRoute] string imageType,
-        [FromRoute] Guid id,
-        [FromForm(Name = "Data")] IFormFile file)
+    [HttpGet("upload")]
+    public async Task<IActionResult> UploadImage()
     {
-        var result = await _imageService.UploadImage(file, imageType);
+        var result = await _imageService.DirectUpload();
 
         return result.Match(
-            Ok,
+            data => Ok(new ImageUploadResponse(data.Result.Id, data.Result.UploadUrl)),
             Problem);
     }
 }

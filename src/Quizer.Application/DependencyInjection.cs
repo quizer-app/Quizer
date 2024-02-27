@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quizer.Application.Common.Behaviors;
 using Quizer.Application.Services;
@@ -9,7 +10,7 @@ namespace Quizer.Application;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services, ConfigurationManager configuration)
     {
         var assembly = Assembly.GetExecutingAssembly();
 
@@ -21,11 +22,11 @@ public static class DependencyInjection
 
         services.AddValidatorsFromAssembly(assembly);
 
-        services.AddServices();
+        services.AddServices(configuration);
 
-        services
-            .AddFluentEmail("quizer@elotoja.com")
-            .AddSendGridSender("API_KEY");
+        //services
+        //    .AddFluentEmail("quizer@elotoja.com")
+        //    .AddSendGridSender("API_KEY");
 
         return services;
     }

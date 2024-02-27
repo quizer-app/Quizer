@@ -18,16 +18,18 @@ internal class Program
             return;
         }
 
+        var imageId = new Guid("91b6de42-f148-4d9e-5062-5bd4d9149600");
+
         var quizes = new List<CreateQuizRequest>
         {
-            new CreateQuizRequest("Introduction to Science", "Test your basic knowledge of scientific concepts and principles in this introductory quiz."),
-            new CreateQuizRequest("World History Trivia", "Explore the depths of history with questions spanning civilizations, events, and influential figures."),
-            new CreateQuizRequest("Math Challenge", "Put your math skills to the test with challenging problems and brain-teasers covering various mathematical topics."),
-            new CreateQuizRequest("Literature Classics", "Delve into the world of literature with questions about famous authors, novels, and literary movements."),
-            new CreateQuizRequest("Geography Explorer", "Embark on a journey around the globe as you answer questions about countries, capitals, and geographic features."),
-            new CreateQuizRequest("Music Trivia Madness", "From classical compositions to modern hits, this quiz covers a wide range of musical genres and artists."),
-            new CreateQuizRequest("Movie Buff Challenge", "Test your knowledge of cinema with questions about iconic films, directors, actors, and memorable quotes."),
-            new CreateQuizRequest("Sports Fanatic Showdown", "Put on your sports cap and tackle questions about your favorite teams, athletes, and sporting events."),
+            new CreateQuizRequest("Introduction to Science", "Test your basic knowledge of scientific concepts and principles in this introductory quiz.", imageId),
+            new CreateQuizRequest("World History Trivia", "Explore the depths of history with questions spanning civilizations, events, and influential figures.", imageId),
+            new CreateQuizRequest("Math Challenge", "Put your math skills to the test with challenging problems and brain-teasers covering various mathematical topics.", imageId),
+            new CreateQuizRequest("Literature Classics", "Delve into the world of literature with questions about famous authors, novels, and literary movements.", imageId),
+            new CreateQuizRequest("Geography Explorer", "Embark on a journey around the globe as you answer questions about countries, capitals, and geographic features.", imageId),
+            new CreateQuizRequest("Music Trivia Madness", "From classical compositions to modern hits, this quiz covers a wide range of musical genres and artists.", imageId),
+            new CreateQuizRequest("Movie Buff Challenge", "Test your knowledge of cinema with questions about iconic films, directors, actors, and memorable quotes.", imageId),
+            new CreateQuizRequest("Sports Fanatic Showdown", "Put on your sports cap and tackle questions about your favorite teams, athletes, and sporting events.", imageId),
         };
 
         foreach(var quiz in quizes)

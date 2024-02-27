@@ -54,5 +54,7 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
             .HasMaxLength(1000);
 
         builder.OwnsOne(q => q.AverageRating);
+
+        builder.OwnsOne(q => q.Image);
     }
 }

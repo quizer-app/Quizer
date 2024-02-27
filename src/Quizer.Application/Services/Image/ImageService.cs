@@ -1,147 +1,74 @@
 ﻿using ErrorOr;
-using ImageMagick;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Quizer.Application.Common.Settings;
+using Quizer.Application.Services.Image.Response;
 using Quizer.Domain.Common.Errors;
-using Microsoft.AspNetCore.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace Quizer.Application.Services.Image;
 
 public class ImageService : IImageService
 {
     private readonly ILogger<ImageService> _logger;
-    private readonly ImageOptimizer _optimizer;
+    private readonly HttpClient _client;
+    private readonly ImagesSettings _settings;
 
-    public ImageService(ILogger<ImageService> logger)
+    public ImageService(ILogger<ImageService> logger, HttpClient client, IOptions<ImagesSettings> imageOptions)
     {
-        _optimizer = new ImageOptimizer();
+        _settings = imageOptions.Value;
         _logger = logger;
+        _client = client;
+
+        _client.BaseAddress = new Uri($"https://api.cloudflare.com/client/v4/accounts/{_settings.AccountId}/images/");
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _settings.ApiToken);
     }
 
-    public async Task<ErrorOr<string>> UploadImage(IFormFile file, string imageType)
+    public async Task<ErrorOr<DirectUploadResponse>> DirectUpload(bool requireSignedURLs = false)
     {
-        string[] correctExtensions = { ".jpg", ".jpeg", ".png", ".webp" };
-        string[] correctImageTypes = { "quiz" };
-
-        if(!correctImageTypes.Contains(imageType))
-            return Errors.Image.WrongType(correctImageTypes);
-
-        if (!IsCorrectExtension(file.FileName, correctExtensions))
-            return Errors.Image.WrongFormat(correctExtensions);
-
-        string tempFilePath = await SaveTempFile(file);
-
-        string imageDir = GetImageDir(imageType);
-
-        var id = new Guid();
-
-        var imageProcessResult = ProcessImage(tempFilePath, imageDir, id);
-        if (imageProcessResult.IsError)
-            return imageProcessResult.Errors;
-
-        return $"/images/{imageType}/{id}.webp";
-    }
-
-    public string? FormatAndMove(string filePathIn, string dirPathOut, Guid id)
-    {
-        try
+        var formData = new MultipartFormDataContent
         {
-            string fileName = $"{id}.webp";
-            string filePathOut = Path.Combine(dirPathOut, fileName);
+            { new StringContent(requireSignedURLs.ToString().ToLower()), "requireSignedURLs" }
+        };
 
-            using var image = new MagickImage(filePathIn);
-            image.Format = MagickFormat.WebP;
+        var response = await _client.PostAsync("v2/direct_upload", formData);
 
-            image.Write(filePathOut);
+        _logger.LogInformation("Direct upload response: {@response}", response);
 
-            return filePathOut;
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error occured during image format: {@Exception}", ex);
-            return null;
-        }
-    }
-
-    public bool Resize(string filePath, int width, int height)
-    {
-        try
-        {
-            using var image = new MagickImage(filePath);
-            image.Resize(width, height);
-            image.Write(filePath);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error occured during image resize: {@Exception}", ex);
-            return false;
-        }
-        return true;
-    }
-
-    public bool Optimize(string filePath)
-    {
-        try
-        {
-            var fileInfo = new FileInfo(filePath);
-            _optimizer.LosslessCompress(fileInfo);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError("Error occured during image optimize: {@Exception}", ex);
-            return false;
-        }
-        return true;
-    }
-
-    public string GetImageDir(string imageType)
-    {
-        string imageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "files", "images", imageType);
-        if (!Directory.Exists(imageDir))
-            Directory.CreateDirectory(imageDir);
-
-        return imageDir;
-    }
-
-    public string GetImagePath(string imageType, Guid id)
-    {
-        string imageDir = GetImageDir(imageType);
-        string filePath = Path.Combine(imageDir, $"{id}.webp");
-        if (!File.Exists(filePath))
-        {
-            filePath = Path.Combine(imageDir, $"default.webp");
-        }
-
-        return filePath;
-    }
-
-    private async Task<string> SaveTempFile(IFormFile file)
-    {
-        string tempFilePath = Path.GetTempFileName();
-        using (var stream = new FileStream(tempFilePath, FileMode.Create))
-        {
-            await file.CopyToAsync(stream);
-        }
-
-        return tempFilePath;
-    }
-
-    private bool IsCorrectExtension(string fileName, string[] correctExtensions)
-    {
-        string extension = Path.GetExtension(fileName);
-
-        return correctExtensions.Contains(extension);
-    }
-
-    private ErrorOr<string> ProcessImage(string tempFilePath, string imageDir, Guid id)
-    {
-        string? imagePath = FormatAndMove(tempFilePath, imageDir, id);
-        if (imagePath is null)
+        if (!response.IsSuccessStatusCode)
             return Errors.Image.CannotUpload;
 
-        bool resized = Resize(imagePath, 512, 288);
-        if (!resized)
+        var content = await response.Content.ReadAsStringAsync();
+        if(content is null)
             return Errors.Image.CannotUpload;
 
-        return imagePath;
+        var result = JsonSerializer.Deserialize<DirectUploadResponse>(content);
+        if (result is null || !result.Success)
+            return Errors.Image.CannotUpload;
+
+        return result;
     }
+
+    public async Task<bool> IsSuccessfulyUploaded(Guid imageId)
+    {
+        var response = await _client.GetFromJsonAsync<ImageDetailsResponse>($"v1/{imageId}");
+
+        if(response is null || response.Result is null || !response.Success) return false;
+
+        return !response.Result.Draft;
+    }
+
+    public async Task<bool> DeleteImage(Guid imageId)
+    {
+        var response = await _client.DeleteFromJsonAsync<DeleteImageResponse>($"v1/{imageId}");
+
+        if (response is null) return false;
+
+        return response.Success;
+    }
+
+    public Uri GenerateImageUrl(Guid imageId, string variantName) =>
+        new Uri($"https://imagedelivery.net/{_settings.AccountId}/{imageId}/{variantName}");
 }

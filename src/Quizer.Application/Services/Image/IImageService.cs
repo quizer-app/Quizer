@@ -1,16 +1,12 @@
-﻿
-using ErrorOr;
-using Microsoft.AspNetCore.Http;
+﻿using ErrorOr;
+using Quizer.Application.Services.Image.Response;
 
-namespace Quizer.Application.Services.Image
+namespace Quizer.Application.Services.Image;
+
+public interface IImageService
 {
-    public interface IImageService
-    {
-        Task<ErrorOr<string>> UploadImage(IFormFile file, string imageType);
-        string? FormatAndMove(string filePathIn, string dirPathOut, Guid id);
-        bool Optimize(string filePath);
-        bool Resize(string filePath, int width, int height);
-        string GetImageDir(string imageType);
-        string GetImagePath(string imageType, Guid id);
-    }
+    Task<ErrorOr<DirectUploadResponse>> DirectUpload(bool requireSignedURLs = false);
+    Task<bool> IsSuccessfulyUploaded(Guid imageId);
+    Task<bool> DeleteImage(Guid imageId);
+    Uri GenerateImageUrl(Guid imageId, string variantName);
 }
