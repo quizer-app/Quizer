@@ -18,7 +18,7 @@ internal class Program
             return;
         }
 
-        var imageId = new Guid();
+        var imageId = new Guid("91b6de42-f148-4d9e-5062-5bd4d9149600");
 
         var quizes = new List<CreateQuizRequest>
         {
