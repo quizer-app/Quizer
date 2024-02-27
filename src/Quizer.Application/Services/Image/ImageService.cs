@@ -70,5 +70,5 @@ public class ImageService : IImageService
     }
 
     public Uri GenerateImageUrl(Guid imageId, string variantName) =>
-        new Uri($"https://imagedelivery.net/{_settings.AccountId}/{imageId}/{variantName}");
+        new Uri($"https://imagedelivery.net/{_settings.AccountHash}/{imageId}/{variantName}");
 }
