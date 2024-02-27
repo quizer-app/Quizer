@@ -12,6 +12,8 @@ public record ShortQuizResponse(
     string CreatedBy,
     string UpdatedBy,
     int NumberOfQuestions,
+    string ImageUrl,
+    string ImageId,
     DateTime CreatedAt,
     DateTime UpdatedAt
     );
