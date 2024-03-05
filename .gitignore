@@ -2,6 +2,6 @@
 **/bin
 **/obj
 **/logs
-# **/wwwroot
 **/.containers
+**/.env
 **/secrets.json
