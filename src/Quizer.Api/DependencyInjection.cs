@@ -2,9 +2,6 @@
 using Quizer.Api.Common.Errors;
 using Quizer.Api.Common.Mapping;
 using Asp.Versioning;
-using Microsoft.Extensions.Options;
-using Quizer.Api.OpenApi;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using Quizer.Api.Common.Settings;
 
 namespace Quizer.Api;
@@ -49,9 +46,7 @@ public static class DependencyInjection
             options.AssumeDefaultVersionWhenUnspecified = true;
             options.ApiVersionReader = new UrlSegmentApiVersionReader();
         }).AddMvc().AddApiExplorer();
-        services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
-        services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen(options => options.OperationFilter<SwaggerDefaultValues>());
+        services.AddOpenApi();
 
         return services;
     }
