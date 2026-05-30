@@ -30,7 +30,7 @@
         env = [
           {
             name = "DOTNET_ROOT";
-            value = "${pkgs.dotnet-sdk_8}";
+            value = "${pkgs.dotnet-sdk_10}";
           }
           {
             name = "DOTNET_CLI_TELEMETRY_OPTOUT";
