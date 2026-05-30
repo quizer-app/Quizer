@@ -2,9 +2,9 @@ name: Publish to GitHub Container Registry
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  release:
+    types:
+      - published
   
 jobs:
   publish:
