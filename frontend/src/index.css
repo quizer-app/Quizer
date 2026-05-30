@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.textHover {
+  @apply hover:text-textHover ease-out duration-200 cursor-pointer;
+}
+
+.mainContainer {
+  @apply container px-4 sm:px-6 xl:px-8 2xl:px-12;
+}
+
+.buttonPrimary {
+  @apply bg-lightBlue py-4 px-8 rounded-sm hover:bg-opacity-95 text-white font-bold;
+}
+
+.buttonSecondary {
+  @apply rounded-sm text-white text-xl transition duration-100;
+}
+
+.dropDown {
+  @apply bg-secondary text-white text-xl text-left pl-5;
+}
