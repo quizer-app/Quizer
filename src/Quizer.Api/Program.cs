@@ -5,6 +5,7 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 {
+    builder.WebHost.UseStaticWebAssets();
     builder.Configuration.Sources.Clear();
     builder.Configuration
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
