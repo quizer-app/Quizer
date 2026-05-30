@@ -22,7 +22,12 @@ export default function PersistLogin({ children }: { children: ReactNode }) {
       }
     };
 
-    !accessToken ? verifyRefreshToken() : setIsLoading(false);
+    if (accessToken) {
+      setIsLoading(false);
+      return;
+    }
+
+    void verifyRefreshToken();
   }, [refresh, accessToken]);
 
   return <>{isLoading ? <Loading /> : <>{children}</>}</>;

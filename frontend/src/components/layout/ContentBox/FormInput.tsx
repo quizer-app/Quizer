@@ -1,30 +1,29 @@
 import {
   FieldErrors,
   FieldValues,
-  RegisterOptions,
-  UseFormRegisterReturn,
+  Path,
+  UseFormRegister,
 } from "react-hook-form";
 
-interface FormInputProps {
-  name: string;
+interface FormInputProps<TFieldValues extends FieldValues> {
+  name: Path<TFieldValues>;
   type: string;
   placeholder: string;
   labelText: string;
-  errors?: FieldErrors<FieldValues>;
-  register: (
-    name: string,
-    options?: RegisterOptions<FieldValues, string> | undefined
-  ) => UseFormRegisterReturn<string>;
+  errors?: FieldErrors<TFieldValues>;
+  register: UseFormRegister<TFieldValues>;
 }
 
-export function FormInput({
+export function FormInput<TFieldValues extends FieldValues>({
   register,
   name,
   type,
   placeholder,
   labelText,
   errors,
-}: FormInputProps) {
+}: FormInputProps<TFieldValues>) {
+  const error = errors?.[name];
+
   return (
     <div className="mb-8">
       <label htmlFor={name} className="block text-sm font-medium mb-3">
@@ -37,11 +36,9 @@ export function FormInput({
         className="bg-input text-textPrimary rounded-sm w-full py-3 pl-6 shadow-md
                     border border-transparent focus:border-lightBlue outline-none"
       />
-      {errors && errors[name] && (
+      {error && (
         <p className="pt-3 text-sm">
-          <span className="text-red-600">
-            {errors[name]?.message as string}
-          </span>
+          <span className="text-red-600">{error.message as string}</span>
         </p>
       )}
     </div>

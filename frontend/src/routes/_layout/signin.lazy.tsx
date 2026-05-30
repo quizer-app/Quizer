@@ -49,7 +49,7 @@ function SignIn() {
   });
 
   useEffect(() => {
-    setFocus("usernameOrEmail");
+    setFocus("email");
   }, [setFocus]);
 
   const loginMutation = useMutation({

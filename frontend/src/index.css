@@ -1,23 +1,65 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@config "../tailwind.config.js";
 
 .textHover {
-  @apply hover:text-textHover ease-out duration-200 cursor-pointer;
+  cursor: pointer;
+  transition-duration: 200ms;
+  transition-timing-function: ease-out;
+}
+
+.textHover:hover {
+  color: #9ba1b3;
 }
 
 .mainContainer {
-  @apply container px-4 sm:px-6 xl:px-8 2xl:px-12;
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 640px) {
+  .mainContainer {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .mainContainer {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .mainContainer {
+    padding-inline: 3rem;
+  }
 }
 
 .buttonPrimary {
-  @apply bg-lightBlue py-4 px-8 rounded-sm hover:bg-opacity-95 text-white font-bold;
+  border-radius: 0.125rem;
+  background-color: #4a6cf7;
+  padding: 1rem 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.buttonPrimary:hover {
+  opacity: 0.95;
 }
 
 .buttonSecondary {
-  @apply rounded-sm text-white text-xl transition duration-100;
+  border-radius: 0.125rem;
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  transition-duration: 100ms;
 }
 
 .dropDown {
-  @apply bg-secondary text-white text-xl text-left pl-5;
+  background-color: #1d2144;
+  color: #fff;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  padding-left: 1.25rem;
+  text-align: left;
 }

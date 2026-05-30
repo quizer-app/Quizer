@@ -32,7 +32,7 @@ export default function Quiz() {
               <Flashcard
                 questions={quiz.questions}
                 className="h-[280px] sm:h-[320px] md:h-[360px] lg:h-[420px]"
-                fullPath="/$username/$quizSlug"
+                fullPath="/$username/$quizSlug/"
                 term={term}
               />
 

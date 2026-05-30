@@ -1,16 +1,18 @@
 import UserInfo from "@/components/Dashboard/UserInfo";
 import UserQuizes from "@/components/Dashboard/UserQuizes";
-import { quizSearchSchema } from "@/types/schema/quizSearchSchema";
-import { Link, createFileRoute } from "@tanstack/react-router";
+import { GetQuizesQueryParams } from "@/types/schema/quizSearchSchema";
+import { Link, createLazyFileRoute } from "@tanstack/react-router";
 import { twMerge } from "tailwind-merge";
 
-export const Route = createFileRoute("/_layout/_auth/$username")({
+export const Route = createLazyFileRoute("/_layout/_auth/$username")({
   component: Dashboard,
-  validateSearch: quizSearchSchema,
 });
 
 export default function Dashboard() {
-  const searchParams = Route.useSearch();
+  const searchParams = Object.assign(
+    { pageNumber: 1, pageSize: 9 },
+    Route.useSearch()
+  ) as GetQuizesQueryParams;
   const { username } = Route.useParams();
   const tabs = ["Information", "Quizes", "Activity"];
 
@@ -53,7 +55,7 @@ export default function Dashboard() {
         )}
         {searchParams.tab === 1 && (
           <div className="flex flex-col gap-10 mainContainer mx-auto">
-            <UserQuizes fullPath={Route.fullPath} searchParams={searchParams} />
+            <UserQuizes fullPath="/$username" searchParams={searchParams} />
           </div>
         )}
       </div>

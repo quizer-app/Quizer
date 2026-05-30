@@ -7,5 +7,5 @@ export const quizPageSchema = z.object({
 export type QuizPageSearchParams = z.infer<typeof quizPageSchema>;
 
 export type QuizPageFullPath =
-  | "/$username/$quizSlug"
+  | "/$username/$quizSlug/"
   | "/$username/$quizSlug/flashcards";
