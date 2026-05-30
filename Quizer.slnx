@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="AssemblyInfo.cs" />
+    <File Path="Dockerfile" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Quizer.Api/Quizer.Api.csproj" />
+    <Project Path="src/Quizer.Application/Quizer.Application.csproj" />
+    <Project Path="src/Quizer.Contracts/Quizer.Contracts.csproj" />
+    <Project Path="src/Quizer.Domain/Quizer.Domain.csproj" />
+    <Project Path="src/Quizer.Infrastructure/Quizer.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Quizer.Seed/Quizer.Seed.csproj" />
+  </Folder>
+  <Project Path="docker-compose.dcproj">
+    <Build />
+  </Project>
+</Solution>
