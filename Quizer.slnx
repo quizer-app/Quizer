@@ -12,6 +12,10 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Quizer.Seed/Quizer.Seed.csproj" />
+    <Project Path="tests/Quizer.Domain.UnitTests/Quizer.Domain.UnitTests.csproj" />
+    <Project Path="tests/Quizer.Application.UnitTests/Quizer.Application.UnitTests.csproj" />
+    <Project Path="tests/Quizer.Infrastructure.IntegrationTests/Quizer.Infrastructure.IntegrationTests.csproj" />
+    <Project Path="tests/Quizer.Api.IntegrationTests/Quizer.Api.IntegrationTests.csproj" />
   </Folder>
   <Project Path="docker-compose.dcproj">
     <Build />

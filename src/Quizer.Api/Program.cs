@@ -33,3 +33,5 @@ var app = builder.Build();
     app.UsePresentation(builder.Configuration);
 }
 
+
+public partial class Program;
