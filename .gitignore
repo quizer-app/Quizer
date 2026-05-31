@@ -1,7 +1,7 @@
-**/.vs
+/.vs
 **/bin
 **/obj
 **/logs
-# **/wwwroot
 **/.containers
 **/secrets.json
+/.idea
