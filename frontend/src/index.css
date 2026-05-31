@@ -1,6 +1,18 @@
 @import "tailwindcss";
-@config "../tailwind.config.js";
+@plugin "@tailwindcss/typography";
 
+@theme {
+  --color-primary: #090e34;
+  --color-secondary: #1d2144;
+  --color-lightBlue: #4a6cf7;
+  --color-lightBlueB: #6f86e0;
+  --color-darkBlue: #2c409e;
+  --color-textHover: #9ba1b3;
+  --color-textPrimary: #959cb1;
+  --color-input: #242b51;
+  --font-primary: "Inter", sans-serif;
+  --opacity-2: 0.98;
+}
 .textHover {
   cursor: pointer;
   transition-duration: 200ms;
