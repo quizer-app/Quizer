@@ -1,26 +1,37 @@
-export const toggleTheme = () => {
-  const htmlTag = document.querySelector("html");
+const THEME_TRANSITION_CLASS = "theme-switching";
+const THEME_TRANSITION_DURATION_MS = 250;
 
-  if (htmlTag?.classList.contains("light")) {
-    htmlTag.setAttribute('class', 'dark');
-    localStorage.setItem('theme', 'dark')
-  } else {
-    htmlTag?.setAttribute('class', 'light');
-    localStorage.setItem('theme', 'light')
-  }
+const applyTheme = (theme: "light" | "dark") => {
+  const htmlTag = document.documentElement;
+  htmlTag.classList.remove("light", "dark");
+  htmlTag.classList.add(theme);
+  localStorage.setItem("theme", theme);
+};
+
+const startThemeTransition = () => {
+  const htmlTag = document.documentElement;
+  htmlTag.classList.add(THEME_TRANSITION_CLASS);
+  window.setTimeout(() => {
+    htmlTag.classList.remove(THEME_TRANSITION_CLASS);
+  }, THEME_TRANSITION_DURATION_MS);
+};
+
+export const toggleTheme = () => {
+  const currentTheme = document.documentElement.classList.contains("light")
+    ? "light"
+    : "dark";
+  const nextTheme = currentTheme === "light" ? "dark" : "light";
+
+  startThemeTransition();
+  applyTheme(nextTheme);
 };
 
 export const getTheme = (): string => {
-  const theme = localStorage.getItem('theme')
-  return theme ? theme : "dark"
-}
+  const theme = localStorage.getItem("theme");
+  return theme ?? "dark";
+};
 
 export const setStartTheme = () => {
-  const htmlTag = document.querySelector("html");
-
-  if (localStorage.getItem("theme") === 'light') {
-    htmlTag?.setAttribute('class', 'light');
-  } else {
-    htmlTag?.setAttribute('class', 'dark');
-  }
-}
+  const initialTheme = localStorage.getItem("theme") === "light" ? "light" : "dark";
+  applyTheme(initialTheme);
+};

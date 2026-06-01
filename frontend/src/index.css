@@ -75,3 +75,20 @@
   padding-left: 1.25rem;
   text-align: left;
 }
+
+
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-switching *,
+  html.theme-switching *::before,
+  html.theme-switching *::after {
+    transition-property:
+      color,
+      background-color,
+      border-color,
+      fill,
+      stroke,
+      box-shadow;
+    transition-duration: 250ms;
+    transition-timing-function: ease-in-out;
+  }
+}
