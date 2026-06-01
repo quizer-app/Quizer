@@ -1,4 +1,5 @@
 import "@/index.css";
+import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
@@ -39,7 +40,4 @@ if (!rootElement.innerHTML) {
       </QueryClientProvider>
     </React.StrictMode>
   );
-}
-function disableReactDevTools() {
-  throw new Error("Function not implemented.");
 }
