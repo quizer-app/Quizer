@@ -4,8 +4,8 @@ import Top from "./Top";
 
 export default function Intro() {
   return (
-    <section className="relative flex h-full w-full items-center overflow-hidden bg-primary">
-      <div className="mx-auto flex w-full max-w-xl flex-col gap-8 px-4 py-20 text-white md:max-w-3xl">
+    <section className="relative flex h-full w-full items-center overflow-y-auto bg-primary">
+      <div className="mx-auto flex min-h-full w-full max-w-xl flex-col justify-center gap-8 px-4 py-20 text-white md:max-w-3xl">
         <h1 className="z-20 text-center text-3xl font-bold sm:text-4xl lg:text-5xl">
           Ignite Your Knowledge with Fun
         </h1>

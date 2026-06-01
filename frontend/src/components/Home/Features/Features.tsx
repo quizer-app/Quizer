@@ -38,8 +38,8 @@ export default function Features() {
   ];
 
   return (
-    <section className="bg-primary/95 h-full w-full overflow-y-auto text-white">
-      <div className="mainContainer mx-auto flex h-full flex-col justify-center gap-10 px-4 py-10 md:py-12 lg:py-14">
+    <section className="h-full w-full overflow-y-auto bg-primary/95 text-white">
+      <div className="mainContainer mx-auto flex min-h-full flex-col justify-center gap-10 px-4 py-10 md:py-12 lg:py-14">
         <div className="max-w-2xl mx-auto text-center">
           <p className="inline-block rounded-sm border border-lightBlue/50 bg-lightBlue/10 px-3 py-1 text-xs uppercase tracking-[0.24em] text-lightBlue">
             Why Quizer
