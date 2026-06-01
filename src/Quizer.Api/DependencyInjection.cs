@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Quizer.Api.Common.Errors;
 using Quizer.Api.Common.Mapping;
 using Asp.Versioning;
@@ -31,8 +31,8 @@ public static class DependencyInjection
                     policy
                         .WithOrigins(corsSettings.Origins)
                         .AllowCredentials()
-                        .AllowAnyHeader();
-                });
+                        .AllowAnyHeader()
+                        .AllowAnyMethod();
         });
 
         return services;
