@@ -9,10 +9,16 @@ export const Route = createLazyFileRoute("/_layout/")({
 
 function Home() {
   return (
-    <>
-      <Intro />
-      <Features />
-      <TileGrid />
-    </>
+    <main className="snap-y snap-mandatory">
+      <div className="snap-start">
+        <Intro />
+      </div>
+      <div className="snap-start">
+        <Features />
+      </div>
+      <div className="snap-start">
+        <TileGrid />
+      </div>
+    </main>
   );
 }
