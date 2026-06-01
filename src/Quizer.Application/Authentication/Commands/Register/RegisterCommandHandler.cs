@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -7,12 +7,12 @@ using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Authentication.Commands.Register;
 
-public class RefreshTokenCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<RegisterResult>>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<RegisterResult>>
 {
     private readonly UserManager<User> _userManager;
-    private readonly ILogger<RefreshTokenCommandHandler> _logger;
+    private readonly ILogger<RegisterCommandHandler> _logger;
 
-    public RefreshTokenCommandHandler(UserManager<User> userManager, ILogger<RefreshTokenCommandHandler> logger)
+    public RegisterCommandHandler(UserManager<User> userManager, ILogger<RegisterCommandHandler> logger)
     {
         _userManager = userManager;
         _logger = logger;
