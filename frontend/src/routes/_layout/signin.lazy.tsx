@@ -1,8 +1,5 @@
 import { api } from "@/api/axios";
-import {
-  selectIsAuthenticated,
-  useAuthStore,
-} from "@/atoms/auth";
+import { selectIsAuthenticated, useAuthStore } from "@/atoms/auth";
 import { Button } from "@/components/layout/ContentBox/Button";
 import ContentBox from "@/components/layout/ContentBox/ContentBox";
 import { FormInput } from "@/components/layout/ContentBox/FormInput";
@@ -15,8 +12,8 @@ import { AuthResponse } from "@/types/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { AxiosError } from "axios";
-import { useEffect } from "react";
+import axios, { AxiosError } from "axios";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
@@ -33,11 +30,41 @@ const schema = z.object({
 
 type Form = z.infer<typeof schema>;
 
+const getAuthErrorMessage = (error: AxiosError) => {
+  if (!error.response) {
+    return "Network error. Check your connection and try again.";
+  }
+
+  if (error.response.status === 400) {
+    return "Please check the entered values and try again.";
+  }
+
+  if (error.response.status === 401) {
+    return "Invalid email or password.";
+  }
+
+  if (error.response.status >= 500) {
+    return "Server error. Please try again in a moment.";
+  }
+
+  const data = error.response.data;
+  if (
+    typeof data === "object" &&
+    data !== null &&
+    "message" in data &&
+    typeof data.message === "string"
+  ) {
+    return data.message;
+  }
+
+  return "Unable to sign in right now. Please try again.";
+};
+
 function SignIn() {
   const isAuthenticated = useAuthStore(selectIsAuthenticated);
   const navigate = useNavigate();
-
   const setAccessToken = useAuthStore(state => state.setAccessToken);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const {
     register,
@@ -60,22 +87,39 @@ function SignIn() {
         withCredentials: true,
       });
     },
+    onMutate: () => {
+      setFormError(null);
+    },
     onSuccess: data => {
       const { accessToken, message } = data.data;
       toast.success(message);
       setAccessToken(accessToken ?? null);
       reset();
     },
-    onError: (error: AxiosError) => {
-      toast.error(error.message);
+    onError: error => {
+      if (!axios.isAxiosError(error)) {
+        const fallbackError = "Unable to sign in right now. Please try again.";
+        setFormError(fallbackError);
+        toast.error(fallbackError);
+        return;
+      }
+
+      const message = getAuthErrorMessage(error);
+      setFormError(message);
+      toast.error(message);
     },
   });
+  const redirectParam = new URLSearchParams(window.location.search).get("redirect");
+  const redirectTo =
+    redirectParam && redirectParam.startsWith("/") ? redirectParam : "/";
 
   useEffect(() => {
-    if (isAuthenticated && !loginMutation.isSuccess) {
-      navigate({ to: "/" });
+    if (!isAuthenticated) {
+      return;
     }
-  }, [isAuthenticated, navigate, loginMutation.isSuccess]);
+
+    navigate({ to: redirectTo, replace: true });
+  }, [isAuthenticated, navigate, redirectTo]);
 
   return (
     <ContentBox>
@@ -83,6 +127,11 @@ function SignIn() {
       <Text>Login to your account for better experience</Text>
       <GoogleButton>Sign in with Google</GoogleButton>
       <TextWithLines>Or, sign in with your email</TextWithLines>
+      {formError && (
+        <p className="mb-4 text-sm text-red-600" role="alert">
+          {formError}
+        </p>
+      )}
       <form
         onSubmit={handleSubmit(data => {
           loginMutation.mutate(data as Form);

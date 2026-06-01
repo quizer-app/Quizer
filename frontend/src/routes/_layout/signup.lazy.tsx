@@ -12,8 +12,8 @@ import { AuthResponse } from "@/types/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
-import { AxiosError } from "axios";
-import { useEffect } from "react";
+import axios, { AxiosError } from "axios";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast/headless";
 import { z } from "zod";
@@ -31,7 +31,39 @@ const schema = z.object({
 
 type Form = z.infer<typeof schema>;
 
+const getRegistrationErrorMessage = (error: AxiosError) => {
+  if (!error.response) {
+    return "Network error. Check your connection and try again.";
+  }
+
+  if (error.response.status === 400) {
+    return "Please check the entered values and try again.";
+  }
+
+  if (error.response.status === 409) {
+    return "That account already exists. Try signing in instead.";
+  }
+
+  if (error.response.status >= 500) {
+    return "Server error. Please try again in a moment.";
+  }
+
+  const data = error.response.data;
+  if (
+    typeof data === "object" &&
+    data !== null &&
+    "message" in data &&
+    typeof data.message === "string"
+  ) {
+    return data.message;
+  }
+
+  return "Unable to sign up right now. Please try again.";
+};
+
 function SignUp() {
+  const [formError, setFormError] = useState<string | null>(null);
+
   const {
     register,
     handleSubmit,
@@ -48,12 +80,24 @@ function SignUp() {
         withCredentials: true,
       });
     },
+    onMutate: () => {
+      setFormError(null);
+    },
     onSuccess: data => {
       const { message } = data.data;
       toast.success(message);
     },
-    onError: (error: AxiosError) => {
-      toast.error(error.message);
+    onError: error => {
+      if (!axios.isAxiosError(error)) {
+        const fallbackError = "Unable to sign up right now. Please try again.";
+        setFormError(fallbackError);
+        toast.error(fallbackError);
+        return;
+      }
+
+      const message = getRegistrationErrorMessage(error);
+      setFormError(message);
+      toast.error(message);
     },
   });
 
@@ -76,6 +120,11 @@ function SignUp() {
       <Text>It's totally free and super easy</Text>
       <GoogleButton>Sign up with Google</GoogleButton>
       <TextWithLines>Or, register with your email</TextWithLines>
+      {formError && (
+        <p className="mb-4 text-sm text-red-600" role="alert">
+          {formError}
+        </p>
+      )}
       <form
         onSubmit={handleSubmit(data => {
           registerMutation.mutate(data as Form);
