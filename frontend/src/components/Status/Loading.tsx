@@ -5,7 +5,12 @@ export default function Loading() {
   return (
     <>
       <Background />
-      <div className="w-full h-[80vh] top-0 left-0 flex items-center justify-center">
+      <div
+        className="w-full h-[80vh] top-0 left-0 flex items-center justify-center"
+        role="status"
+        aria-live="polite"
+        aria-label="Loading content"
+      >
         <FadeLoader color="white" />
       </div>
     </>

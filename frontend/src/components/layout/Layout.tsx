@@ -6,7 +6,7 @@ import { Header } from "./Header/Header";
 export default function Layout() {
   return (
     <>
-      <Toaster />
+      <Toaster position="top-center" toastOptions={{ duration: 4000 }} />
       <Header />
       <Outlet />
       <Footer />

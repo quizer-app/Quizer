@@ -3,12 +3,18 @@ import { Menu, X } from "lucide-react";
 interface NavToggleProps {
   toggleNavbar: () => void;
   isOpen: boolean;
+  menuId: string;
 }
 
-export default function NavToggle({ toggleNavbar, isOpen }: NavToggleProps) {
+export default function NavToggle({ toggleNavbar, isOpen, menuId }: NavToggleProps) {
   return (
     <div className="flex pl-3 lg:hidden z-50">
-      <button onClick={toggleNavbar}>
+      <button
+        onClick={toggleNavbar}
+        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+        aria-expanded={isOpen}
+        aria-controls={menuId}
+      >
         {isOpen ? (
           <X className="w-9 h-9" strokeWidth={1.6} />
         ) : (

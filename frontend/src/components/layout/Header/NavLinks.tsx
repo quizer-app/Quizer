@@ -3,9 +3,10 @@ import { Link } from "@tanstack/react-router";
 interface NavLinksProps {
   isOpen: boolean;
   onClick: () => void;
+  menuId: string;
 }
 
-export default function NavLinks({ isOpen, onClick }: NavLinksProps) {
+export default function NavLinks({ isOpen, onClick, menuId }: NavLinksProps) {
   const data = [
     { href: "/", text: "Home" },
     {
@@ -23,6 +24,8 @@ export default function NavLinks({ isOpen, onClick }: NavLinksProps) {
   return (
     <div>
       <ul
+        id={menuId}
+        aria-hidden={!isOpen}
         className={`${isOpen ? "flex" : "hidden"} flex-col bg-secondary
           absolute top-20 rounded-sm border-[.5px] gap-[10px] p-5 z-50
           border-textPrimary border-opacity-20 right-4 
