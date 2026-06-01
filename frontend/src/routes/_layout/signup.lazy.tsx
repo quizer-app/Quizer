@@ -150,6 +150,7 @@ function SignUp() {
           void form.handleSubmit();
         }}
         autoComplete="off"
+        aria-busy={registerMutation.isPending}
       >
         <form.Field
           name="username"
@@ -252,7 +253,9 @@ function SignUp() {
             />
           )}
         />
-        <Button>Sign up</Button>
+        <Button disabled={registerMutation.isPending}>
+          {registerMutation.isPending ? "Creating account..." : "Sign up"}
+        </Button>
         <TextWithLink link="Sign in" path="/signin">
           Already using Quizer?
         </TextWithLink>

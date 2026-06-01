@@ -147,6 +147,7 @@ function SignIn() {
           void form.handleSubmit();
         }}
         autoComplete="off"
+        aria-busy={loginMutation.isPending}
       >
         <form.Field
           name="email"
@@ -219,7 +220,9 @@ function SignIn() {
             </div>
           )}
         />
-        <Button>Sign in</Button>
+        <Button disabled={loginMutation.isPending}>
+          {loginMutation.isPending ? "Signing in..." : "Sign in"}
+        </Button>
       </form>
       <TextWithLink link="Sign up" path="/signup">
         Don't have an account?
