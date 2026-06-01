@@ -2,6 +2,22 @@
 
 Quizer is a full-stack quiz platform with a .NET 10 backend and a React/TypeScript frontend.
 
+## Quick start
+
+```bash
+# 1) Enter dev shell
+nix develop
+
+# 2) Restore backend/frontend dependencies
+nix develop -c restore
+
+# 3) Run API (terminal A)
+nix develop -c api
+
+# 4) Run web app (terminal B)
+nix develop -c web
+```
+
 ## Project requirements
 
 Use the Nix dev shell to guarantee toolchain parity:
