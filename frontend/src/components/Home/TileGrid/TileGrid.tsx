@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import useQuizesPaging from "@/hooks/quizes/useQuizesPaging";
 import { QuizResponse } from "@/types/types/quiz";
 import Loading from "../../Status/Loading";
@@ -7,17 +8,51 @@ export type TileGridViewProps = {
   quizes: QuizResponse[];
 };
 
+const getPageSize = (availableHeight: number) => {
+  if (availableHeight < 860) {
+    return 3;
+  }
+
+  return 6;
+};
+
 export default function TileGrid() {
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const [pageSize, setPageSize] = useState<number>(6);
+
+  useEffect(() => {
+    const sectionElement = sectionRef.current;
+    if (sectionElement === null) {
+      return;
+    }
+
+    const updatePageSize = () => {
+      const nextPageSize = getPageSize(sectionElement.clientHeight);
+      setPageSize(previousPageSize =>
+        previousPageSize === nextPageSize ? previousPageSize : nextPageSize
+      );
+    };
+
+    updatePageSize();
+
+    const resizeObserver = new ResizeObserver(updatePageSize);
+    resizeObserver.observe(sectionElement);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, []);
+
   const { isLoading, isError, quizes } = useQuizesPaging({
     pageNumber: 1,
-    pageSize: 6,
+    pageSize,
     sortColumn: "createdAt",
     sortOrder: "desc",
     searchTerm: "",
   });
 
   return (
-    <section className="h-full w-full overflow-hidden bg-primary">
+    <section ref={sectionRef} className="h-full w-full overflow-hidden bg-primary">
       {isLoading && <Loading />}
       {isError ? (
         <div className="mainContainer w-full rounded-sm border border-white/10 bg-white/5 p-8 text-center">
