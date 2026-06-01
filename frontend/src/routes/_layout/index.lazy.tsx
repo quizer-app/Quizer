@@ -100,7 +100,7 @@ export function Home() {
             <Link
               to="/quiz-search"
               search={{ pageNumber: 1, pageSize: 9 }}
-              className="rounded-sm border border-white/40 px-6 py-3 text-sm font-semibold transition-colors hover:bg-white/10"
+              className="inline-flex min-h-14 items-center justify-center rounded-sm border border-white/40 px-6 py-4 text-sm font-semibold transition-colors hover:bg-white/10"
             >
               Browse quizzes
             </Link>
