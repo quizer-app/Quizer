@@ -1,5 +1,3 @@
-version: "3.4"
-
 services:
   quizer.api:
     image: ${DOCKER_REGISTRY-}quizerapi
@@ -16,14 +14,14 @@ services:
       - 5001:5001
 
   quizer.database:
-    image: postgres:16.1-alpine3.19
+    image: postgres:18.4-alpine3.23
     container_name: quizer.database
     environment:
       - POSTGRES_DB=quizer
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
-      - ./.containers/quizer-db:/var/lib/postgresql/data
+      - ./.containers/quizer-db:/var/lib/postgresql
     ports:
       - 5432:5432
 

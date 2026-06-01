@@ -1,6 +1,5 @@
 import "@/index.css";
 import "./i18n";
-import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import React from "react";
@@ -15,10 +14,6 @@ declare module "@tanstack/react-router" {
   interface Register {
     router: typeof router;
   }
-}
-
-if (import.meta.env.PROD) {
-  disableReactDevTools();
 }
 
 const rootElement = document.getElementById("app")!;

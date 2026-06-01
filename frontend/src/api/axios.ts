@@ -1,7 +1,7 @@
 import axios, { AxiosHeaders } from "axios";
 
 export const baseURL =
-  (import.meta.env.VITE_API_URL as string) ?? "https://api.local.elotoja.com";
+  (import.meta.env.VITE_API_URL as string) ?? "http://localhost:5247";
 
 export const api = axios.create({
   baseURL,
@@ -22,3 +22,4 @@ export const setAuthorizationHeader = (
 ) => {
   headers.set("Authorization", `Bearer ${accessToken}`);
 };
+
