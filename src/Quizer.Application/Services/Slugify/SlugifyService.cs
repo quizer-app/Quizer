@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using System.Text;
 using Diacritics;
 
@@ -22,8 +22,8 @@ namespace Quizer.Application.Services.Slugify
 
             str = CleanWhiteSpace(str, _config.CollapseWhiteSpace);
             str = ApplyReplacements(str, _config.CharacterReplacements);
-            str = _diacriticsMapper.RemoveDiacritics(str);
-            str = DeleteCharacters(str, _config.DeniedCharactersRegex);
+            var withoutDiacritics = _diacriticsMapper.RemoveDiacritics(str) ?? str;
+            str = DeleteCharacters(withoutDiacritics, _config.DeniedCharactersRegex);
 
             return str;
         }
