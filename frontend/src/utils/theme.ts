@@ -1,7 +1,11 @@
 const THEME_TRANSITION_CLASS = "theme-switching";
 const THEME_TRANSITION_DURATION_MS = 250;
 
-const applyTheme = (theme: "light" | "dark") => {
+type Theme = "light" | "dark";
+
+const isTheme = (value: string | null): value is Theme => value === "light" || value === "dark";
+
+const applyTheme = (theme: Theme) => {
   const htmlTag = document.documentElement;
   htmlTag.classList.remove("light", "dark");
   htmlTag.classList.add(theme);
@@ -16,22 +20,28 @@ const startThemeTransition = () => {
   }, THEME_TRANSITION_DURATION_MS);
 };
 
-export const toggleTheme = () => {
-  const currentTheme = document.documentElement.classList.contains("light")
-    ? "light"
-    : "dark";
+export const getTheme = (): Theme => {
+  const theme = localStorage.getItem("theme");
+
+  if (isTheme(theme)) {
+    return theme;
+  }
+
+  return "dark";
+};
+
+export const setStartTheme = (): Theme => {
+  const initialTheme = getTheme();
+  applyTheme(initialTheme);
+  return initialTheme;
+};
+
+export const toggleTheme = (): Theme => {
+  const currentTheme = document.documentElement.classList.contains("light") ? "light" : "dark";
   const nextTheme = currentTheme === "light" ? "dark" : "light";
 
   startThemeTransition();
   applyTheme(nextTheme);
-};
 
-export const getTheme = (): string => {
-  const theme = localStorage.getItem("theme");
-  return theme ?? "dark";
-};
-
-export const setStartTheme = () => {
-  const initialTheme = localStorage.getItem("theme") === "light" ? "light" : "dark";
-  applyTheme(initialTheme);
+  return nextTheme;
 };

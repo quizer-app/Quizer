@@ -16,13 +16,15 @@ export default function DarkModeButton() {
     };
   }, []);
   useEffect(() => {
-    setStartTheme();
+    const startTheme = setStartTheme();
+    setIsDark(startTheme === "dark");
   }, []);
 
   const handleThemeChange = () => {
+    const nextTheme = toggleTheme();
+
     setIsIconAnimating(true);
-    toggleTheme();
-    setIsDark(previousState => !previousState);
+    setIsDark(nextTheme === "dark");
 
     if (animationTimeoutRef.current !== null) {
       window.clearTimeout(animationTimeoutRef.current);

@@ -2,17 +2,40 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --color-primary: #090e34;
-  --color-secondary: #1d2144;
-  --color-lightBlue: #4a6cf7;
-  --color-lightBlueB: #6f86e0;
-  --color-darkBlue: #2c409e;
-  --color-textHover: #9ba1b3;
-  --color-textPrimary: #959cb1;
-  --color-input: #242b51;
+  --color-primary: var(--ui-primary);
+  --color-secondary: var(--ui-secondary);
+  --color-lightBlue: var(--ui-accent);
+  --color-lightBlueB: var(--ui-accent-muted);
+  --color-darkBlue: var(--ui-logo-secondary);
+  --color-textHover: var(--ui-text-hover);
+  --color-textPrimary: var(--ui-text-primary);
+  --color-input: var(--ui-input);
   --font-primary: "Inter", sans-serif;
   --opacity-2: 0.98;
 }
+:root,
+html.dark {
+  --ui-primary: #090e34;
+  --ui-secondary: #1d2144;
+  --ui-accent: #4a6cf7;
+  --ui-accent-muted: #6f86e0;
+  --ui-logo-secondary: #2c409e;
+  --ui-text-hover: #9ba1b3;
+  --ui-text-primary: #959cb1;
+  --ui-input: #242b51;
+}
+
+html.light {
+  --ui-primary: #10163d;
+  --ui-secondary: #2a315f;
+  --ui-accent: #7c93ff;
+  --ui-accent-muted: #9db0ff;
+  --ui-logo-secondary: #3d53b8;
+  --ui-text-hover: #c1c7db;
+  --ui-text-primary: #adb4c9;
+  --ui-input: #363f74;
+}
+
 .textHover {
   cursor: pointer;
   transition-duration: 200ms;
