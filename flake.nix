@@ -14,6 +14,8 @@
     devshell,
   }: let
     nixosModule = import ./nix/modules/quizer.nix;
+    backendPackage = import ./nix/quizer-backend.nix;
+    frontendPackage = import ./nix/quizer-frontend.nix;
   in
     flake-utils.lib.eachDefaultSystem (system: let
       pkgs = import nixpkgs {
@@ -21,48 +23,14 @@
         overlays = [devshell.overlays.default];
       };
 
-      backend = pkgs.buildDotnetModule {
-        pname = "quizer-backend";
-        version = "0.1.0";
+      backend = backendPackage {
+        inherit pkgs;
         src = ./.;
-        projectFile = "src/Quizer.Api/Quizer.Api.csproj";
-        nugetDeps = ./deps.json;
-        dotnet-sdk = pkgs.dotnet-sdk_10;
-        dotnet-runtime = pkgs.dotnet-runtime_10;
-        executables = ["Quizer.Api"];
       };
 
-      frontend = pkgs.stdenv.mkDerivation {
-        pname = "quizer-frontend";
-        version = "0.1.0";
-        src = ./frontend;
-
-        nativeBuildInputs = [
-          pkgs.nodejs_22
-          pkgs.pnpm_11
-          pkgs.pnpmConfigHook
-        ];
-
-        pnpmDeps = pkgs.fetchPnpmDeps {
-          pname = "quizer-frontend";
-          version = "0.1.0";
-          src = ./frontend;
-          fetcherVersion = 3;
-          hash = "sha256-kxxp6erd6q/6hv6mvdJ00CaaNa3N4Jh77o6kvUpFrWs=";
-        };
-
-        buildPhase = ''
-          runHook preBuild
-          pnpm run build
-          runHook postBuild
-        '';
-
-        installPhase = ''
-          runHook preInstall
-          mkdir -p $out
-          cp -r dist/* $out/
-          runHook postInstall
-        '';
+      frontend = frontendPackage {
+        inherit pkgs;
+        frontendSrc = ./frontend;
       };
 
       app = pkgs.symlinkJoin {
