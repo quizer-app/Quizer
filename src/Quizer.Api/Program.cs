@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Host.UseSerilog((context, configuration) =>
         configuration.ReadFrom.Configuration(context.Configuration));
-    
+
     builder.Services
         .AddApplication(builder.Configuration)
         .AddInfractructure(builder.Configuration)
@@ -29,9 +29,8 @@ Log.Logger =
 
 var app = builder.Build();
 {
-    await app.MigrateDatabase();
+    await app.MigrateDatabase(builder.Configuration.GetValue<bool>("Seeding:Enable"));
     app.UsePresentation(builder.Configuration);
 }
-
 
 public partial class Program;

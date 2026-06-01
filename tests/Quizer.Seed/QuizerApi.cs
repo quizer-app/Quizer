@@ -19,7 +19,7 @@ public class QuizerApi
     private static HttpClient CreateHttpClient(HttpClient? client)
     {
         client = new HttpClient();
-        client.BaseAddress = new Uri("https://api.local.elotoja.com");
+        client.BaseAddress = new Uri("http://localhost:5247");
         return client;
     }
 
