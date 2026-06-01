@@ -19,9 +19,6 @@
     "@tanstack/react-query-devtools": "^5.100.14",
     "@tanstack/react-router": "^1.170.9",
     "axios": "^1.16.1",
-    "jotai": "^2.20.0",
-    "jotai-devtools": "^0.14.0",
-    "jotai-tanstack-query": "^0.11.0",
     "lucide-react": "^1.17.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
@@ -30,7 +27,8 @@
     "react-spinners": "^0.17.0",
     "tailwind-merge": "^3.6.0",
     "wonka": "^6.3.6",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "zustand": "^5.0.14"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

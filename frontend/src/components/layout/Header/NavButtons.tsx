@@ -1,11 +1,10 @@
-import { isAuthenticatedAtom, tokenDataAtom } from "@/atoms/auth";
+import { selectIsAuthenticated, selectTokenData, useAuthStore } from "@/atoms/auth";
 import useLogout from "@/hooks/auth/useLogout";
 import { Link } from "@tanstack/react-router";
-import { useAtomValue } from "jotai";
 
 export default function NavButtons() {
-  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
-  const tokenData = useAtomValue(tokenDataAtom);
+  const isAuthenticated = useAuthStore(selectIsAuthenticated);
+  const tokenData = useAuthStore(selectTokenData);
   const logout = useLogout();
 
   const username = tokenData?.given_name ? tokenData.given_name : "";

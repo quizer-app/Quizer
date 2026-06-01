@@ -1,11 +1,10 @@
+import { selectIsAuthenticated, useAuthStore } from "@/atoms/auth";
 import { Navigate, Outlet } from "@tanstack/react-router";
-import { useAtomValue } from "jotai";
-import { isAuthenticatedAtom } from "../../atoms/auth";
 
 export default function RequireAuth() {
   // const location = useLocation();
 
-  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
+  const isAuthenticated = useAuthStore(selectIsAuthenticated);
 
   return isAuthenticated ? (
     <Outlet />

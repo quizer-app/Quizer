@@ -1,13 +1,12 @@
+import { selectAccessToken, useAuthStore } from "@/atoms/auth";
 import useRefreshToken from "@/hooks/auth/useRefreshToken";
-import { useAtomValue } from "jotai";
 import { ReactNode, useEffect, useState } from "react";
-import { accessTokenAtom } from "../../atoms/auth";
 import Loading from "../Status/Loading";
 
 export default function PersistLogin({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const refresh = useRefreshToken();
-  const accessToken = useAtomValue(accessTokenAtom);
+  const accessToken = useAuthStore(selectAccessToken);
 
   useEffect(() => {
     const verifyRefreshToken = async () => {

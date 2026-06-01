@@ -1,11 +1,13 @@
 import { api } from "@/api/axios";
+import {
+  selectIsAuthenticated,
+  useAuthStore,
+} from "@/atoms/auth";
 import { useMutation } from "@tanstack/react-query";
-import { useAtomValue, useSetAtom } from "jotai";
-import { accessTokenAtom, isAuthenticatedAtom } from "../../atoms/auth";
 
 export default function useLogout() {
-  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
-  const setAccessToken = useSetAtom(accessTokenAtom);
+  const isAuthenticated = useAuthStore(selectIsAuthenticated);
+  const setAccessToken = useAuthStore(state => state.setAccessToken);
 
   const logoutMutation = useMutation({
     mutationFn: () => {

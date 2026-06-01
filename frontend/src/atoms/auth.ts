@@ -1,17 +1,23 @@
 import { TokenData } from "@/api/tokenData";
-import { atom } from "jotai";
+import { create } from "zustand";
 
-export const accessTokenAtom = atom<string | null>(null);
+interface AuthState {
+  accessToken: string | null;
+  setAccessToken: (accessToken: string | null) => void;
+}
 
-export const isAuthenticatedAtom = atom<boolean>(get => {
-  return get(accessTokenAtom) !== null;
-});
+export const useAuthStore = create<AuthState>(set => ({
+  accessToken: null,
+  setAccessToken: accessToken => set({ accessToken }),
+}));
 
-export const tokenDataAtom = atom<TokenData | null>(get => {
-  const token = get(accessTokenAtom);
-  if (token === null) {
+export const selectAccessToken = (state: AuthState) => state.accessToken;
+export const selectIsAuthenticated = (state: AuthState) => state.accessToken !== null;
+export const selectTokenData = (state: AuthState): TokenData | null => {
+  if (state.accessToken === null) {
     return null;
   }
-  const tokenData = JSON.parse(atob(token.split(".")[1])) as TokenData;
+
+  const tokenData = JSON.parse(atob(state.accessToken.split(".")[1])) as TokenData;
   return tokenData;
-});
+};

@@ -1,13 +1,12 @@
 import { apiPrivate } from "@/api/axios";
+import { selectAccessToken, useAuthStore } from "@/atoms/auth";
 import { AxiosError } from "axios";
-import { useAtomValue } from "jotai";
 import { useEffect } from "react";
-import { accessTokenAtom } from "../../atoms/auth";
 import useRefreshToken from "./useRefreshToken";
 
 export default function useApiPrivate() {
   const refresh = useRefreshToken();
-  const accessToken = useAtomValue(accessTokenAtom);
+  const accessToken = useAuthStore(selectAccessToken);
 
   useEffect(() => {
     const requestIntercept = apiPrivate.interceptors.request.use(

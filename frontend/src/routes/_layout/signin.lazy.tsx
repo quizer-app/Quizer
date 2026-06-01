@@ -1,5 +1,8 @@
 import { api } from "@/api/axios";
-import { accessTokenAtom, isAuthenticatedAtom } from "@/atoms/auth";
+import {
+  selectIsAuthenticated,
+  useAuthStore,
+} from "@/atoms/auth";
 import { Button } from "@/components/layout/ContentBox/Button";
 import ContentBox from "@/components/layout/ContentBox/ContentBox";
 import { FormInput } from "@/components/layout/ContentBox/FormInput";
@@ -13,7 +16,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { AxiosError } from "axios";
-import { useAtomValue, useSetAtom } from "jotai";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -32,10 +34,10 @@ const schema = z.object({
 type Form = z.infer<typeof schema>;
 
 function SignIn() {
-  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
+  const isAuthenticated = useAuthStore(selectIsAuthenticated);
   const navigate = useNavigate();
 
-  const setAccessToken = useSetAtom(accessTokenAtom);
+  const setAccessToken = useAuthStore(state => state.setAccessToken);
 
   const {
     register,
