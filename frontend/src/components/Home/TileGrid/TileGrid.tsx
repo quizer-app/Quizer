@@ -17,7 +17,7 @@ export default function TileGrid() {
   });
 
   return (
-    <section className="bg-primary h-full w-full">
+    <section className="h-full w-full overflow-hidden bg-primary">
       {isLoading && <Loading />}
       {isError ? (
         <div className="mainContainer w-full rounded-sm border border-white/10 bg-white/5 p-8 text-center">
@@ -27,7 +27,7 @@ export default function TileGrid() {
           </p>
         </div>
       ) : (
-        <div className="mainContainer grid h-full grid-cols-1 content-center gap-4 py-4 md:grid-cols-2 md:py-6 lg:gap-6 xl:grid-cols-3">
+        <div className="mainContainer grid h-full grid-cols-1 content-start gap-4 pt-4 pb-1 md:grid-cols-2 md:pt-5 md:pb-2 lg:gap-6 xl:grid-cols-3">
           {quizes?.items.map((el, id) => {
             return <QuizTile quiz={el} key={id} />;
           })}

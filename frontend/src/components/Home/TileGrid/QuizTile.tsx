@@ -30,7 +30,7 @@ export default function QuizTile({ quiz }: QuizTileProps) {
           decoding="async"
           alt="quiz banner"
           onError={() => setBannerSrc(img)}
-          className="h-48 w-full object-cover"
+          className="h-[clamp(7.5rem,16vh,12rem)] w-full object-cover"
         />
         <div className="text-white text-sm font-bold absolute top-4 right-4 px-4 py-2 bg-lightBlue rounded-3xl">
           {`${quiz.numberOfQuestions} Questions`}

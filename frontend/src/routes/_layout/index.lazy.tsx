@@ -9,14 +9,14 @@ export const Route = createLazyFileRoute("/_layout/")({
 
 function Home() {
   return (
-    <main className="h-[calc(100dvh-80px)] overflow-y-auto snap-y snap-mandatory overscroll-y-contain">
-      <section className="h-[calc(100dvh-80px)] snap-start snap-always">
+    <main className="h-[calc(100dvh-var(--header-height,80px))] overflow-y-auto snap-y snap-mandatory overscroll-y-contain">
+      <section className="h-[calc(100dvh-var(--header-height,80px))] snap-start snap-always">
         <Intro />
       </section>
-      <section className="h-[calc(100dvh-80px)] snap-start snap-always">
+      <section className="h-[calc(100dvh-var(--header-height,80px))] snap-start snap-always">
         <Features />
       </section>
-      <section className="h-[calc(100dvh-80px)] snap-start snap-always">
+      <section className="h-[calc(100dvh-var(--header-height,80px))] snap-start snap-always">
         <TileGrid />
       </section>
     </main>
