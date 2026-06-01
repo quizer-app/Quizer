@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Quizer.Application.Common.Interfaces.Authentication;
@@ -54,7 +54,7 @@ public class JwtTokenProvider : IJwtTokenProvider
             signingCredentials: signingCredentials,
             issuer: _jwtSettings.Issuer,
             audience: _jwtSettings.Audience,
-            expires: _dateTimeProvider.UtcNow.AddDays(_jwtSettings.AccessTokenExpiryMinutes)
+            expires: _dateTimeProvider.UtcNow.AddMinutes(_jwtSettings.AccessTokenExpiryMinutes)
             );
 
         return new JwtSecurityTokenHandler().WriteToken(securityToken);
