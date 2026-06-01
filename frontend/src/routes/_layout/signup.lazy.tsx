@@ -3,7 +3,6 @@ import { selectIsAuthenticated, useAuthStore } from "@/atoms/auth";
 import { Button } from "@/components/layout/ContentBox/Button";
 import ContentBox from "@/components/layout/ContentBox/ContentBox";
 import { FormInput } from "@/components/layout/ContentBox/FormInput";
-import GoogleButton from "@/components/layout/ContentBox/GoogleButton";
 import Text from "@/components/layout/ContentBox/Text";
 import TextWithLines from "@/components/layout/ContentBox/TextWithLines";
 import TextWithLink from "@/components/layout/ContentBox/TextWithLink";
@@ -140,7 +139,6 @@ function SignUp() {
     <ContentBox>
       <Title>{t("auth.createAccountTitle")}</Title>
       <Text>{t("auth.createAccountSubtitle")}</Text>
-      <GoogleButton>{t("auth.signUpGoogle")}</GoogleButton>
       <TextWithLines>{t("auth.signUpWithEmail")}</TextWithLines>
       {formError && (
         <p className="mb-4 text-sm text-red-600" role="alert">

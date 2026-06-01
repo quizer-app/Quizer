@@ -3,9 +3,7 @@ import { selectIsAuthenticated, useAuthStore } from "@/atoms/auth";
 import { Button } from "@/components/layout/ContentBox/Button";
 import ContentBox from "@/components/layout/ContentBox/ContentBox";
 import { FormInput } from "@/components/layout/ContentBox/FormInput";
-import GoogleButton from "@/components/layout/ContentBox/GoogleButton";
 import Text from "@/components/layout/ContentBox/Text";
-import TextWithLines from "@/components/layout/ContentBox/TextWithLines";
 import TextWithLink from "@/components/layout/ContentBox/TextWithLink";
 import Title from "@/components/layout/ContentBox/Title";
 import { AuthResponse } from "@/types/types/auth";
@@ -135,8 +133,6 @@ function SignIn() {
     <ContentBox>
       <Title>{t("auth.signInTitle")}</Title>
       <Text>{t("auth.signInSubtitle")}</Text>
-      <GoogleButton>{t("auth.signInGoogle")}</GoogleButton>
-      <TextWithLines>{t("auth.signInWithEmail")}</TextWithLines>
       {formError && (
         <p className="mb-4 text-sm text-red-600" role="alert">
           {formError}
