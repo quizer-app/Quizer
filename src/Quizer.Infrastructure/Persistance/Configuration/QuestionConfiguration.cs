@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Quizer.Domain.QuestionAggregate;
 using Quizer.Domain.QuestionAggregate.ValueObjects;
@@ -34,6 +34,7 @@ public class QuestionConfigurations : IEntityTypeConfiguration<Question>
 
             ans.Property(a => a.Text)
                 .HasMaxLength(200);
+            ans.Property(a => a.IsCorrect);
         });
 
         builder.Metadata.FindNavigation(nameof(Question.Answers))!

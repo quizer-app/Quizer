@@ -1,4 +1,5 @@
-﻿namespace Quizer.Contracts.Question;
+namespace Quizer.Contracts.Question;
 
 public record AnswerResponse(
-    string Text);
+    string Text,
+    bool IsCorrect);

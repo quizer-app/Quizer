@@ -77,7 +77,6 @@ public class PersistenceIntegrationTests : IDisposable
         Assert.Single(quizOneQuestions);
         Assert.Equal(((QuestionId)questionOne.Id).Value, ((QuestionId)quizOneQuestions[0].Id).Value);
     }
-
     private QuizerDbContext CreateContext()
     {
         return new QuizerDbContext(_options, new PublishDomainEventsInterceptor(new NullPublisher()));

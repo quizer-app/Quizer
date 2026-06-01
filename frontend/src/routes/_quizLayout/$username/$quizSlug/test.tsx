@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_quizLayout/$username/$quizSlug/test")({
 });
 
 export interface FormFields {
-  [key: string]: string;
+  [key: string]: string[];
 }
 
 export interface AnswerProps {
@@ -34,7 +34,7 @@ export default function Test() {
     }
 
     return quiz.questions.reduce<FormFields>((accumulator, _, index) => {
-      accumulator[String(index + 1)] = "";
+      accumulator[String(index + 1)] = [];
       return accumulator;
     }, {});
   }, [quiz]);
@@ -50,8 +50,14 @@ export default function Test() {
       let nextScore = 0;
       const nextAnswers = Object.keys(value).map(key => {
         const questionIndex = parseInt(key, 10) - 1;
-        const answer = quiz.questions[questionIndex].answers[0].text;
-        const isCorrect = answer === value[key];
+        const selectedAnswers = new Set(value[key] ?? []);
+        const correctAnswers = quiz.questions[questionIndex].answers
+          .filter(answer => answer.isCorrect)
+          .map(answer => answer.text);
+
+        const isCorrect =
+          selectedAnswers.size === correctAnswers.length &&
+          correctAnswers.every(answer => selectedAnswers.has(answer));
 
         if (isCorrect) {
           nextScore += 1;

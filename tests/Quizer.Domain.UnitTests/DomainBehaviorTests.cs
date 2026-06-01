@@ -81,6 +81,20 @@ public class DomainBehaviorTests
     }
 
     [Fact]
+    public void Question_create_without_correct_answer_returns_validation_error()
+    {
+        var answers = new List<Answer>
+        {
+            Answer.Create("A", false).Value,
+            Answer.Create("B", false).Value
+        };
+
+        var result = Question.Create(Guid.NewGuid(), QuizId.CreateUnique(), "Which options are valid?", answers);
+
+        Assert.True(result.IsError);
+    }
+
+    [Fact]
     public void Average_rating_add_and_remove_keeps_consistent_value()
     {
         var average = AverageRating.CreateNew();

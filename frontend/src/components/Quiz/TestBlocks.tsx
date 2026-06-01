@@ -11,7 +11,7 @@ interface TestBlocksProps {
   isSubmitted: boolean;
   answers: AnswerProps[];
   values: FormFields;
-  onChange: (name: string, value: string) => void;
+  onChange: (name: string, value: string[]) => void;
   inputRefs: RefObject<HTMLElement[]>;
 }
 
@@ -32,41 +32,60 @@ export default function TestBlocks({
   return (
     <>
       {quiz?.questions.map((question, id) => {
+        const isQuestionCorrect = answers[id] ? answers[id].isCorrect : false;
+        const selected = new Set(values[`${id + 1}`] ?? []);
+
         return (
           <div
             key={id}
             ref={element => setInputRef(element, id)}
             className="bg-secondary flex flex-col justify-between rounded-sm w-full px-6 py-12 gap-8"
           >
-            <div className="flex items-center justify-between font-semibold pb-20">
+            <div className="flex items-center justify-between font-semibold pb-8">
               <p className="text-lg">{question.question}</p>
               <p className="text-textPrimary">{`${id + 1} / ${quiz.questions.length}`}</p>
             </div>
 
-            {!(answers[id] ? answers[id].isCorrect : false) && isSubmitted && (
-              <input
-                className="bg-input text-textPrimary autofill:bg-input rounded-sm w-full py-3 pl-6 shadow-md border border-green-600 outline-none"
-                autoComplete="off"
-                value={quiz.questions[id].answers[0].text}
-                readOnly={isSubmitted}
-              />
+            <div className="flex flex-col gap-3">
+              {question.answers.map(answer => {
+                const isSelected = selected.has(answer.text);
+                const showCorrectOption = isSubmitted && answer.isCorrect;
+                const showIncorrectSelected = isSubmitted && isSelected && !answer.isCorrect;
+
+                return (
+                  <label
+                    key={answer.text}
+                    className={twMerge(
+                      "bg-input text-textPrimary rounded-sm w-full py-3 px-4 shadow-md border border-transparent flex items-center gap-3",
+                      !isSubmitted && "cursor-pointer",
+                      showCorrectOption && "border-green-600",
+                      showIncorrectSelected && "border-red-600"
+                    )}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={isSelected}
+                      disabled={isSubmitted}
+                      onChange={event => {
+                        const current = values[`${id + 1}`] ?? [];
+                        const next = event.target.checked
+                          ? [...current, answer.text]
+                          : current.filter(value => value !== answer.text);
+
+                        onChange(`${id + 1}`, next);
+                      }}
+                    />
+                    <span>{answer.text}</span>
+                  </label>
+                );
+              })}
+            </div>
+
+            {isSubmitted && (
+              <p className={isQuestionCorrect ? "text-green-500" : "text-red-500"}>
+                {isQuestionCorrect ? "Correct" : "Incorrect"}
+              </p>
             )}
-            <input
-              name={`${id + 1}`}
-              value={values[`${id + 1}`] ?? ""}
-              onChange={event => onChange(`${id + 1}`, event.target.value)}
-              className={twMerge(
-                "bg-input text-textPrimary autofill:bg-input rounded-sm w-full py-3 pl-6 shadow-md border border-transparent outline-none",
-                isSubmitted
-                  ? (answers[id] ? answers[id].isCorrect : false)
-                    ? "border-green-600"
-                    : "border-red-600"
-                  : "focus:border-lightBlue"
-              )}
-              placeholder={isSubmitted ? "" : "Your answer"}
-              autoComplete="off"
-              readOnly={isSubmitted}
-            />
           </div>
         );
       })}
