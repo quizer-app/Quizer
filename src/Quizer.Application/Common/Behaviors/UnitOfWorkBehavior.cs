@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
 
@@ -26,8 +26,8 @@ public sealed class UnitOfWorkBehavior<TRequest, TResponse> :
 
         var result = await next();
 
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-
+        if (!result.IsError)
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
         return result;
     }
 
