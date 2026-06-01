@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,7 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Quizer.Contracts\Quizer.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Quizer.Application\Quizer.Application.csproj" />
+    <ProjectReference Include="..\..\src\Quizer.Domain\Quizer.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Quizer.Infrastructure\Quizer.Infrastructure.csproj" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Remove="QuizerApi.cs" />
+  </ItemGroup>
 </Project>
