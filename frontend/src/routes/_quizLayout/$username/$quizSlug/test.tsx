@@ -3,9 +3,9 @@ import TestBlocks from "@/components/Quiz/TestBlocks";
 import Error from "@/components/Status/Error";
 import Loading from "@/components/Status/Loading";
 import useQuizData from "@/hooks/quizes/useQuizData";
+import { useForm } from "@tanstack/react-form";
 import { createFileRoute } from "@tanstack/react-router";
-import { useRef, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useMemo, useRef, useState } from "react";
 
 export const Route = createFileRoute("/_quizLayout/$username/$quizSlug/test")({
   component: Test,
@@ -23,39 +23,48 @@ export interface AnswerProps {
 export default function Test() {
   const { username, quizSlug } = Route.useParams();
   const { isLoading, isError, quiz } = useQuizData(username, quizSlug);
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitted },
-  } = useForm<FormFields>();
-
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [answers, setAnswers] = useState<AnswerProps[]>([]);
   const inputRefs = useRef<HTMLElement[]>([]);
-  // is state necessarry?
   const [score, setScore] = useState<number>(0);
 
-  const isValid = (answer: string, user: string) => {
-    return answer === user;
-  };
+  const defaultValues = useMemo<FormFields>(() => {
+    if (!quiz) {
+      return {};
+    }
 
-  const onSubmit: SubmitHandler<FormFields> = data => {
-    if (!quiz) return;
-    window.scrollTo(0, 0);
+    return quiz.questions.reduce<FormFields>((accumulator, _, index) => {
+      accumulator[String(index + 1)] = "";
+      return accumulator;
+    }, {});
+  }, [quiz]);
 
-    Object.keys(data).forEach(key => {
-      const answer = quiz.questions[parseInt(key) - 1].answers[0].text;
-      const formAnswer = data[key];
-      const isCorrect = isValid(answer, formAnswer);
-
-      if (isCorrect) {
-        setScore(prev => prev + 1);
+  const form = useForm({
+    defaultValues,
+    onSubmit: ({ value }) => {
+      if (!quiz) {
+        return;
       }
-      setAnswers(prev => [
-        ...prev,
-        { number: parseInt(key), isCorrect: isCorrect },
-      ]);
-    });
-  };
+
+      window.scrollTo(0, 0);
+      let nextScore = 0;
+      const nextAnswers = Object.keys(value).map(key => {
+        const questionIndex = parseInt(key, 10) - 1;
+        const answer = quiz.questions[questionIndex].answers[0].text;
+        const isCorrect = answer === value[key];
+
+        if (isCorrect) {
+          nextScore += 1;
+        }
+
+        return { number: parseInt(key, 10), isCorrect };
+      });
+
+      setScore(nextScore);
+      setAnswers(nextAnswers);
+      setIsSubmitted(true);
+    },
+  });
 
   return (
     <>
@@ -74,13 +83,20 @@ export default function Test() {
             )}
             <form
               className="flex flex-col gap-10 items-center"
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={event => {
+                event.preventDefault();
+                event.stopPropagation();
+                void form.handleSubmit();
+              }}
             >
               <TestBlocks
                 quiz={quiz}
                 isSubmitted={isSubmitted}
                 answers={answers}
-                register={register}
+                values={form.state.values}
+                onChange={(name, fieldValue) => {
+                  form.setFieldValue(name, fieldValue);
+                }}
                 inputRefs={inputRefs}
               />
               {!isSubmitted && (

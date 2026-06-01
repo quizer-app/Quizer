@@ -4,14 +4,14 @@ import {
 } from "@/routes/_quizLayout/$username/$quizSlug/test";
 import { QuizResponse } from "@/types/types/quiz";
 import { RefObject } from "react";
-import { UseFormRegister } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
 interface TestBlocksProps {
   quiz: QuizResponse | undefined;
   isSubmitted: boolean;
   answers: AnswerProps[];
-  register: UseFormRegister<FormFields>;
+  values: FormFields;
+  onChange: (name: string, value: string) => void;
   inputRefs: RefObject<HTMLElement[]>;
 }
 
@@ -19,7 +19,8 @@ export default function TestBlocks({
   quiz,
   isSubmitted,
   answers,
-  register,
+  values,
+  onChange,
   inputRefs,
 }: TestBlocksProps) {
   const setInputRef = (element: HTMLElement | null, id: number) => {
@@ -51,7 +52,9 @@ export default function TestBlocks({
               />
             )}
             <input
-              {...register(`${id + 1}`)}
+              name={`${id + 1}`}
+              value={values[`${id + 1}`] ?? ""}
+              onChange={event => onChange(`${id + 1}`, event.target.value)}
               className={twMerge(
                 "bg-input text-textPrimary autofill:bg-input rounded-sm w-full py-3 pl-6 shadow-md border border-transparent outline-none",
                 isSubmitted

@@ -9,12 +9,11 @@ import TextWithLines from "@/components/layout/ContentBox/TextWithLines";
 import TextWithLink from "@/components/layout/ContentBox/TextWithLink";
 import Title from "@/components/layout/ContentBox/Title";
 import { AuthResponse } from "@/types/types/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast/headless";
 import { z } from "zod";
 
@@ -22,12 +21,20 @@ export const Route = createLazyFileRoute("/_layout/signup")({
   component: SignUp,
 });
 
-const schema = z.object({
-  username: z.string().min(3).max(32),
-  email: z.string().email().min(3).max(64),
-  password: z.string().min(8).max(64),
-  confirmPassword: z.string().min(8).max(64),
-});
+const schema = z
+  .object({
+    username: z.string().min(3, "Username must be at least 3 characters").max(32),
+    email: z.string().email("Enter a valid email").min(3).max(64),
+    password: z.string().min(8, "Password must be at least 8 characters").max(64),
+    confirmPassword: z
+      .string()
+      .min(8, "Password confirmation must be at least 8 characters")
+      .max(64),
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  });
 
 type Form = z.infer<typeof schema>;
 
@@ -64,16 +71,6 @@ const getRegistrationErrorMessage = (error: AxiosError) => {
 function SignUp() {
   const [formError, setFormError] = useState<string | null>(null);
 
-  const {
-    register,
-    handleSubmit,
-    setFocus,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schema),
-    mode: "onChange",
-  });
-
   const registerMutation = useMutation({
     mutationFn: (data: Form) => {
       return api.post<AuthResponse>("/api/v1/Auth/register", data, {
@@ -86,6 +83,7 @@ function SignUp() {
     onSuccess: data => {
       const { message } = data.data;
       toast.success(message);
+      form.reset();
     },
     onError: error => {
       if (!axios.isAxiosError(error)) {
@@ -101,18 +99,38 @@ function SignUp() {
     },
   });
 
+  const form = useForm({
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    } as Form,
+    onSubmit: async ({ value }) => {
+      const parsed = schema.safeParse(value);
+      if (!parsed.success) {
+        return;
+      }
+
+      registerMutation.mutate(parsed.data);
+    },
+  });
+
   const isAuthenticated = useAuthStore(selectIsAuthenticated);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated && !registerMutation.isSuccess) {
-      navigate({ to: "/" });
+    if (isAuthenticated) {
+      navigate({ to: "/", replace: true });
     }
-  }, [isAuthenticated, navigate, registerMutation.isSuccess]);
+  }, [isAuthenticated, navigate]);
 
   useEffect(() => {
-    setFocus("username");
-  }, [setFocus]);
+    const usernameInput = document.getElementById("input-username");
+    if (usernameInput instanceof HTMLInputElement) {
+      usernameInput.focus();
+    }
+  }, []);
 
   return (
     <ContentBox>
@@ -126,42 +144,113 @@ function SignUp() {
         </p>
       )}
       <form
-        onSubmit={handleSubmit(data => {
-          registerMutation.mutate(data as Form);
-        })}
+        onSubmit={event => {
+          event.preventDefault();
+          event.stopPropagation();
+          void form.handleSubmit();
+        }}
         autoComplete="off"
       >
-        <FormInput
+        <form.Field
           name="username"
-          type="text"
-          placeholder="Enter your username"
-          labelText="Username"
-          register={register}
-          errors={errors}
+          validators={{
+            onChange: ({ value }) => {
+              if (schema.shape.username.safeParse(value).success) {
+                return undefined;
+              }
+
+              return "Username must be at least 3 characters";
+            },
+          }}
+          children={field => (
+            <FormInput
+              name={field.name}
+              type="text"
+              placeholder="Enter your username"
+              labelText="Username"
+              value={field.state.value}
+              onChange={field.handleChange}
+              onBlur={field.handleBlur}
+              error={field.state.meta.errors[0]}
+            />
+          )}
         />
-        <FormInput
+        <form.Field
           name="email"
-          type="text"
-          placeholder="Enter your email"
-          labelText="Email"
-          register={register}
-          errors={errors}
+          validators={{
+            onChange: ({ value }) => {
+              if (schema.shape.email.safeParse(value).success) {
+                return undefined;
+              }
+
+              return "Enter a valid email";
+            },
+          }}
+          children={field => (
+            <FormInput
+              name={field.name}
+              type="text"
+              placeholder="Enter your email"
+              labelText="Email"
+              value={field.state.value}
+              onChange={field.handleChange}
+              onBlur={field.handleBlur}
+              error={field.state.meta.errors[0]}
+            />
+          )}
         />
-        <FormInput
+        <form.Field
           name="password"
-          type="password"
-          placeholder="Enter your password"
-          labelText="Password"
-          register={register}
-          errors={errors}
+          validators={{
+            onChange: ({ value }) => {
+              if (schema.shape.password.safeParse(value).success) {
+                return undefined;
+              }
+
+              return "Password must be at least 8 characters";
+            },
+          }}
+          children={field => (
+            <FormInput
+              name={field.name}
+              type="password"
+              placeholder="Enter your password"
+              labelText="Password"
+              value={field.state.value}
+              onChange={field.handleChange}
+              onBlur={field.handleBlur}
+              error={field.state.meta.errors[0]}
+            />
+          )}
         />
-        <FormInput
+        <form.Field
           name="confirmPassword"
-          type="password"
-          placeholder="Confirm your password"
-          labelText="Confirm Password"
-          register={register}
-          errors={errors}
+          validators={{
+            onChange: ({ value, fieldApi }) => {
+              const password = fieldApi.form.getFieldValue("password");
+              if (value !== password) {
+                return "Passwords do not match";
+              }
+
+              if (schema.shape.confirmPassword.safeParse(value).success) {
+                return undefined;
+              }
+
+              return "Password confirmation must be at least 8 characters";
+            },
+          }}
+          children={field => (
+            <FormInput
+              name={field.name}
+              type="password"
+              placeholder="Confirm your password"
+              labelText="Confirm Password"
+              value={field.state.value}
+              onChange={field.handleChange}
+              onBlur={field.handleBlur}
+              error={field.state.meta.errors[0]}
+            />
+          )}
         />
         <Button>Sign up</Button>
         <TextWithLink link="Sign in" path="/signin">

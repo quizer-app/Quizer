@@ -9,12 +9,11 @@ import TextWithLines from "@/components/layout/ContentBox/TextWithLines";
 import TextWithLink from "@/components/layout/ContentBox/TextWithLink";
 import Title from "@/components/layout/ContentBox/Title";
 import { AuthResponse } from "@/types/types/auth";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "@tanstack/react-form";
 import { useMutation } from "@tanstack/react-query";
 import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { z } from "zod";
 
@@ -23,8 +22,8 @@ export const Route = createLazyFileRoute("/_layout/signin")({
 });
 
 const schema = z.object({
-  email: z.string().min(1),
-  password: z.string().min(1),
+  email: z.string().min(1, "Email is required"),
+  password: z.string().min(1, "Password is required"),
   rememberMe: z.boolean().optional(),
 });
 
@@ -66,21 +65,6 @@ function SignIn() {
   const setAccessToken = useAuthStore(state => state.setAccessToken);
   const [formError, setFormError] = useState<string | null>(null);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setFocus,
-  } = useForm({
-    resolver: zodResolver(schema),
-    mode: "onChange",
-  });
-
-  useEffect(() => {
-    setFocus("email");
-  }, [setFocus]);
-
   const loginMutation = useMutation({
     mutationFn: (data: Form) => {
       return api.post<AuthResponse>("/api/v1/Auth/login", data, {
@@ -94,7 +78,7 @@ function SignIn() {
       const { accessToken, message } = data.data;
       toast.success(message);
       setAccessToken(accessToken ?? null);
-      reset();
+      form.reset();
     },
     onError: error => {
       if (!axios.isAxiosError(error)) {
@@ -109,6 +93,30 @@ function SignIn() {
       toast.error(message);
     },
   });
+
+  const form = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: false,
+    } as Form,
+    onSubmit: async ({ value }) => {
+      const parsed = schema.safeParse(value);
+      if (!parsed.success) {
+        return;
+      }
+
+      loginMutation.mutate(parsed.data);
+    },
+  });
+
+  useEffect(() => {
+    const emailInput = document.getElementById("input-email");
+    if (emailInput instanceof HTMLInputElement) {
+      emailInput.focus();
+    }
+  }, []);
+
   const redirectParam = new URLSearchParams(window.location.search).get("redirect");
   const redirectTo =
     redirectParam && redirectParam.startsWith("/") ? redirectParam : "/";
@@ -133,44 +141,84 @@ function SignIn() {
         </p>
       )}
       <form
-        onSubmit={handleSubmit(data => {
-          loginMutation.mutate(data as Form);
-        })}
+        onSubmit={event => {
+          event.preventDefault();
+          event.stopPropagation();
+          void form.handleSubmit();
+        }}
         autoComplete="off"
       >
-        <FormInput
+        <form.Field
           name="email"
-          type="text"
-          placeholder="Enter your email"
-          labelText="Email or Username"
-          register={register}
-          errors={errors}
+          validators={{
+            onChange: ({ value }) => {
+              if (schema.shape.email.safeParse(value).success) {
+                return undefined;
+              }
+
+              return "Email is required";
+            },
+          }}
+          children={field => (
+            <FormInput
+              name={field.name}
+              type="text"
+              placeholder="Enter your email"
+              labelText="Email or Username"
+              value={field.state.value}
+              onChange={field.handleChange}
+              onBlur={field.handleBlur}
+              error={field.state.meta.errors[0]}
+            />
+          )}
         />
-        <FormInput
+        <form.Field
           name="password"
-          type="password"
-          placeholder="Enter your password"
-          labelText="Password"
-          register={register}
-          errors={errors}
+          validators={{
+            onChange: ({ value }) => {
+              if (schema.shape.password.safeParse(value).success) {
+                return undefined;
+              }
+
+              return "Password is required";
+            },
+          }}
+          children={field => (
+            <FormInput
+              name={field.name}
+              type="password"
+              placeholder="Enter your password"
+              labelText="Password"
+              value={field.state.value}
+              onChange={field.handleChange}
+              onBlur={field.handleBlur}
+              error={field.state.meta.errors[0]}
+            />
+          )}
         />
-        <div className="mt-8 flex justify-center mb-5">
-          <input
-            type="checkbox"
-            {...register("rememberMe")}
-            className="bg-secondary"
-            id="rememberMe"
-          />
-          <label
-            htmlFor="rememberMe"
-            className="text-textPrimary text-sm font-medium grow pl-3"
-          >
-            Keep me signed in
-          </label>
-          <a href="#" className="text-lightBlue text-sm font-medium">
-            Forgot Password?
-          </a>
-        </div>
+        <form.Field
+          name="rememberMe"
+          children={field => (
+            <div className="mt-8 flex justify-center mb-5">
+              <input
+                type="checkbox"
+                checked={field.state.value}
+                onChange={event => field.handleChange(event.target.checked)}
+                className="bg-secondary"
+                id="rememberMe"
+              />
+              <label
+                htmlFor="rememberMe"
+                className="text-textPrimary text-sm font-medium grow pl-3"
+              >
+                Keep me signed in
+              </label>
+              <a href="#" className="text-lightBlue text-sm font-medium">
+                Forgot Password?
+              </a>
+            </div>
+          )}
+        />
         <Button>Sign in</Button>
       </form>
       <TextWithLink link="Sign up" path="/signup">
