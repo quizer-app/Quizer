@@ -116,8 +116,8 @@ public static class DependencyInjection
             foreach (Permission permission in Enum.GetValues<Permission>())
             {
                 options.AddPolicy(
-                    policyName: PermissionAuthorizationPolicy.For(permission),
-                    configurePolicy: policy => policy.Requirements.Add(new PermissionRequirement(permission)));
+                    PermissionAuthorizationPolicy.For(permission),
+                    policy => policy.Requirements.Add(new PermissionRequirement(permission)));
             }
         });
 
