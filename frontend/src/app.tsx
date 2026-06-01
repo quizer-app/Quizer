@@ -1,4 +1,5 @@
 import "@/index.css";
+import "./i18n";
 import { disableReactDevTools } from "@fvilers/disable-react-devtools";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterProvider, createRouter } from "@tanstack/react-router";

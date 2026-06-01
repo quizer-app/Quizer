@@ -3,6 +3,7 @@ import DarkModeButton from "./DarkModeButton";
 import Logo from "./Logo";
 import NavButtons from "./NavButtons";
 import NavLinks from "./NavLinks";
+import LanguageSwitcher from "./LanguageSwitcher";
 import NavToggle from "./NavToggle";
 
 export function Header() {
@@ -42,6 +43,7 @@ export function Header() {
         </div>
         <div className="flex justify-between items-center">
           <DarkModeButton />
+          <LanguageSwitcher />
           <NavToggle toggleNavbar={toggleNavbar} isOpen={isOpen} menuId={menuId} />
         </div>
       </div>

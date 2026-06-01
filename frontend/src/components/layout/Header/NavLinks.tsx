@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 interface NavLinksProps {
   isOpen: boolean;
@@ -7,20 +8,23 @@ interface NavLinksProps {
 }
 
 export default function NavLinks({ isOpen, onClick, menuId }: NavLinksProps) {
+  const { t } = useTranslation();
+
   const data = [
-    { href: "/", text: "Home" },
+    { href: "/", text: t("nav.home") },
     {
       href: "/quiz-search",
-      text: "Quizes",
+      text: t("nav.quizzes"),
       search: { pageNumber: 1, pageSize: 6 },
     },
     {
       href: "/support",
-      text: "Support",
+      text: t("nav.support"),
     },
-    { href: "/signin", text: "Sign In", auth: true },
-    { href: "/signup", text: "Sign Up", auth: true },
+    { href: "/signin", text: t("nav.signIn"), auth: true },
+    { href: "/signup", text: t("nav.signUp"), auth: true },
   ];
+
   return (
     <div>
       <ul
@@ -32,7 +36,6 @@ export default function NavLinks({ isOpen, onClick, menuId }: NavLinksProps) {
           sm:right-[calc(50%-18.5rem)] md:right-[calc(50%-22.5rem)]
           sm:gap-4 sm:top-[5.5rem] lg:bg-transparent lg:flex-row lg:static
           lg:border-none lg:flex lg:gap-9 lg:ml-8 xl:gap-12 xl:ml-14
-          
           `}
       >
         {data.map((el, id) => (

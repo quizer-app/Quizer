@@ -1,0 +1,48 @@
+{
+  "nav": {
+    "home": "Home",
+    "quizzes": "Quizzes",
+    "support": "Support",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "dashboard": "Dashboard ({{name}})",
+    "logOut": "Log Out",
+    "openMenu": "Open navigation menu",
+    "closeMenu": "Close navigation menu",
+    "switchLanguage": "Switch language",
+    "themeToggle": "Toggle theme"
+  },
+  "auth": {
+    "signInTitle": "Sign in to your account",
+    "signInSubtitle": "Login to your account for better experience",
+    "signInGoogle": "Sign in with Google",
+    "signInWithEmail": "Or, sign in with your email",
+    "emailOrUsername": "Email or Username",
+    "emailPlaceholder": "Enter your email",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "rememberMe": "Keep me signed in",
+    "forgotPassword": "Forgot Password?",
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "noAccount": "Don't have an account?",
+    "createAccountTitle": "Create your account",
+    "createAccountSubtitle": "It's totally free and super easy",
+    "signUpGoogle": "Sign up with Google",
+    "signUpWithEmail": "Or, register with your email",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
+    "email": "Email",
+    "confirmPassword": "Confirm Password",
+    "confirmPasswordPlaceholder": "Confirm your password",
+    "signUp": "Sign up",
+    "creatingAccount": "Creating account...",
+    "alreadyUsing": "Already using Quizer?"
+  },
+  "status": {
+    "loading": "Loading content",
+    "errorOccurred": "Error has occurred!",
+    "notFound": "This page can't be reached",
+    "homePage": "Home Page"
+  }
+}

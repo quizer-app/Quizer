@@ -1,4 +1,5 @@
 import Background from "@/components/layout/Background/Background";
+import { useTranslation } from "react-i18next";
 import HomePageButton from "./HomePageButton";
 
 interface ErrorProps {
@@ -6,6 +7,8 @@ interface ErrorProps {
 }
 
 export default function Error({ msg }: ErrorProps) {
+  const { t } = useTranslation();
+
   return (
     <>
       <Background />
@@ -14,9 +17,7 @@ export default function Error({ msg }: ErrorProps) {
         role="alert"
         aria-live="assertive"
       >
-        <p className="text-4xl text-center">
-          {msg ? msg : "Error has occurred!"}
-        </p>
+        <p className="text-4xl text-center">{msg ? msg : t("status.errorOccurred")}</p>
         <HomePageButton />
       </div>
     </>

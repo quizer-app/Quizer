@@ -15,6 +15,7 @@ import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast/headless";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 export const Route = createLazyFileRoute("/_layout/signup")({
@@ -70,6 +71,7 @@ const getRegistrationErrorMessage = (error: AxiosError) => {
 
 function SignUp() {
   const [formError, setFormError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const registerMutation = useMutation({
     mutationFn: (data: Form) => {
@@ -120,9 +122,11 @@ function SignUp() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate({ to: "/", replace: true });
+    if (!isAuthenticated) {
+      return;
     }
+
+    navigate({ to: "/", replace: true });
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
@@ -134,10 +138,10 @@ function SignUp() {
 
   return (
     <ContentBox>
-      <Title>Create your account</Title>
-      <Text>It's totally free and super easy</Text>
-      <GoogleButton>Sign up with Google</GoogleButton>
-      <TextWithLines>Or, register with your email</TextWithLines>
+      <Title>{t("auth.createAccountTitle")}</Title>
+      <Text>{t("auth.createAccountSubtitle")}</Text>
+      <GoogleButton>{t("auth.signUpGoogle")}</GoogleButton>
+      <TextWithLines>{t("auth.signUpWithEmail")}</TextWithLines>
       {formError && (
         <p className="mb-4 text-sm text-red-600" role="alert">
           {formError}
@@ -167,8 +171,8 @@ function SignUp() {
             <FormInput
               name={field.name}
               type="text"
-              placeholder="Enter your username"
-              labelText="Username"
+              placeholder={t("auth.usernamePlaceholder")}
+              labelText={t("auth.username")}
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
@@ -191,8 +195,8 @@ function SignUp() {
             <FormInput
               name={field.name}
               type="text"
-              placeholder="Enter your email"
-              labelText="Email"
+              placeholder={t("auth.emailPlaceholder")}
+              labelText={t("auth.email")}
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
@@ -215,8 +219,8 @@ function SignUp() {
             <FormInput
               name={field.name}
               type="password"
-              placeholder="Enter your password"
-              labelText="Password"
+              placeholder={t("auth.passwordPlaceholder")}
+              labelText={t("auth.password")}
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
@@ -244,8 +248,8 @@ function SignUp() {
             <FormInput
               name={field.name}
               type="password"
-              placeholder="Confirm your password"
-              labelText="Confirm Password"
+              placeholder={t("auth.confirmPasswordPlaceholder")}
+              labelText={t("auth.confirmPassword")}
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
@@ -254,10 +258,10 @@ function SignUp() {
           )}
         />
         <Button disabled={registerMutation.isPending}>
-          {registerMutation.isPending ? "Creating account..." : "Sign up"}
+          {registerMutation.isPending ? t("auth.creatingAccount") : t("auth.signUp")}
         </Button>
-        <TextWithLink link="Sign in" path="/signin">
-          Already using Quizer?
+        <TextWithLink link={t("nav.signIn")} path="/signin">
+          {t("auth.alreadyUsing")}
         </TextWithLink>
       </form>
     </ContentBox>

@@ -1,8 +1,11 @@
 import Background from "@/components/layout/Background/Background";
 import HomePageButton from "@/components/Status/HomePageButton";
+import { useTranslation } from "react-i18next";
 import NotFoundSvg from "./NotFoundSvg";
 
 export default function NotFound() {
+  const { t } = useTranslation();
+
   return (
     <>
       <Background />
@@ -12,7 +15,7 @@ export default function NotFound() {
         aria-live="polite"
       >
         <NotFoundSvg />
-        <p className="text-4xl text-center">This page can't be reached</p>
+        <p className="text-4xl text-center">{t("status.notFound")}</p>
         <HomePageButton />
       </div>
     </>

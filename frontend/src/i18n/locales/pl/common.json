@@ -1,0 +1,48 @@
+{
+  "nav": {
+    "home": "Strona główna",
+    "quizzes": "Quizy",
+    "support": "Wsparcie",
+    "signIn": "Zaloguj się",
+    "signUp": "Zarejestruj się",
+    "dashboard": "Panel ({{name}})",
+    "logOut": "Wyloguj się",
+    "openMenu": "Otwórz menu nawigacji",
+    "closeMenu": "Zamknij menu nawigacji",
+    "switchLanguage": "Zmień język",
+    "themeToggle": "Przełącz motyw"
+  },
+  "auth": {
+    "signInTitle": "Zaloguj się do swojego konta",
+    "signInSubtitle": "Zaloguj się, aby korzystać wygodniej",
+    "signInGoogle": "Zaloguj się przez Google",
+    "signInWithEmail": "Lub zaloguj się e-mailem",
+    "emailOrUsername": "E-mail lub nazwa użytkownika",
+    "emailPlaceholder": "Wpisz swój e-mail",
+    "password": "Hasło",
+    "passwordPlaceholder": "Wpisz hasło",
+    "rememberMe": "Pozostań zalogowany",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "signIn": "Zaloguj się",
+    "signingIn": "Logowanie...",
+    "noAccount": "Nie masz konta?",
+    "createAccountTitle": "Utwórz konto",
+    "createAccountSubtitle": "To darmowe i bardzo proste",
+    "signUpGoogle": "Zarejestruj się przez Google",
+    "signUpWithEmail": "Lub zarejestruj się e-mailem",
+    "username": "Nazwa użytkownika",
+    "usernamePlaceholder": "Wpisz nazwę użytkownika",
+    "email": "E-mail",
+    "confirmPassword": "Potwierdź hasło",
+    "confirmPasswordPlaceholder": "Potwierdź hasło",
+    "signUp": "Zarejestruj się",
+    "creatingAccount": "Tworzenie konta...",
+    "alreadyUsing": "Masz już konto w Quizerze?"
+  },
+  "status": {
+    "loading": "Ładowanie treści",
+    "errorOccurred": "Wystąpił błąd!",
+    "notFound": "Nie można otworzyć tej strony",
+    "homePage": "Strona główna"
+  }
+}

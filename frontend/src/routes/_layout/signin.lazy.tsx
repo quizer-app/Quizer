@@ -15,6 +15,7 @@ import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 import { z } from "zod";
 
 export const Route = createLazyFileRoute("/_layout/signin")({
@@ -64,6 +65,7 @@ function SignIn() {
   const navigate = useNavigate();
   const setAccessToken = useAuthStore(state => state.setAccessToken);
   const [formError, setFormError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const loginMutation = useMutation({
     mutationFn: (data: Form) => {
@@ -131,10 +133,10 @@ function SignIn() {
 
   return (
     <ContentBox>
-      <Title>Sign in to your account</Title>
-      <Text>Login to your account for better experience</Text>
-      <GoogleButton>Sign in with Google</GoogleButton>
-      <TextWithLines>Or, sign in with your email</TextWithLines>
+      <Title>{t("auth.signInTitle")}</Title>
+      <Text>{t("auth.signInSubtitle")}</Text>
+      <GoogleButton>{t("auth.signInGoogle")}</GoogleButton>
+      <TextWithLines>{t("auth.signInWithEmail")}</TextWithLines>
       {formError && (
         <p className="mb-4 text-sm text-red-600" role="alert">
           {formError}
@@ -164,8 +166,8 @@ function SignIn() {
             <FormInput
               name={field.name}
               type="text"
-              placeholder="Enter your email"
-              labelText="Email or Username"
+              placeholder={t("auth.emailPlaceholder")}
+              labelText={t("auth.emailOrUsername")}
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
@@ -188,8 +190,8 @@ function SignIn() {
             <FormInput
               name={field.name}
               type="password"
-              placeholder="Enter your password"
-              labelText="Password"
+              placeholder={t("auth.passwordPlaceholder")}
+              labelText={t("auth.password")}
               value={field.state.value}
               onChange={field.handleChange}
               onBlur={field.handleBlur}
@@ -212,20 +214,20 @@ function SignIn() {
                 htmlFor="rememberMe"
                 className="text-textPrimary text-sm font-medium grow pl-3"
               >
-                Keep me signed in
+                {t("auth.rememberMe")}
               </label>
               <a href="#" className="text-lightBlue text-sm font-medium">
-                Forgot Password?
+                {t("auth.forgotPassword")}
               </a>
             </div>
           )}
         />
         <Button disabled={loginMutation.isPending}>
-          {loginMutation.isPending ? "Signing in..." : "Sign in"}
+          {loginMutation.isPending ? t("auth.signingIn") : t("auth.signIn")}
         </Button>
       </form>
-      <TextWithLink link="Sign up" path="/signup">
-        Don't have an account?
+      <TextWithLink link={t("nav.signUp")} path="/signup">
+        {t("auth.noAccount")}
       </TextWithLink>
     </ContentBox>
   );
