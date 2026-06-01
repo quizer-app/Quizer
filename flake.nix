@@ -87,8 +87,12 @@
             help = "Restore backend and frontend dependencies";
             command = "dotnet restore Quizer.slnx && pnpm --dir frontend install";
           }
+          {
+            name = "test-seed";
+            help = "Run seed scenario against the API";
+            command = "dotnet run --project tests/Quizer.Seed/Quizer.Seed.csproj";
+          }
         ];
-
         devshell.startup.quizer.text = ''
           echo "Quizer dev shell"
           echo "  dotnet: $(dotnet --version)"
