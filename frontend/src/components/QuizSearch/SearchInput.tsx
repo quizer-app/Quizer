@@ -1,7 +1,7 @@
 import { GetQuizesQueryParams } from "@/types/schema/quizSearchSchema";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { SearchIcon, XCircle } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface SearchInputProps {
   fullPath: "/quiz-search";
@@ -20,20 +20,46 @@ export default function SearchInput({
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate({ from: fullPath });
 
-  const handleChange = (e: string) => {
-    if (fullPath === "/$username") {
-      navigate({
-        from: fullPath,
-        search: { ...searchParams, searchTerm: e },
-        replace: true,
-      });
-    } else if (fullPath === "/quiz-search") {
-      navigate({
-        from: fullPath,
-        search: { ...searchParams, searchTerm: e },
-        replace: true,
-      });
+  const [inputValue, setInputValue] = useState(searchParams.searchTerm);
+
+  useEffect(() => {
+    setInputValue(searchParams.searchTerm);
+  }, [searchParams.searchTerm]);
+
+  useEffect(() => {
+    if (fullPath !== "/quiz-search") {
+      return;
     }
+
+    const timeoutId = window.setTimeout(() => {
+      if (inputValue === searchParams.searchTerm) {
+        return;
+      }
+
+      navigate({
+        from: fullPath,
+        search: { ...searchParams, searchTerm: inputValue },
+        replace: true,
+      });
+    }, 300);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [fullPath, inputValue, navigate, searchParams]);
+
+  const handleChange = (value: string) => {
+    setInputValue(value);
+
+    if (fullPath !== "/$username") {
+      return;
+    }
+
+    navigate({
+      from: fullPath,
+      search: { ...searchParams, searchTerm: value },
+      replace: true,
+    });
   };
 
   const clearInput = (prev: GetQuizesQueryParams) => {
@@ -44,7 +70,7 @@ export default function SearchInput({
     <div className="relative">
       <input
         onChange={e => handleChange(e.target.value)}
-        value={searchParams.searchTerm}
+        value={inputValue}
         ref={inputRef}
         className="bg-secondary w-full rounded-sm p-3 text-textPrimary pl-12 focus:outline-none min-w-99"
         placeholder="Search for quizes..."
