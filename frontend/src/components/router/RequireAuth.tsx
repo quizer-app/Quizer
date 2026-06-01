@@ -1,15 +1,14 @@
 import { selectIsAuthenticated, useAuthStore } from "@/atoms/auth";
-import { Navigate, Outlet } from "@tanstack/react-router";
+import { Navigate, Outlet, useLocation } from "@tanstack/react-router";
 
 export default function RequireAuth() {
-  // const location = useLocation();
-
+  const location = useLocation();
   const isAuthenticated = useAuthStore(selectIsAuthenticated);
+  const redirectTo = location.pathname;
 
-  return isAuthenticated ? (
-    <Outlet />
-  ) : (
-    // <Navigate to="/signin" state={{ from: location }} replace />
-    <Navigate to="/signin" replace />
-  );
+  if (isAuthenticated) {
+    return <Outlet />;
+  }
+
+  return <Navigate to="/signin" search={{ redirect: redirectTo }} replace />;
 }

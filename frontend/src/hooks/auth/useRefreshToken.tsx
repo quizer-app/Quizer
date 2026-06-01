@@ -5,7 +5,7 @@ import { AuthResponse } from "@/types/types/auth";
 export default function useRefreshToken() {
   const setAccessToken = useAuthStore(state => state.setAccessToken);
 
-  const refresh = async () => {
+  const refresh = async (): Promise<string | null> => {
     const response = await api.post<AuthResponse>(
       "/api/v1/Auth/refresh",
       {},
@@ -14,8 +14,9 @@ export default function useRefreshToken() {
       }
     );
     const { accessToken } = response.data;
-    setAccessToken(accessToken ?? null);
-    return accessToken;
+    const nextAccessToken = accessToken ?? null;
+    setAccessToken(nextAccessToken);
+    return nextAccessToken;
   };
 
   return refresh;

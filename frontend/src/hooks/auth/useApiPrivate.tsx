@@ -1,8 +1,17 @@
-import { apiPrivate } from "@/api/axios";
+import { apiPrivate, setAuthorizationHeader } from "@/api/axios";
 import { selectAccessToken, useAuthStore } from "@/atoms/auth";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosHeaders, InternalAxiosRequestConfig } from "axios";
 import { useEffect } from "react";
 import useRefreshToken from "./useRefreshToken";
+
+const withAuthorization = (
+  config: InternalAxiosRequestConfig,
+  accessToken: string
+) => {
+  const headers = AxiosHeaders.from(config.headers);
+  setAuthorizationHeader(headers, accessToken);
+  config.headers = headers;
+};
 
 export default function useApiPrivate() {
   const refresh = useRefreshToken();
@@ -11,10 +20,11 @@ export default function useApiPrivate() {
   useEffect(() => {
     const requestIntercept = apiPrivate.interceptors.request.use(
       config => {
-        if (!config.headers["Authorization"]) {
-          config.headers["Authorization"] = `Bearer ${accessToken}`;
+        if (!accessToken || config.headers.Authorization) {
+          return config;
         }
 
+        withAuthorization(config, accessToken);
         return config;
       },
       (error: AxiosError) => Promise.reject(error)
@@ -24,16 +34,25 @@ export default function useApiPrivate() {
       response => response,
       async (error: AxiosError) => {
         const prevRequest = error.config;
-        if (!prevRequest) return Promise.reject(error);
-        if (error.response?.status === 401 && !prevRequest._retry) {
-          prevRequest._retry = true;
-          const newAccessToken = await refresh();
-          prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
-          return apiPrivate(prevRequest);
+        if (!prevRequest) {
+          return Promise.reject(error);
         }
-        return Promise.reject(error);
+
+        if (error.response?.status !== 401 || prevRequest._retry) {
+          return Promise.reject(error);
+        }
+
+        prevRequest._retry = true;
+        const newAccessToken = await refresh();
+        if (!newAccessToken) {
+          return Promise.reject(error);
+        }
+
+        withAuthorization(prevRequest, newAccessToken);
+        return apiPrivate(prevRequest);
       }
     );
+
     return () => {
       apiPrivate.interceptors.response.eject(responseIntercept);
       apiPrivate.interceptors.request.eject(requestIntercept);

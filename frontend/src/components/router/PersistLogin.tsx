@@ -1,4 +1,4 @@
-import { selectAccessToken, useAuthStore } from "@/atoms/auth";
+import { selectIsAuthenticated, useAuthStore } from "@/atoms/auth";
 import useRefreshToken from "@/hooks/auth/useRefreshToken";
 import { ReactNode, useEffect, useState } from "react";
 import Loading from "../Status/Loading";
@@ -6,28 +6,28 @@ import Loading from "../Status/Loading";
 export default function PersistLogin({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const refresh = useRefreshToken();
-  const accessToken = useAuthStore(selectAccessToken);
+  const isAuthenticated = useAuthStore(selectIsAuthenticated);
 
   useEffect(() => {
     const verifyRefreshToken = async () => {
       try {
         await refresh();
-      } catch (err) {
-        if (err instanceof Error) {
-          console.log(err.message);
-        }
       } finally {
         setIsLoading(false);
       }
     };
 
-    if (accessToken) {
+    if (isAuthenticated) {
       setIsLoading(false);
       return;
     }
 
     void verifyRefreshToken();
-  }, [refresh, accessToken]);
+  }, [isAuthenticated, refresh]);
 
-  return <>{isLoading ? <Loading /> : <>{children}</>}</>;
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  return <>{children}</>;
 }

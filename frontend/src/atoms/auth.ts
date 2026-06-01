@@ -11,13 +11,33 @@ export const useAuthStore = create<AuthState>(set => ({
   setAccessToken: accessToken => set({ accessToken }),
 }));
 
+const parseTokenData = (accessToken: string): TokenData | null => {
+  const segments = accessToken.split(".");
+  if (segments.length < 2) {
+    return null;
+  }
+
+  try {
+    const decodedPayload = atob(segments[1]);
+    return JSON.parse(decodedPayload) as TokenData;
+  } catch {
+    return null;
+  }
+};
+
 export const selectAccessToken = (state: AuthState) => state.accessToken;
-export const selectIsAuthenticated = (state: AuthState) => state.accessToken !== null;
+export const selectIsAuthenticated = (state: AuthState) => {
+  if (state.accessToken === null) {
+    return false;
+  }
+
+  return parseTokenData(state.accessToken) !== null;
+};
+
 export const selectTokenData = (state: AuthState): TokenData | null => {
   if (state.accessToken === null) {
     return null;
   }
 
-  const tokenData = JSON.parse(atob(state.accessToken.split(".")[1])) as TokenData;
-  return tokenData;
+  return parseTokenData(state.accessToken);
 };

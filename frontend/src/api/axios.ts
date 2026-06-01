@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
 
 export const baseURL =
   (import.meta.env.VITE_API_URL as string) ?? "https://api.local.elotoja.com";
@@ -16,3 +16,9 @@ export const apiPrivate = axios.create({
     "Content-Type": "application/json",
   },
 });
+export const setAuthorizationHeader = (
+  headers: AxiosHeaders,
+  accessToken: string
+) => {
+  headers.set("Authorization", `Bearer ${accessToken}`);
+};
