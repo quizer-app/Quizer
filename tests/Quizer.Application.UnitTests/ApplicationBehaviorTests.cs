@@ -1,3 +1,5 @@
+using MediatR;
+using Quizer.Application.Quizes.Events;
 using Quizer.Application.Authentication.Commands.Register;
 using Quizer.Application.Quizes.Queries.GetQuizes;
 using Xunit;
@@ -30,5 +32,12 @@ public class ApplicationBehaviorTests
         Assert.Contains(result.Errors, error => error.PropertyName == "PageNumber");
         Assert.Contains(result.Errors, error => error.PropertyName == "PageSize");
     }
+    [Fact]
+    public void Quiz_deleted_handler_handles_quiz_deleted_notification()
+    {
+        var handlerType = typeof(QuizDeletedHandler);
+        var notificationHandlerType = typeof(INotificationHandler<Quizer.Domain.QuizAggregate.Events.QuizDeleted>);
 
+        Assert.True(notificationHandlerType.IsAssignableFrom(handlerType));
+    }
 }
