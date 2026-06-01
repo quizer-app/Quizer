@@ -17,7 +17,7 @@ export default function TileGrid() {
   });
 
   return (
-    <section className="bg-primary flex min-h-[calc(100svh-80px)] w-full flex-col items-center justify-center gap-16 py-14 md:py-16 lg:py-20">
+    <section className="bg-primary flex h-full w-full flex-col items-center justify-center gap-16 py-14 md:py-16 lg:py-20">
       {isLoading && <Loading />}
       {isError ? (
         <div className="mainContainer w-full rounded-sm border border-white/10 bg-white/5 p-8 text-center">
