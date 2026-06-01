@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -109,7 +110,16 @@ public static class DependencyInjection
                 };
             });
 
-        services.AddAuthorization();
+        services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+        services.AddAuthorization(options =>
+        {
+            foreach (Permission permission in Enum.GetValues<Permission>())
+            {
+                options.AddPolicy(
+                    policyName: PermissionAuthorizationPolicy.For(permission),
+                    configurePolicy: policy => policy.Requirements.Add(new PermissionRequirement(permission)));
+            }
+        });
 
         return services;
     }
