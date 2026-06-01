@@ -1,3 +1,4 @@
+import { useState } from "react";
 import img from "@/assets/images/office.jpg";
 import { QuizResponse } from "@/types/types/quiz";
 import { formatDate } from "@/utils/date";
@@ -8,6 +9,7 @@ type QuizTileProps = {
 };
 
 export default function QuizTile({ quiz }: QuizTileProps) {
+  const [bannerSrc, setBannerSrc] = useState(quiz.imageUrl || img);
   return (
     <div className="bg-secondary rounded-sm w-full">
       <Link
@@ -19,14 +21,15 @@ export default function QuizTile({ quiz }: QuizTileProps) {
         search={{
           term: 1,
         }}
-        className="relative"
+        className="relative block overflow-hidden rounded-t-sm"
       >
         <img
-          src={quiz.imageUrl}
+          src={bannerSrc}
           loading="lazy"
           decoding="async"
           alt="quiz banner"
-          className="w-full rounded-t-sm"
+          onError={() => setBannerSrc(img)}
+          className="h-48 w-full object-cover"
         />
         <div className="text-white text-sm font-bold absolute top-4 right-4 px-4 py-2 bg-lightBlue rounded-3xl">
           {`${quiz.numberOfQuestions} Questions`}
