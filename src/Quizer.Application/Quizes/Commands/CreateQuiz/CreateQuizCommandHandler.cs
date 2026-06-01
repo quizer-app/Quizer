@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Quizer.Application.Common.Interfaces.Persistance;
@@ -46,8 +46,10 @@ public class CreateQuizCommandHandler : IRequestHandler<CreateQuizCommand, Error
             request.Name,
             slug,
             request.Description,
-            userName
-            );
+            userName,
+            request.TimeLimitInSeconds,
+            request.AutoSubmitWhenTimeExpires,
+            request.MaxAttemptsPerUser);
 
         if (result.IsError)
             return result.Errors;

@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Quizer.Domain.QuizAggregate;
 
@@ -53,6 +53,10 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
         builder.Property(q => q.Description)
             .HasMaxLength(1000);
 
+
+        builder.Property(q => q.TimeLimitInSeconds);
+        builder.Property(q => q.AutoSubmitWhenTimeExpires);
+        builder.Property(q => q.MaxAttemptsPerUser);
         builder.OwnsOne(q => q.AverageRating);
 
         builder.OwnsOne(q => q.Image);

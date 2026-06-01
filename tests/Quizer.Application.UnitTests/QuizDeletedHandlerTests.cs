@@ -31,13 +31,7 @@ public class QuizDeletedHandlerTests
 
     private static Quiz CreateQuiz()
     {
-        var quiz = Quiz.Create(
-            Guid.NewGuid(),
-            Image.CreateNew(Guid.NewGuid(), new Uri("https://example.com/image.png")),
-            "Quiz",
-            "quiz",
-            "Description",
-            "owner");
+        var quiz = Quiz.Create(Guid.NewGuid(), Image.CreateNew(Guid.NewGuid(), new Uri("https://example.com/image.png")), "Quiz", "quiz", "Description", "owner", null, false, null);
 
         return quiz.Value;
     }

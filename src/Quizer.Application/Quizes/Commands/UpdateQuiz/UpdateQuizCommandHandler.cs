@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Application.Services.Image;
@@ -33,7 +33,7 @@ public class UpdateQuizCommandHandler : IRequestHandler<UpdateQuizCommand, Error
 
         string slug = _slugifyService.GenerateSlug(request.Name);
 
-        if(quiz.Image.ImageId != request.ImageId)
+        if (quiz.Image.ImageId != request.ImageId)
         {
             bool deleted = await _imageService.DeleteImage(quiz.Image.ImageId);
             if (!deleted)
@@ -49,10 +49,13 @@ public class UpdateQuizCommandHandler : IRequestHandler<UpdateQuizCommand, Error
             Image.CreateNew(request.ImageId, _imageService.GenerateImageUrl(request.ImageId, "quiz")),
             request.Name,
             slug,
-            request.Description);
+            request.Description,
+            request.TimeLimitInSeconds,
+            request.AutoSubmitWhenTimeExpires,
+            request.MaxAttemptsPerUser);
 
         if (result.IsError) return result.Errors;
-        
+
         return id;
     }
 }

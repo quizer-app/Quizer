@@ -1,7 +1,9 @@
-﻿namespace Quizer.Contracts.Quiz;
+namespace Quizer.Contracts.Quiz;
 
 public record CreateQuizRequest(
     string Name,
     string Description,
-    Guid ImageId
-    );
+    Guid ImageId,
+    int? TimeLimitInSeconds,
+    bool AutoSubmitWhenTimeExpires,
+    int? MaxAttemptsPerUser);

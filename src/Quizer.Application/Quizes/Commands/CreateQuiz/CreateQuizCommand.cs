@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Quizer.Domain.QuizAggregate;
 
@@ -8,5 +8,7 @@ public record CreateQuizCommand(
     string Name,
     string Description,
     Guid UserId,
-    Guid ImageId
-    ) : IRequest<ErrorOr<QuizId>>;
+    Guid ImageId,
+    int? TimeLimitInSeconds,
+    bool AutoSubmitWhenTimeExpires,
+    int? MaxAttemptsPerUser) : IRequest<ErrorOr<QuizId>>;

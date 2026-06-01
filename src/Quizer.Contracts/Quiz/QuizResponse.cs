@@ -1,4 +1,4 @@
-﻿using Quizer.Contracts.Question;
+using Quizer.Contracts.Question;
 
 namespace Quizer.Contracts.Quiz;
 
@@ -11,11 +11,13 @@ public record QuizResponse(
     string Description,
     double AverageRating,
     int NumberOfRatings,
+    int? TimeLimitInSeconds,
+    bool AutoSubmitWhenTimeExpires,
+    int? MaxAttemptsPerUser,
     IReadOnlyList<QuestionResponse> Questions,
     string CreatedBy,
     string UpdatedBy,
     string ImageUrl,
     string ImageId,
     DateTime CreatedAt,
-    DateTime UpdatedAt
-    );
+    DateTime UpdatedAt);

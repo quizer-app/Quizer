@@ -1,4 +1,5 @@
-﻿using ErrorOr;
+using ErrorOr;
+using Quizer.Domain.Common.Errors;
 using Quizer.Domain.Common.Models;
 using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuestionAggregate;
@@ -12,13 +13,15 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     private readonly List<QuestionId> _questionIds = new();
 
     public string UserName { get; private set; }
-
     public string Name { get; private set; }
     public string Slug { get; private set; }
     public string Description { get; private set; }
     public Image Image { get; private set; }
     public AverageRating AverageRating { get; private set; }
-    
+    public int? TimeLimitInSeconds { get; private set; }
+    public bool AutoSubmitWhenTimeExpires { get; private set; }
+    public int? MaxAttemptsPerUser { get; private set; }
+
     public string Location => $"{UserName}/{Slug}";
     public IReadOnlyList<QuestionId> QuestionIds => _questionIds.AsReadOnly();
     public int NumberOfQuestions => _questionIds.Count;
@@ -31,7 +34,10 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         string slug,
         string description,
         string userName,
-        AverageRating averageRating) : base(id, userId)
+        AverageRating averageRating,
+        int? timeLimitInSeconds,
+        bool autoSubmitWhenTimeExpires,
+        int? maxAttemptsPerUser) : base(id, userId)
     {
         Name = name;
         Slug = slug;
@@ -39,6 +45,9 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         UserName = userName;
         Image = image;
         AverageRating = averageRating;
+        TimeLimitInSeconds = timeLimitInSeconds;
+        AutoSubmitWhenTimeExpires = autoSubmitWhenTimeExpires;
+        MaxAttemptsPerUser = maxAttemptsPerUser;
     }
 
     private ErrorOr<bool> Validate()
@@ -54,7 +63,10 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         string name,
         string slug,
         string description,
-        string userName)
+        string userName,
+        int? timeLimitInSeconds,
+        bool autoSubmitWhenTimeExpires,
+        int? maxAttemptsPerUser)
     {
         var quiz = new Quiz(
             userId,
@@ -64,7 +76,10 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
             slug,
             description,
             userName,
-            AverageRating.CreateNew());
+            AverageRating.CreateNew(),
+            timeLimitInSeconds,
+            autoSubmitWhenTimeExpires,
+            maxAttemptsPerUser);
 
         var result = quiz.Validate();
         if (result.IsError) return result.Errors;
@@ -77,23 +92,57 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
         Image image,
         string name,
         string slug,
-        string description)
+        string description,
+        int? timeLimitInSeconds,
+        bool autoSubmitWhenTimeExpires,
+        int? maxAttemptsPerUser)
     {
         base.Update(userId);
         Name = name;
         Description = description;
         Slug = slug;
         Image = image;
+        TimeLimitInSeconds = timeLimitInSeconds;
+        AutoSubmitWhenTimeExpires = autoSubmitWhenTimeExpires;
+        MaxAttemptsPerUser = maxAttemptsPerUser;
 
-        var result = this.Validate();
+        var result = Validate();
         if (result.IsError) return result.Errors;
 
         return true;
     }
 
+    public ErrorOr<bool> CanStartAttempt(int numberOfExistingAttempts)
+    {
+        if (!MaxAttemptsPerUser.HasValue)
+            return true;
+
+        if (numberOfExistingAttempts < MaxAttemptsPerUser.Value)
+            return true;
+
+        return Errors.Quiz.AttemptLimitReached;
+    }
+
+    public ErrorOr<DateTimeOffset> GetAttemptDeadline(DateTimeOffset startedAt)
+    {
+        if (!TimeLimitInSeconds.HasValue)
+            return Errors.Quiz.TimedConfigurationMissing;
+
+        return startedAt.AddSeconds(TimeLimitInSeconds.Value);
+    }
+
+    public bool IsAttemptExpired(DateTimeOffset startedAt, DateTimeOffset now)
+    {
+        if (!TimeLimitInSeconds.HasValue)
+            return false;
+
+        var deadline = startedAt.AddSeconds(TimeLimitInSeconds.Value);
+        return now >= deadline;
+    }
+
     public void Delete()
     {
-        this.AddDomainEvent(new QuizDeleted(this));
+        AddDomainEvent(new QuizDeleted(this));
     }
 
     public void AddQuestion(Guid userId, Question question)
@@ -109,6 +158,6 @@ public sealed class Quiz : AggregateRoot<QuizId, Guid>
     }
 
 #pragma warning disable CS8618
-    private Quiz() {}
+    private Quiz() { }
 #pragma warning restore CS8618
 }

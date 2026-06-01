@@ -1,4 +1,4 @@
-﻿namespace Quizer.Contracts.Quiz;
+namespace Quizer.Contracts.Quiz;
 
 public record ShortQuizResponse(
     string Id,
@@ -9,11 +9,13 @@ public record ShortQuizResponse(
     string Description,
     double AverageRating,
     int NumberOfRatings,
+    int? TimeLimitInSeconds,
+    bool AutoSubmitWhenTimeExpires,
+    int? MaxAttemptsPerUser,
     string CreatedBy,
     string UpdatedBy,
     int NumberOfQuestions,
     string ImageUrl,
     string ImageId,
     DateTime CreatedAt,
-    DateTime UpdatedAt
-    );
+    DateTime UpdatedAt);

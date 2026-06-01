@@ -37,13 +37,7 @@ public class PersistenceIntegrationTests : IDisposable
         var repository = new QuizRepository(context);
         var unitOfWork = new UnitOfWork(context);
 
-        var quiz = Quiz.Create(
-            Guid.NewGuid(),
-            Image.CreateNew(Guid.NewGuid(), new Uri("https://cdn.example.com/quiz.png")),
-            "CSharp Basics",
-            "csharp-basics",
-            "Language fundamentals",
-            "alice").Value;
+        var quiz = Quiz.Create(Guid.NewGuid(), Image.CreateNew(Guid.NewGuid(), new Uri("https://cdn.example.com/quiz.png")), "CSharp Basics", "csharp-basics", "Language fundamentals", "alice", null, false, null).Value;
 
         await repository.Add(quiz);
         await unitOfWork.SaveChangesAsync();
@@ -64,8 +58,8 @@ public class PersistenceIntegrationTests : IDisposable
         var questionRepository = new QuestionRepository(context);
         var unitOfWork = new UnitOfWork(context);
 
-        var quizOne = Quiz.Create(Guid.NewGuid(), Image.CreateNew(Guid.NewGuid(), new Uri("https://cdn.example.com/1.png")), "Quiz One", "quiz-one", "Desc", "alice").Value;
-        var quizTwo = Quiz.Create(Guid.NewGuid(), Image.CreateNew(Guid.NewGuid(), new Uri("https://cdn.example.com/2.png")), "Quiz Two", "quiz-two", "Desc", "bob").Value;
+        var quizOne = Quiz.Create(Guid.NewGuid(), Image.CreateNew(Guid.NewGuid(), new Uri("https://cdn.example.com/1.png")), "Quiz One", "quiz-one", "Desc", "alice", null, false, null).Value;
+        var quizTwo = Quiz.Create(Guid.NewGuid(), Image.CreateNew(Guid.NewGuid(), new Uri("https://cdn.example.com/2.png")), "Quiz Two", "quiz-two", "Desc", "bob", null, false, null).Value;
 
         await quizRepository.Add(quizOne);
         await quizRepository.Add(quizTwo);
