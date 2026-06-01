@@ -51,8 +51,9 @@ export default function QuizTile({ quiz }: QuizTileProps) {
           <h3 className="text-white text-2xl font-bold mb-3">{quiz.name}</h3>
           <p className="text-textPrimary font-medium">{quiz.description}</p>
         </Link>
-        <span className="h-[1px] bg-white bg-opacity-10 block my-6"></span>
-        <div className="flex items-center gap-4 mt-auto">
+        <div className="mt-auto">
+          <span className="h-[1px] bg-white bg-opacity-10 mb-6 block"></span>
+          <div className="flex items-center gap-4">
           <img
             src={img}
             loading="lazy"
@@ -69,6 +70,7 @@ export default function QuizTile({ quiz }: QuizTileProps) {
             <p className="text-textPrimary text-xs font-medium">
               {formatDate(quiz.createdAt)}
             </p>
+          </div>
           </div>
         </div>
       </div>
