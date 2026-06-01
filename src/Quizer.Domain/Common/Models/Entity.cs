@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using FluentValidation.Results;
 
 namespace Quizer.Domain.Common.Models;
@@ -43,7 +43,10 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>, IHasDomainEvents
 
     public bool Equals(Entity<TId>? other)
     {
-        return Equals(other);
+        if (other is null)
+            return false;
+
+        return Id.Equals(other.Id);
     }
 
     public static bool operator ==(Entity<TId>? a, Entity<TId>? b)
