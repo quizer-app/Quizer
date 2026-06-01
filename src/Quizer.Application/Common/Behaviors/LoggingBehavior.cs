@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -22,16 +22,15 @@ public sealed class LoggingBehavior<TRequest, TResponse> :
         CancellationToken cancellationToken)
     {
         _logger.LogInformation(
-            "Starting request {@RequestName}, {@Request}",
-            typeof(TRequest).Name,
-            request);
+            "Starting request {RequestName}",
+            typeof(TRequest).Name);
 
         var result = await next();
 
         _logger.LogInformation(
-            "Completed request {@RequestName}, {@Result}",
+            "Completed request {RequestName} with error={IsError}",
             typeof(TRequest).Name,
-            result);
+            result.IsError);
 
         return result;
     }

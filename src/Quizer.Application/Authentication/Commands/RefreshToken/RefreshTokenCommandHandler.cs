@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Quizer.Application.Common.Interfaces.Authentication;
@@ -26,19 +26,19 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, E
         bool isValid = await _jwtTokenGenerator.ValidateRefreshToken(command.RefreshToken);
         if (!isValid)
         {
-            _logger.LogError("Invalid refresh token {refreshToken}", command.RefreshToken);
+            _logger.LogWarning("Rejecting invalid refresh token");
             return Errors.Authentication.InvalidToken;
         }
 
         var token = await _refreshTokenRepository.Get(TokenId.Create(command.RefreshToken));
         if (token is null || !token.IsValid)
         {
-            _logger.LogError("Refresh token {refreshToken} not found or not valid", command.RefreshToken);
+            _logger.LogWarning("Rejecting refresh token because it was not found or is invalidated");
             return Errors.Authentication.InvalidToken;
         }
 
         string accessToken = _jwtTokenGenerator.GenerateAccessToken(command.RefreshToken);
-        _logger.LogInformation("Generated access token {accessToken}", accessToken);
+        _logger.LogInformation("Generated access token from refresh token");
 
         return accessToken;
     }
