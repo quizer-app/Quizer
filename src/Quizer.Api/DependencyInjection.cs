@@ -33,6 +33,7 @@ public static class DependencyInjection
                         .AllowCredentials()
                         .AllowAnyHeader()
                         .AllowAnyMethod();
+                });
         });
 
         return services;
