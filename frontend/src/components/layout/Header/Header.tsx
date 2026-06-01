@@ -41,7 +41,7 @@ export function Header() {
           <NavLinks isOpen={isOpen} onClick={closeNavbar} menuId={menuId} />
           <NavButtons />
         </div>
-        <div className="flex justify-between items-center">
+        <div className="flex items-center gap-3 sm:gap-4 lg:gap-5 pl-3">
           <DarkModeButton />
           <LanguageSwitcher />
           <NavToggle toggleNavbar={toggleNavbar} isOpen={isOpen} menuId={menuId} />
