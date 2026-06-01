@@ -52,7 +52,7 @@ export default function QuizTile({ quiz }: QuizTileProps) {
           <p className="text-textPrimary font-medium">{quiz.description}</p>
         </Link>
         <div className="mt-auto">
-          <span className="h-[1px] bg-white bg-opacity-10 mb-6 block"></span>
+          <span className="block h-[1px] bg-white bg-opacity-10 mt-8 mb-4"></span>
           <div className="flex items-center gap-4">
           <img
             src={img}
