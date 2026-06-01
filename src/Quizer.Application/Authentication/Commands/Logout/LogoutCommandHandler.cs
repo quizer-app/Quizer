@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Quizer.Application.Common.Interfaces.Authentication;
@@ -22,7 +22,7 @@ public class LogoutCommandHandler : IRequestHandler<LogoutCommand, ErrorOr<Logou
 
     public async Task<ErrorOr<LogoutResult>> Handle(LogoutCommand query, CancellationToken cancellation)
     {
-        var token = await _refreshTokenRepository.Get(TokenId.Create(query.RefreshToken));
+        var token = await _refreshTokenRepository.Get(TokenId.FromToken(query.RefreshToken));
 
         if(token is null)
             return Errors.Authentication.InvalidCredentials;

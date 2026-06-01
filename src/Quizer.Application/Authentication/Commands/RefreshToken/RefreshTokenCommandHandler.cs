@@ -30,7 +30,7 @@ public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, E
             return Errors.Authentication.InvalidToken;
         }
 
-        var token = await _refreshTokenRepository.Get(TokenId.Create(command.RefreshToken));
+        var token = await _refreshTokenRepository.Get(TokenId.FromToken(command.RefreshToken));
         if (token is null || !token.IsValid)
         {
             _logger.LogWarning("Rejecting refresh token because it was not found or is invalidated");

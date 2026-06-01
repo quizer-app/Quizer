@@ -1,4 +1,4 @@
-﻿using Quizer.Domain.Common.Models;
+using Quizer.Domain.Common.Models;
 
 namespace Quizer.Domain.RefreshTokenAggregate;
 
@@ -22,7 +22,7 @@ public sealed class RefreshToken : AggregateRoot<TokenId, string>
     {
         var refreshToken = new RefreshToken(
             userId,
-            TokenId.Create(token),
+            TokenId.FromToken(token),
             true);
 
         return refreshToken;
