@@ -15,7 +15,7 @@ pkgs.stdenv.mkDerivation {
     version = "0.1.0";
     src = frontendSrc;
     fetcherVersion = 3;
-    hash = "sha256-kxxp6erd6q/6hv6mvdJ00CaaNa3N4Jh77o6kvUpFrWs=";
+    hash = "sha256-FTqw4oPLK+fzMTel7EGy8WuDVuj5uaLAN44V1Hd2LFM=";
   };
 
   buildPhase = ''
