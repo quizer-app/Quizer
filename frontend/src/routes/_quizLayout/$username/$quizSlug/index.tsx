@@ -1,3 +1,4 @@
+import { selectTokenData, useAuthStore } from "@/atoms/auth";
 import Category from "@/components/Quiz/Category";
 import Flashcard from "@/components/Quiz/Flashcards/Flashcard";
 import Term from "@/components/Quiz/Term";
@@ -6,7 +7,7 @@ import NotFound from "@/components/Status/NotFound/NotFound";
 import useQuizData from "@/hooks/quizes/useQuizData";
 import { quizPageSchema } from "@/types/schema/quizPageSchema";
 import { QuestionResponse } from "@/types/types/quiz";
-import { createFileRoute } from "@tanstack/react-router";
+import { Link, createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_quizLayout/$username/$quizSlug/")({
   component: Quiz,
@@ -14,10 +15,11 @@ export const Route = createFileRoute("/_quizLayout/$username/$quizSlug/")({
 });
 
 export default function Quiz() {
+  const tokenData = useAuthStore(selectTokenData);
   const { username, quizSlug } = Route.useParams();
   const { isLoading, isError, quiz } = useQuizData(username, quizSlug);
   const { term } = Route.useSearch();
-
+  const canEdit = tokenData?.sub === quiz?.createdBy;
   return (
     <>
       {isLoading && <Loading />}
@@ -25,9 +27,18 @@ export default function Quiz() {
       {quiz && (
         <div className="bg-primary w-full text-white px-4 py-10 sm:py-12 md:py-16 lg:py-20">
           <div className="mx-auto rounded-sm max-w-[592px] md:max-w-[720px] lg:max-w-[976px]">
-            <h2 className="text-2xl font-bold mb-10 xl:text-3xl">
-              {quiz.name}
-            </h2>
+            <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="text-2xl font-bold xl:text-3xl">{quiz.name}</h2>
+              {canEdit && (
+                <Link
+                  to="/$username/$quizSlug/edit"
+                  params={{ username: quiz.userName, quizSlug: quiz.slug }}
+                  className="buttonSecondary bg-secondary px-5 py-3 text-center"
+                >
+                  Edit quiz
+                </Link>
+              )}
+            </div>
             <div className="flex flex-col gap-10 w-full mb-16">
               <Flashcard
                 questions={quiz.questions}

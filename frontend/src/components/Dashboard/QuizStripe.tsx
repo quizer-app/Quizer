@@ -1,8 +1,8 @@
-import { QuizResponse } from "@/types/types/quiz";
+import { ShortQuizResponse } from "@/types/types/quiz";
 import { Link } from "@tanstack/react-router";
 
 interface QuizStripeProps {
-  quiz: QuizResponse;
+  quiz: ShortQuizResponse;
 }
 
 export default function QuizStripe({ quiz }: QuizStripeProps) {

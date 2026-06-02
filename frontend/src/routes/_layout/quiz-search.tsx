@@ -5,7 +5,7 @@ import Loading from "@/components/Status/Loading";
 import NotFound from "@/components/Status/NotFound/NotFound";
 import useQuizesPaging from "@/hooks/quizes/useQuizesPaging";
 import { quizSearchSchema } from "@/types/schema/quizSearchSchema";
-import { QuizResponse } from "@/types/types/quiz";
+import { ShortQuizResponse } from "@/types/types/quiz";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_layout/quiz-search")({
@@ -37,7 +37,7 @@ function QuizSearch() {
         {isError && <NotFound />}
         {quizes?.items.length !== 0 ? (
           <div className="mainContainer grid grid-cols-1 gap-4 lg:gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {quizes?.items.map((el: QuizResponse, id: number) => {
+            {quizes?.items.map((el: ShortQuizResponse, id: number) => {
               return <QuizTile quiz={el} key={id} />;
             })}
           </div>

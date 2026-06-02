@@ -19,6 +19,7 @@ import { Route as LayoutAuthRouteImport } from './routes/_layout/_auth'
 import { Route as QuizLayoutUsernameQuizSlugIndexRouteImport } from './routes/_quizLayout/$username/$quizSlug/index'
 import { Route as QuizLayoutUsernameQuizSlugTestRouteImport } from './routes/_quizLayout/$username/$quizSlug/test'
 import { Route as QuizLayoutUsernameQuizSlugFlashcardsRouteImport } from './routes/_quizLayout/$username/$quizSlug/flashcards'
+import { Route as QuizLayoutUsernameQuizSlugEditRouteImport } from './routes/_quizLayout/$username/$quizSlug/edit'
 
 const LayoutIndexLazyRouteImport = createFileRoute('/_layout/')()
 const LayoutVerifiedLazyRouteImport = createFileRoute('/_layout/verified')()
@@ -133,6 +134,12 @@ const QuizLayoutUsernameQuizSlugFlashcardsRoute =
     path: '/$username/$quizSlug/flashcards',
     getParentRoute: () => QuizLayoutRoute,
   } as any)
+const QuizLayoutUsernameQuizSlugEditRoute =
+  QuizLayoutUsernameQuizSlugEditRouteImport.update({
+    id: '/$username/$quizSlug/edit',
+    path: '/$username/$quizSlug/edit',
+    getParentRoute: () => QuizLayoutRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof LayoutIndexLazyRoute
@@ -145,6 +152,7 @@ export interface FileRoutesByFullPath {
   '/verified': typeof LayoutVerifiedLazyRoute
   '/$username': typeof LayoutAuthUsernameLazyRoute
   '/verification/$token': typeof LayoutVerificationTokenLazyRoute
+  '/$username/$quizSlug/edit': typeof QuizLayoutUsernameQuizSlugEditRoute
   '/$username/$quizSlug/flashcards': typeof QuizLayoutUsernameQuizSlugFlashcardsRoute
   '/$username/$quizSlug/test': typeof QuizLayoutUsernameQuizSlugTestRoute
   '/$username/$quizSlug/': typeof QuizLayoutUsernameQuizSlugIndexRoute
@@ -160,6 +168,7 @@ export interface FileRoutesByTo {
   '/verified': typeof LayoutVerifiedLazyRoute
   '/$username': typeof LayoutAuthUsernameLazyRoute
   '/verification/$token': typeof LayoutVerificationTokenLazyRoute
+  '/$username/$quizSlug/edit': typeof QuizLayoutUsernameQuizSlugEditRoute
   '/$username/$quizSlug/flashcards': typeof QuizLayoutUsernameQuizSlugFlashcardsRoute
   '/$username/$quizSlug/test': typeof QuizLayoutUsernameQuizSlugTestRoute
   '/$username/$quizSlug': typeof QuizLayoutUsernameQuizSlugIndexRoute
@@ -179,6 +188,7 @@ export interface FileRoutesById {
   '/_layout/': typeof LayoutIndexLazyRoute
   '/_layout/_auth/$username': typeof LayoutAuthUsernameLazyRoute
   '/_layout/verification/$token': typeof LayoutVerificationTokenLazyRoute
+  '/_quizLayout/$username/$quizSlug/edit': typeof QuizLayoutUsernameQuizSlugEditRoute
   '/_quizLayout/$username/$quizSlug/flashcards': typeof QuizLayoutUsernameQuizSlugFlashcardsRoute
   '/_quizLayout/$username/$quizSlug/test': typeof QuizLayoutUsernameQuizSlugTestRoute
   '/_quizLayout/$username/$quizSlug/': typeof QuizLayoutUsernameQuizSlugIndexRoute
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/verified'
     | '/$username'
     | '/verification/$token'
+    | '/$username/$quizSlug/edit'
     | '/$username/$quizSlug/flashcards'
     | '/$username/$quizSlug/test'
     | '/$username/$quizSlug/'
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/verified'
     | '/$username'
     | '/verification/$token'
+    | '/$username/$quizSlug/edit'
     | '/$username/$quizSlug/flashcards'
     | '/$username/$quizSlug/test'
     | '/$username/$quizSlug'
@@ -229,6 +241,7 @@ export interface FileRouteTypes {
     | '/_layout/'
     | '/_layout/_auth/$username'
     | '/_layout/verification/$token'
+    | '/_quizLayout/$username/$quizSlug/edit'
     | '/_quizLayout/$username/$quizSlug/flashcards'
     | '/_quizLayout/$username/$quizSlug/test'
     | '/_quizLayout/$username/$quizSlug/'
@@ -353,6 +366,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuizLayoutUsernameQuizSlugFlashcardsRouteImport
       parentRoute: typeof QuizLayoutRoute
     }
+    '/_quizLayout/$username/$quizSlug/edit': {
+      id: '/_quizLayout/$username/$quizSlug/edit'
+      path: '/$username/$quizSlug/edit'
+      fullPath: '/$username/$quizSlug/edit'
+      preLoaderRoute: typeof QuizLayoutUsernameQuizSlugEditRouteImport
+      parentRoute: typeof QuizLayoutRoute
+    }
   }
 }
 
@@ -398,12 +418,14 @@ const LayoutRouteWithChildren =
   LayoutRoute._addFileChildren(LayoutRouteChildren)
 
 interface QuizLayoutRouteChildren {
+  QuizLayoutUsernameQuizSlugEditRoute: typeof QuizLayoutUsernameQuizSlugEditRoute
   QuizLayoutUsernameQuizSlugFlashcardsRoute: typeof QuizLayoutUsernameQuizSlugFlashcardsRoute
   QuizLayoutUsernameQuizSlugTestRoute: typeof QuizLayoutUsernameQuizSlugTestRoute
   QuizLayoutUsernameQuizSlugIndexRoute: typeof QuizLayoutUsernameQuizSlugIndexRoute
 }
 
 const QuizLayoutRouteChildren: QuizLayoutRouteChildren = {
+  QuizLayoutUsernameQuizSlugEditRoute: QuizLayoutUsernameQuizSlugEditRoute,
   QuizLayoutUsernameQuizSlugFlashcardsRoute:
     QuizLayoutUsernameQuizSlugFlashcardsRoute,
   QuizLayoutUsernameQuizSlugTestRoute: QuizLayoutUsernameQuizSlugTestRoute,

@@ -1,5 +1,5 @@
 export type PaginatedQuizResponse = {
-  items: QuizResponse[];
+  items: ShortQuizResponse[];
   pageNumber: number;
   pageSize: number;
   totalCount: number;
@@ -8,7 +8,7 @@ export type PaginatedQuizResponse = {
   hasPreviousPage: boolean;
 };
 
-export type QuizResponse = {
+export type ShortQuizResponse = {
   id: string;
   userName: string;
   name: string;
@@ -17,12 +17,20 @@ export type QuizResponse = {
   description: string;
   averageRating: number;
   numberOfRatings: number;
+  timeLimitInSeconds: number | null;
+  autoSubmitWhenTimeExpires: boolean;
+  maxAttemptsPerUser: number | null;
   numberOfQuestions: number;
   imageUrl: string;
   imageId: string;
-  userId: string;
-  questions: QuestionResponse[];
+  createdBy: string;
+  updatedBy: string;
   createdAt: string;
+  updatedAt: string;
+};
+
+export type QuizResponse = ShortQuizResponse & {
+  questions: QuestionResponse[];
 };
 
 export type QuestionResponse = {
@@ -35,3 +43,19 @@ export type Answer = {
   text: string;
   isCorrect: boolean;
 };
+
+export type UpdateQuizRequest = {
+  name: string;
+  description: string;
+  imageId: string;
+  timeLimitInSeconds: number | null;
+  autoSubmitWhenTimeExpires: boolean;
+  maxAttemptsPerUser: number | null;
+};
+
+export type UpdateQuestionRequest = {
+  question: string;
+  answers: Answer[];
+};
+
+export type CreateQuestionRequest = UpdateQuestionRequest;

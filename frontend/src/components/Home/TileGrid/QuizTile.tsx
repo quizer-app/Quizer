@@ -1,11 +1,11 @@
 import { useState } from "react";
 import img from "@/assets/images/office.jpg";
-import { QuizResponse } from "@/types/types/quiz";
+import { ShortQuizResponse } from "@/types/types/quiz";
 import { formatDate } from "@/utils/date";
 import { Link } from "@tanstack/react-router";
 
 type QuizTileProps = {
-  quiz: QuizResponse;
+  quiz: ShortQuizResponse;
 };
 
 export default function QuizTile({ quiz }: QuizTileProps) {

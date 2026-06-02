@@ -1,4 +1,4 @@
-import { QuizResponse } from "@/types/types/quiz";
+import { ShortQuizResponse } from "@/types/types/quiz";
 import QuizStripe from "./QuizStripe";
 import SearchInput from "../QuizSearch/SearchInput";
 import useQuizesPaging from "@/hooks/quizes/useQuizesPaging";
@@ -34,7 +34,7 @@ export default function UserQuizes({
         }}
       />
       <div className="flex flex-col gap-6">
-        {quizes?.items.map((el: QuizResponse, id: number) => {
+        {quizes?.items.map((el: ShortQuizResponse, id: number) => {
           return <QuizStripe quiz={el} key={id} />;
         })}
       </div>

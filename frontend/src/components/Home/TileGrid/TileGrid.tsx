@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import useQuizesPaging from "@/hooks/quizes/useQuizesPaging";
-import { QuizResponse } from "@/types/types/quiz";
+import { ShortQuizResponse } from "@/types/types/quiz";
 import Loading from "../../Status/Loading";
 import QuizTile from "./QuizTile";
 
 export type TileGridViewProps = {
-  quizes: QuizResponse[];
+  quizes: ShortQuizResponse[];
 };
 
 const getPageSize = (availableHeight: number) => {

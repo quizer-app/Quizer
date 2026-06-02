@@ -47,6 +47,26 @@ public class DomainBehaviorTests
         Assert.True(result.IsError);
         Assert.Contains(result.Errors, error => error.Code == "AutoSubmitWhenTimeExpires");
     }
+    [Fact]
+    public void Quiz_update_changes_editable_fields()
+    {
+        var createdBy = Guid.NewGuid();
+        var updatedBy = Guid.NewGuid();
+        var image = Image.CreateNew(Guid.NewGuid(), new Uri("https://cdn.example.com/q.png"));
+        var quiz = Quiz.Create(createdBy, image, "Name", "slug", "A quiz", "alice", null, false, null).Value;
+        var newImage = Image.CreateNew(Guid.NewGuid(), new Uri("https://cdn.example.com/new.png"));
+
+        var result = quiz.Update(updatedBy, newImage, "Updated", "updated", "Updated quiz", 120, true, 2);
+
+        Assert.False(result.IsError);
+        Assert.Equal("Updated", quiz.Name);
+        Assert.Equal("alice/updated", quiz.Location);
+        Assert.Equal("Updated quiz", quiz.Description);
+        Assert.Equal(120, quiz.TimeLimitInSeconds);
+        Assert.True(quiz.AutoSubmitWhenTimeExpires);
+        Assert.Equal(2, quiz.MaxAttemptsPerUser);
+        Assert.Equal(updatedBy, quiz.UpdatedBy);
+    }
 
     [Fact]
     public void Quiz_attempt_limit_is_enforced()
@@ -92,6 +112,42 @@ public class DomainBehaviorTests
         var result = Question.Create(Guid.NewGuid(), QuizId.CreateUnique(), "Which options are valid?", answers);
 
         Assert.True(result.IsError);
+    }
+    [Fact]
+    public void Question_update_replaces_text_and_answers()
+    {
+        var createdBy = Guid.NewGuid();
+        var updatedBy = Guid.NewGuid();
+        var question = Question.Create(
+            createdBy,
+            QuizId.CreateUnique(),
+            "Original question",
+            new List<Answer> { Answer.Create("Original answer", true).Value }).Value;
+
+        var result = question.Update(
+            updatedBy,
+            "Updated question",
+            new List<Answer>
+            {
+                Answer.Create("Incorrect", false).Value,
+                Answer.Create("Correct", true).Value
+            });
+
+        Assert.False(result.IsError);
+        Assert.Equal("Updated question", question.QuestionText);
+        Assert.Collection(
+            question.Answers,
+            answer =>
+            {
+                Assert.Equal("Incorrect", answer.Text);
+                Assert.False(answer.IsCorrect);
+            },
+            answer =>
+            {
+                Assert.Equal("Correct", answer.Text);
+                Assert.True(answer.IsCorrect);
+            });
+        Assert.Equal(updatedBy, question.UpdatedBy);
     }
 
     [Fact]
