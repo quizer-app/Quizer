@@ -1,5 +1,8 @@
-{ lib, config, ... }:
-let
+{
+  lib,
+  config,
+  ...
+}: let
   cfg = config.services.quizer;
 in {
   options.services.quizer = {
@@ -24,6 +27,12 @@ in {
       description = "Group under which Quizer runs.";
     };
 
+    host = lib.mkOption {
+      type = lib.types.str;
+      default = "0.0.0.0";
+      description = "Host address used by the Quizer HTTP listener.";
+    };
+
     port = lib.mkOption {
       type = lib.types.port;
       default = 5000;
@@ -34,6 +43,12 @@ in {
       type = lib.types.attrsOf lib.types.str;
       default = {};
       description = "Additional environment variables for Quizer.";
+    };
+    environmentFiles = lib.mkOption {
+      type = lib.types.listOf lib.types.path;
+      default = [];
+      example = ["/run/secrets/quizer.env"];
+      description = "Additional environment files containing Quizer configuration.";
     };
   };
 
@@ -47,8 +62,8 @@ in {
 
     users.users = lib.mkIf (cfg.user == "quizer") {
       quizer = {
+        inherit (cfg) group;
         isSystemUser = true;
-        group = cfg.group;
       };
     };
 
@@ -64,12 +79,13 @@ in {
 
       environment =
         {
-          ASPNETCORE_URLS = "http://0.0.0.0:${toString cfg.port}";
+          ASPNETCORE_URLS = "http://${cfg.host}:${toString cfg.port}";
           ASPNETCORE_ENVIRONMENT = "Production";
         }
         // cfg.environment;
 
       serviceConfig = {
+        EnvironmentFile = cfg.environmentFiles;
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
