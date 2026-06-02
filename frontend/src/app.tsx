@@ -5,6 +5,7 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import queryClient from "./utils/queryClient";
+import { installBetterStackErrorHandlers } from "./utils/betterStack";
 
 import { routeTree } from "./routeTree.gen";
 
@@ -15,6 +16,8 @@ declare module "@tanstack/react-router" {
     router: typeof router;
   }
 }
+
+installBetterStackErrorHandlers();
 
 const rootElement = document.getElementById("app")!;
 if (!rootElement.innerHTML) {
