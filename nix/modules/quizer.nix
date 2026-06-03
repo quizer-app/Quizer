@@ -7,38 +7,32 @@
 in {
   options.services.quizer = {
     enable = lib.mkEnableOption "Quizer API with embedded frontend";
-
     package = lib.mkOption {
       type = lib.types.nullOr lib.types.package;
       default = null;
       example = lib.literalExpression "inputs.quizer.packages.<system>.quizer";
       description = "Quizer package that contains backend and frontend assets.";
     };
-
     user = lib.mkOption {
       type = lib.types.str;
       default = "quizer";
       description = "User account under which Quizer runs.";
     };
-
     group = lib.mkOption {
       type = lib.types.str;
       default = "quizer";
       description = "Group under which Quizer runs.";
     };
-
     host = lib.mkOption {
       type = lib.types.str;
       default = "0.0.0.0";
       description = "Host address used by the Quizer HTTP listener.";
     };
-
     port = lib.mkOption {
       type = lib.types.port;
       default = 5000;
       description = "TCP port used by the Quizer HTTP listener.";
     };
-
     environment = lib.mkOption {
       type = lib.types.attrsOf lib.types.str;
       default = {};
