@@ -83,7 +83,7 @@ in {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        WorkingDirectory = "${cfg.package}/lib/quizer";
+        WorkingDirectory = "${cfg.package}/lib/quizer-backend";
         ExecStart = "${cfg.package}/bin/Quizer.Api";
         Restart = "on-failure";
         RestartSec = "5s";

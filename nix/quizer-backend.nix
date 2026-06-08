@@ -6,6 +6,6 @@ pkgs.buildDotnetModule {
   projectFile = "src/Quizer.Api/Quizer.Api.csproj";
   nugetDeps = ./../deps.json;
   dotnet-sdk = pkgs.dotnet-sdk_10;
-  dotnet-runtime = pkgs.dotnet-runtime_10;
+  dotnet-runtime = pkgs.dotnetCorePackages.aspnetcore_10_0;
   executables = ["Quizer.Api"];
 }

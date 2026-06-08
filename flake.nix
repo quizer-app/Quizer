@@ -38,8 +38,8 @@
         paths = [backend];
         nativeBuildInputs = [pkgs.makeWrapper];
         postBuild = ''
-          install -d $out/lib/quizer/wwwroot
-          cp -r ${frontend}/* $out/lib/quizer/wwwroot/
+          install -d $out/lib/quizer-backend/wwwroot
+          cp -r ${frontend}/* $out/lib/quizer-backend/wwwroot/
 
           wrapProgram $out/bin/Quizer.Api \
             --set ASPNETCORE_ENVIRONMENT Production
