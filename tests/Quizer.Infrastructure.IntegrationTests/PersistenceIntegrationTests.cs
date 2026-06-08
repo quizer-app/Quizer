@@ -51,6 +51,24 @@ public class PersistenceIntegrationTests : IDisposable
     }
 
     [Fact]
+    public async Task Quiz_repository_enforces_unique_user_slug()
+    {
+        using var context = CreateContext();
+        var repository = new QuizRepository(context);
+        var unitOfWork = new UnitOfWork(context);
+        var userId = Guid.NewGuid();
+
+        var first = Quiz.Create(userId, Image.CreateNew(Guid.NewGuid(), new Uri("https://cdn.example.com/1.png")), "My Quiz", "my-quiz", "Desc", "alice", null, false, null).Value;
+        var second = Quiz.Create(userId, Image.CreateNew(Guid.NewGuid(), new Uri("https://cdn.example.com/2.png")), "my-quiz", "my-quiz", "Desc", "alice", null, false, null).Value;
+
+        await repository.Add(first);
+        await unitOfWork.SaveChangesAsync();
+        await repository.Add(second);
+
+        await Assert.ThrowsAsync<DbUpdateException>(() => unitOfWork.SaveChangesAsync());
+    }
+
+    [Fact]
     public async Task Question_repository_returns_only_questions_for_requested_quiz()
     {
         using var context = CreateContext();

@@ -37,7 +37,7 @@ public class QuizConfigurations : IEntityTypeConfiguration<Quiz>
 
         builder.HasKey(q => q.Id);
 
-        builder.HasIndex(q => new { q.UserName, q.Name })
+        builder.HasIndex(q => new { q.UserName, q.Slug })
             .IsUnique();
 
         builder.Property(q => q.Id)

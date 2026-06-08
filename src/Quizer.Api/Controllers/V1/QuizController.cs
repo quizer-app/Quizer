@@ -1,4 +1,4 @@
-﻿using MapsterMapper;
+using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -103,7 +103,7 @@ public class QuizController : ApiController
     [HttpDelete("{quizId:guid}")]
     public async Task<IActionResult> DeleteQuiz(Guid quizId)
     {
-        var command = new DeleteQuizCommand(quizId);
+        var command = new DeleteQuizCommand((Guid)UserId!, quizId);
         var result = await _mediator.Send(command);
 
         return result.Match(

@@ -31,10 +31,10 @@ public class CreateQuizCommandHandler : IRequestHandler<CreateQuizCommand, Error
         var user = await _userManager.FindByIdAsync(request.UserId.ToString());
         string userName = user is null || user.UserName is null ? "Anonymous" : user.UserName;
 
-        if ((await _quizRepository.Get(userName, request.Name)) is not null)
-            return Errors.Quiz.DuplicateName;
-
         string slug = _slugifyService.GenerateSlug(request.Name);
+
+        if ((await _quizRepository.Get(userName, slug)) is not null)
+            return Errors.Quiz.DuplicateName;
 
         bool uploaded = await _imageService.IsSuccessfulyUploaded(request.ImageId);
         if (!uploaded)

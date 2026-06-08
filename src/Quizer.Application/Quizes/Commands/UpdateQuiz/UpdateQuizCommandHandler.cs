@@ -29,6 +29,9 @@ public class UpdateQuizCommandHandler : IRequestHandler<UpdateQuizCommand, Error
         if (quiz is null)
             return Errors.Quiz.NotFound;
 
+        if (quiz.CreatedBy != request.UserId)
+            return Errors.Quiz.Forbidden;
+
         var id = (QuizId)quiz.Id;
 
         string slug = _slugifyService.GenerateSlug(request.Name);

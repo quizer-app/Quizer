@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Application.Services.Image;
@@ -24,6 +24,9 @@ public class DeleteQuizCommandHandler : IRequestHandler<DeleteQuizCommand, Error
 
         if (quiz is null)
             return Errors.Quiz.NotFound;
+
+        if (quiz.CreatedBy != request.UserId)
+            return Errors.Quiz.Forbidden;
 
         bool deleted = await _imageService.DeleteImage(quiz.Image.ImageId);
         if (!deleted)

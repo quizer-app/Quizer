@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Common.Errors;
@@ -25,6 +25,9 @@ public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionComman
 
         if (quiz is null)
             return Errors.Quiz.NotFound;
+
+        if (quiz.CreatedBy != request.UserId)
+            return Errors.Quiz.Forbidden;
 
         var result = Question.Create(
             request.UserId,

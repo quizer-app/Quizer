@@ -1,4 +1,4 @@
-﻿using ErrorOr;
+using ErrorOr;
 using MediatR;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Common.Errors;
@@ -24,6 +24,9 @@ public class DeleteQuestionCommandHandler : IRequestHandler<DeleteQuestionComman
 
         var quiz = await _quizRepository.Get(question.QuizId);
         if (quiz is null) return Errors.Quiz.NotFound;
+
+        if (quiz.CreatedBy != request.UserId)
+            return Errors.Quiz.Forbidden;
 
         quiz.DeleteQuestion(request.UserId, question);
         _questionRepository.Delete(question);

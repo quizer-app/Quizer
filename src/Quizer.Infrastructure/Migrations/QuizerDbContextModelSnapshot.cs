@@ -229,7 +229,7 @@ namespace Quizer.Infrastructure.Migrations
                         .HasColumnType("text");
                     b.HasKey("Id");
 
-                    b.HasIndex("UserName", "Name")
+                    b.HasIndex("UserName", "Slug")
                         .IsUnique();
 
                     b.ToTable("Quizes", (string)null);

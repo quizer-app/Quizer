@@ -14,6 +14,10 @@ public static partial class Errors
             code: "Quiz.DuplicateName",
             description: "Quiz with this name already exists");
 
+        public static Error Forbidden => Error.Forbidden(
+            code: "Quiz.Forbidden",
+            description: "User is not allowed to modify this quiz");
+
         public static Error AttemptLimitReached => Error.Forbidden(
             code: "Quiz.AttemptLimitReached",
             description: "User has reached the maximum number of attempts for this quiz");
