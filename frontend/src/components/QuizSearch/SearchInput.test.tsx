@@ -21,7 +21,7 @@ describe("SearchInput", () => {
     render(
       <SearchInput
         fullPath="/quiz-search"
-        searchParams={{ pageNumber: 1, pageSize: 9, searchTerm: "" }}
+        searchParams={{ pageNumber: 5, pageSize: 9, searchTerm: "" }}
       />
     );
 

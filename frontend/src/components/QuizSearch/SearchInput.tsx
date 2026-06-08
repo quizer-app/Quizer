@@ -38,7 +38,7 @@ export default function SearchInput({
 
       navigate({
         from: fullPath,
-        search: { ...searchParams, searchTerm: inputValue },
+        search: { ...searchParams, searchTerm: inputValue, pageNumber: 1 },
         replace: true,
       });
     }, 300);
@@ -62,8 +62,12 @@ export default function SearchInput({
     });
   };
 
-  const clearInput = (prev: GetQuizesQueryParams) => {
-    return { ...prev, searchTerm: "" };
+  const clearQuizSearch = (prev: GetQuizesQueryParams) => {
+    return { ...prev, searchTerm: "", pageNumber: 1 };
+  };
+
+  const clearUserSearch = () => {
+    return { searchTerm: "" };
   };
 
   return (
@@ -84,7 +88,7 @@ export default function SearchInput({
       {/* avoid types */}
       {searchParams.searchTerm !== "" &&
         (fullPath === "/$username" ? (
-          <Link from={fullPath} search={clearInput} replace>
+          <Link from={fullPath} search={clearUserSearch} replace>
             <XCircle
               color="#959CB1"
               className="absolute top-3 right-3 cursor-pointer"
@@ -92,7 +96,7 @@ export default function SearchInput({
             />
           </Link>
         ) : (
-          <Link from={fullPath} search={clearInput} replace>
+          <Link from={fullPath} search={clearQuizSearch} replace>
             <XCircle
               color="#959CB1"
               className="absolute top-3 right-3 cursor-pointer"

@@ -12,20 +12,22 @@ export const Route = createFileRoute(
   validateSearch: quizPageSchema,
 });
 
-function Flashcards() {
+export function Flashcards() {
   const { username, quizSlug } = Route.useParams();
   const { isLoading, isError, quiz } = useQuizData(username, quizSlug);
 
   const { term } = Route.useSearch();
 
-  if (!quiz) {
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (isError || !quiz) {
     return <NotFound />;
   }
 
   return (
     <>
-      {isLoading && <Loading />}
-      {isError && <NotFound />}
       <div className="bg-primary text-white fixed w-full h-[100vh] px-4 py-12 sm:py-16 md:py-20 lg:py-24">
         <div className="mx-auto rounded-sm max-w-[592px] md:max-w-[720px] lg:max-w-[976px]">
           <div className="flex flex-col gap-10 w-full mb-16">

@@ -16,7 +16,7 @@ export default function PagingBar({
 }: PagingBarProps) {
   const navigate = useNavigate();
   const elements = Array.from(
-    Array(quizes?.totalCount ? quizes.totalCount : 1),
+    Array(quizes?.totalPages ? quizes.totalPages : 1),
     (_, index) => index + 1
   );
 
@@ -75,31 +75,29 @@ export default function PagingBar({
     <div className="flex gap-2 text-white">
       <PagingButton text="PREV" onClick={() => setCurrPage("decrement")} />
 
-      {elements
-        .slice(0, quizes?.totalPages ? quizes.totalPages : 1)
-        .map((el, id) => {
-          return isDisplayed(el) ? (
-            <PagingButton
-              text={el}
-              onClick={() => setCurrPage(el)}
-              current={
-                quizes?.pageNumber !== null &&
-                quizes?.pageNumber !== undefined &&
-                id + 1 === quizes.pageNumber
-              }
-              dots={
-                quizes?.pageNumber && quizes.pageNumber >= 4 && el === 1
-                  ? "AFTER"
-                  : quizes?.pageNumber &&
-                      quizes.pageNumber <= quizes.totalPages - 3 &&
-                      el === quizes.totalPages
-                    ? "BEFORE"
-                    : ""
-              }
-              key={id}
-            />
-          ) : null;
-        })}
+      {elements.map((el, id) => {
+        return isDisplayed(el) ? (
+          <PagingButton
+            text={el}
+            onClick={() => setCurrPage(el)}
+            current={
+              quizes?.pageNumber !== null &&
+              quizes?.pageNumber !== undefined &&
+              id + 1 === quizes.pageNumber
+            }
+            dots={
+              quizes?.pageNumber && quizes.pageNumber >= 4 && el === 1
+                ? "AFTER"
+                : quizes?.pageNumber &&
+                    quizes.pageNumber <= quizes.totalPages - 3 &&
+                    el === quizes.totalPages
+                  ? "BEFORE"
+                  : ""
+            }
+            key={id}
+          />
+        ) : null;
+      })}
 
       <PagingButton text="NEXT" onClick={() => setCurrPage("increment")} />
     </div>
