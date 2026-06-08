@@ -1,5 +1,5 @@
 ﻿using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Application.Utils;
 using Quizer.Domain.QuizAggregate;
@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace Quizer.Application.Quizes.Queries.GetQuizes;
 
-public class GetQuizesQueryHandler : IRequestHandler<GetQuizesQuery, ErrorOr<PagedList<Quiz>>>
+public class GetQuizesQueryHandler : IQueryHandler<GetQuizesQuery, ErrorOr<PagedList<Quiz>>>
 {
     private readonly IQuizRepository _quizRepository;
 

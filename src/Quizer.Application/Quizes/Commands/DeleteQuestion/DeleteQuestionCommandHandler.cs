@@ -1,12 +1,12 @@
 using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Common.Errors;
 using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Application.Quizes.Commands.DeleteQuestion;
 
-public class DeleteQuestionCommandHandler : IRequestHandler<DeleteQuestionCommand, ErrorOr<QuestionId>>
+public class DeleteQuestionCommandHandler : ICommandHandler<DeleteQuestionCommand, ErrorOr<QuestionId>>
 {
     private readonly IQuestionRepository _questionRepository;
     private readonly IQuizRepository _quizRepository;

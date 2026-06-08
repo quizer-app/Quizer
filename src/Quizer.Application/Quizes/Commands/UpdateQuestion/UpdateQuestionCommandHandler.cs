@@ -1,5 +1,5 @@
 using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Common.Errors;
 using Quizer.Domain.QuestionAggregate;
@@ -7,7 +7,7 @@ using Quizer.Domain.QuestionAggregate.Entities;
 
 namespace Quizer.Application.Quizes.Commands.UpdateQuestion;
 
-public class UpdateQuestionCommandHandler : IRequestHandler<UpdateQuestionCommand, ErrorOr<QuestionId>>
+public class UpdateQuestionCommandHandler : ICommandHandler<UpdateQuestionCommand, ErrorOr<QuestionId>>
 {
     private readonly IQuestionRepository _questionRepository;
     private readonly IQuizRepository _quizRepository;

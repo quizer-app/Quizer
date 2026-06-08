@@ -1,17 +1,17 @@
-﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Domain.Common.Models;
 
 namespace Quizer.Infrastructure.Persistance.Interceptors;
 
 public class PublishDomainEventsInterceptor : SaveChangesInterceptor
 {
-    private readonly IPublisher _mediator;
+    private readonly IDomainEventPublisher _domainEventPublisher;
 
-    public PublishDomainEventsInterceptor(IPublisher mediator)
+    public PublishDomainEventsInterceptor(IDomainEventPublisher domainEventPublisher)
     {
-        _mediator = mediator;
+        _domainEventPublisher = domainEventPublisher;
     }
 
     public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
@@ -22,11 +22,11 @@ public class PublishDomainEventsInterceptor : SaveChangesInterceptor
 
     public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
-        await PublishDomainEvents(eventData.Context);
+        await PublishDomainEvents(eventData.Context, cancellationToken);
         return await base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 
-    private async Task PublishDomainEvents(DbContext? dbContext)
+    private async Task PublishDomainEvents(DbContext? dbContext, CancellationToken cancellationToken = default)
     {
         if (dbContext is null) return;
 
@@ -41,9 +41,9 @@ public class PublishDomainEventsInterceptor : SaveChangesInterceptor
 
         entitiesWithDomainEvents.ForEach(entity => entity.ClearDomainEvents());
 
-        foreach(var domainEvent in domainEvents)
+        foreach (var domainEvent in domainEvents)
         {
-            await _mediator.Publish(domainEvent);
+            await _domainEventPublisher.Publish(domainEvent, cancellationToken);
         }
     }
 }

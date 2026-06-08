@@ -1,5 +1,5 @@
 ﻿using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Application.Quizes.Common;
 using Quizer.Domain.Common.Errors;
@@ -7,7 +7,7 @@ using Quizer.Domain.QuizAggregate;
 
 namespace Quizer.Application.Quizes.Queries.GetQuizById;
 
-public class GetQuizByIdQueryHandler : IRequestHandler<GetQuizByIdQuery, ErrorOr<DetailedQuizResult>>
+public class GetQuizByIdQueryHandler : IQueryHandler<GetQuizByIdQuery, ErrorOr<DetailedQuizResult>>
 {
     private readonly IQuizRepository _quizRepository;
     private readonly IQuestionRepository _questionRepository;

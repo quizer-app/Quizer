@@ -1,5 +1,5 @@
 ﻿using MapsterMapper;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Quizes.Commands.CreateQuestion;
@@ -14,12 +14,12 @@ namespace Quizer.Api.Controllers.V1;
 
 public class QuestionController : ApiController
 {
-    private readonly ISender _mediator;
+    private readonly IRequestDispatcher _dispatcher;
     private readonly IMapper _mapper;
 
-    public QuestionController(ISender mediator, IMapper mapper)
+    public QuestionController(IRequestDispatcher dispatcher, IMapper mapper)
     {
-        _mediator = mediator;
+        _dispatcher = dispatcher;
         _mapper = mapper;
     }
 
@@ -28,7 +28,7 @@ public class QuestionController : ApiController
     public async Task<IActionResult> GetQuestion(Guid questionId)
     {
         var query = new GetQuestionQuery(questionId);
-        var result = await _mediator.Send(query);
+        var result = await _dispatcher.Send(query);
 
         return result.Match(
             quizes => Ok(_mapper.Map<QuestionResponse>(quizes)),
@@ -41,7 +41,7 @@ public class QuestionController : ApiController
         [FromBody] CreateQuestionRequest request)
     {
         var command = _mapper.Map<CreateQuestionCommand>((request, UserId, quizId));
-        var result = await _mediator.Send(command);
+        var result = await _dispatcher.Send(command);
 
         return result.Match(
             quizId => Ok(_mapper.Map<QuestionIdResponse>(quizId)),
@@ -54,7 +54,7 @@ public class QuestionController : ApiController
         [FromBody] UpdateQuestionRequest request)
     {
         var command = _mapper.Map<UpdateQuestionCommand>((request, UserId, questionId));
-        var result = await _mediator.Send(command);
+        var result = await _dispatcher.Send(command);
 
         return result.Match(
             quizId => Ok(_mapper.Map<QuestionIdResponse>(quizId)),
@@ -65,7 +65,7 @@ public class QuestionController : ApiController
     public async Task<IActionResult> DeleteQuestion(Guid questionId)
     {
         var command = new DeleteQuestionCommand((Guid)UserId!, questionId);
-        var result = await _mediator.Send(command);
+        var result = await _dispatcher.Send(command);
 
         return result.Match(
             quizId => Ok(_mapper.Map<QuestionIdResponse>(quizId)),

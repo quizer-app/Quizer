@@ -1,6 +1,6 @@
-﻿using ErrorOr;
+using ErrorOr;
 using FluentValidation;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 
 namespace Quizer.Application.Common.Behaviors;
 

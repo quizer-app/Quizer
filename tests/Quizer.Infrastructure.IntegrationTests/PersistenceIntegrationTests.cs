@@ -1,6 +1,7 @@
-using MediatR;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Quizer.Application.Common.Cqrs;
+using Quizer.Domain.Common.Models;
 using Quizer.Domain.Common.ValueObjects;
 using Quizer.Domain.QuestionAggregate;
 using Quizer.Domain.QuestionAggregate.Entities;
@@ -105,15 +106,9 @@ public class PersistenceIntegrationTests : IDisposable
         _connection.Dispose();
     }
 
-    private sealed class NullPublisher : IPublisher
+    private sealed class NullPublisher : IDomainEventPublisher
     {
-        public Task Publish(object notification, CancellationToken cancellationToken = default)
-        {
-            return Task.CompletedTask;
-        }
-
-        public Task Publish<TNotification>(TNotification notification, CancellationToken cancellationToken = default)
-            where TNotification : INotification
+        public Task Publish(IDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
             return Task.CompletedTask;
         }

@@ -80,16 +80,6 @@
     "hash": "sha256-u1PUUXNBq1+xY0QrWN4hoFWorwLGKZjKtZMw7Ql86Yg="
   },
   {
-    "pname": "MediatR",
-    "version": "14.1.0",
-    "hash": "sha256-T/BFRCWO/8AyOzU++2EFgYbw/y3OZB0NhRezL4KvAvw="
-  },
-  {
-    "pname": "MediatR.Contracts",
-    "version": "2.0.1",
-    "hash": "sha256-89ULOtn0fPqX0R7ulvnIjjz+rjKYq4//REhKNO3rUvw="
-  },
-  {
     "pname": "Microsoft.AspNetCore.Authentication.JwtBearer",
     "version": "10.0.8",
     "hash": "sha256-Jxlk+nLUCmFM0uDq9y21Gh2/cGdG52s+djzUXVXsc2A="

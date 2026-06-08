@@ -1,12 +1,12 @@
 ﻿using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Common.Errors;
 using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Application.Quizes.Queries.GetQuestion;
 
-public class GetQuestionQueryHandler : IRequestHandler<GetQuestionQuery, ErrorOr<Question>>
+public class GetQuestionQueryHandler : IQueryHandler<GetQuestionQuery, ErrorOr<Question>>
 {
     private readonly IQuestionRepository _questionRepository;
 

@@ -1,5 +1,5 @@
 ﻿using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Application.Quizes.Common;
 using Quizer.Domain.QuestionAggregate;
 
@@ -10,4 +10,4 @@ public record CreateQuestionCommand(
     Guid QuizId,
     string QuestionText,
     List<CreateQuestionAnswer> Answers
-    ) : IRequest<ErrorOr<QuestionId>>;
+    ) : ICommand<ErrorOr<QuestionId>>;

@@ -1,5 +1,5 @@
 using MapsterMapper;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Quizes.Commands.CreateQuiz;
@@ -17,12 +17,12 @@ namespace Quizer.Api.Controllers.V1;
 
 public class QuizController : ApiController
 {
-    private readonly ISender _mediator;
+    private readonly IRequestDispatcher _dispatcher;
     private readonly IMapper _mapper;
 
-    public QuizController(ISender mediator, IMapper mapper)
+    public QuizController(IRequestDispatcher dispatcher, IMapper mapper)
     {
-        _mediator = mediator;
+        _dispatcher = dispatcher;
         _mapper = mapper;
     }
 
@@ -44,7 +44,7 @@ public class QuizController : ApiController
             pageSize,
             userName);
 
-        var result = await _mediator.Send(query);
+        var result = await _dispatcher.Send(query);
 
         return result.Match(
             quizes => Ok(_mapper.Map<PaginatedResponse<ShortQuizResponse>>(quizes)),
@@ -56,7 +56,7 @@ public class QuizController : ApiController
     public async Task<IActionResult> GetQuizById(Guid quizId)
     {
         var query = new GetQuizByIdQuery(quizId);
-        var result = await _mediator.Send(query);
+        var result = await _dispatcher.Send(query);
 
         return result.Match(
             quizes => Ok(_mapper.Map<QuizResponse>(quizes)),
@@ -68,7 +68,7 @@ public class QuizController : ApiController
     public async Task<IActionResult> GetQuizByName(string userName, string quizSlug)
     {
         var query = new GetQuizByNameQuery(userName, quizSlug);
-        var result = await _mediator.Send(query);
+        var result = await _dispatcher.Send(query);
 
         return result.Match(
             quizes => Ok(_mapper.Map<QuizResponse>(quizes)),
@@ -80,7 +80,7 @@ public class QuizController : ApiController
         CreateQuizRequest request)
     {
         var command = _mapper.Map<CreateQuizCommand>((request, UserId));
-        var result = await _mediator.Send(command);
+        var result = await _dispatcher.Send(command);
 
         return result.Match(
             quizId => Ok(_mapper.Map<QuizIdResponse>(quizId)),
@@ -93,7 +93,7 @@ public class QuizController : ApiController
         [FromBody] UpdateQuizRequest request)
     {
         var command = _mapper.Map<UpdateQuizCommand>((request, UserId, quizId));
-        var result = await _mediator.Send(command);
+        var result = await _dispatcher.Send(command);
 
         return result.Match(
             quizId => Ok(_mapper.Map<QuizIdResponse>(quizId)),
@@ -104,7 +104,7 @@ public class QuizController : ApiController
     public async Task<IActionResult> DeleteQuiz(Guid quizId)
     {
         var command = new DeleteQuizCommand((Guid)UserId!, quizId);
-        var result = await _mediator.Send(command);
+        var result = await _dispatcher.Send(command);
 
         return result.Match(
             quizId => Ok(_mapper.Map<QuizIdResponse>(quizId)),

@@ -1,5 +1,5 @@
 ﻿using MapsterMapper;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -16,13 +16,13 @@ namespace Quizer.Api.Controllers.V1;
 [AllowAnonymous]
 public class AuthController : ApiController
 {
-    private readonly ISender _mediator;
+    private readonly IRequestDispatcher _dispatcher;
     private readonly IMapper _mapper;
     private readonly IOptions<JwtSettings> _jwtSettings;
 
-    public AuthController(ISender mediator, IMapper mapper, IOptions<JwtSettings> jwtSettings)
+    public AuthController(IRequestDispatcher dispatcher, IMapper mapper, IOptions<JwtSettings> jwtSettings)
     {
-        _mediator = mediator;
+        _dispatcher = dispatcher;
         _mapper = mapper;
         _jwtSettings = jwtSettings;
     }
@@ -32,7 +32,7 @@ public class AuthController : ApiController
     {
         var command = _mapper.Map<RegisterCommand>(request);
 
-        var result = await _mediator.Send(command);
+        var result = await _dispatcher.Send(command);
 
         return result.Match(
             data => Ok(_mapper.Map<RegisterResponse>(data)),
@@ -45,7 +45,7 @@ public class AuthController : ApiController
     {
         var query = _mapper.Map<LoginCommand>(request);
 
-        var result = await _mediator.Send(query);
+        var result = await _dispatcher.Send(query);
 
         DateTimeOffset? expirationTime = request.RememberMe ? DateTimeOffset.UtcNow.AddDays(_jwtSettings.Value.RefreshTokenExpiryDays) : null;
         if (!result.IsError)
@@ -73,7 +73,7 @@ public class AuthController : ApiController
 
         var query = new LogoutCommand(refreshToken);
 
-        var result = await _mediator.Send(query);
+        var result = await _dispatcher.Send(query);
 
         return result.Match(
             data => Ok(_mapper.Map<LogoutResponse>(data)),
@@ -90,7 +90,7 @@ public class AuthController : ApiController
 
         var query = new RefreshTokenCommand(refreshToken);
 
-        var result = await _mediator.Send(query);
+        var result = await _dispatcher.Send(query);
 
         return result.Match(
             token => Ok(new RefreshTokenResponse(token)),

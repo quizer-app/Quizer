@@ -1,5 +1,5 @@
 using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.Common.Errors;
 using Quizer.Domain.QuestionAggregate;
@@ -8,7 +8,7 @@ using Quizer.Domain.QuizAggregate;
 
 namespace Quizer.Application.Quizes.Commands.CreateQuestion;
 
-public class CreateQuestionCommandHandler : IRequestHandler<CreateQuestionCommand, ErrorOr<QuestionId>>
+public class CreateQuestionCommandHandler : ICommandHandler<CreateQuestionCommand, ErrorOr<QuestionId>>
 {
     private readonly IQuizRepository _quizRepository;
     private readonly IQuestionRepository _questionRepository;

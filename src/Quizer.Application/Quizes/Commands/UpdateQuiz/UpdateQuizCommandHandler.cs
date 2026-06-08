@@ -1,5 +1,5 @@
 using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Application.Services.Image;
 using Quizer.Application.Services.Slugify;
@@ -9,7 +9,7 @@ using Quizer.Domain.QuizAggregate;
 
 namespace Quizer.Application.Quizes.Commands.UpdateQuiz;
 
-public class UpdateQuizCommandHandler : IRequestHandler<UpdateQuizCommand, ErrorOr<QuizId>>
+public class UpdateQuizCommandHandler : ICommandHandler<UpdateQuizCommand, ErrorOr<QuizId>>
 {
     private readonly IQuizRepository _quizRepository;
     private readonly ISlugifyService _slugifyService;

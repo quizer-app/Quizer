@@ -1,5 +1,5 @@
 ﻿using MapsterMapper;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Quizer.Application.Users.Queries.GetUser;
@@ -12,12 +12,12 @@ namespace Quizer.Api.Controllers.V1;
 
 public class UserController : ApiController
 {
-    private readonly ISender _mediator;
+    private readonly IRequestDispatcher _dispatcher;
     private readonly IMapper _mapper;
 
-    public UserController(ISender mediator, IMapper mapper)
+    public UserController(IRequestDispatcher dispatcher, IMapper mapper)
     {
-        _mediator = mediator;
+        _dispatcher = dispatcher;
         _mapper = mapper;
     }
 
@@ -27,7 +27,7 @@ public class UserController : ApiController
     {
         var query = new GetUserQuery(userName);
 
-        var result = await _mediator.Send(query);
+        var result = await _dispatcher.Send(query);
 
         return result.Match(
             quizes => Ok(_mapper.Map<UserResponse>(quizes)),
@@ -40,7 +40,7 @@ public class UserController : ApiController
     {
         var query = new GetUserByIdQuery(userId);
 
-        var result = await _mediator.Send(query);
+        var result = await _dispatcher.Send(query);
 
         return result.Match(
             quizes => Ok(_mapper.Map<UserResponse>(quizes)),

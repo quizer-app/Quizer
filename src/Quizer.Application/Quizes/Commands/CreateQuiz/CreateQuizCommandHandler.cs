@@ -1,5 +1,5 @@
 using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Microsoft.AspNetCore.Identity;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Application.Services.Image;
@@ -11,7 +11,7 @@ using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Quizes.Commands.CreateQuiz;
 
-public class CreateQuizCommandHandler : IRequestHandler<CreateQuizCommand, ErrorOr<QuizId>>
+public class CreateQuizCommandHandler : ICommandHandler<CreateQuizCommand, ErrorOr<QuizId>>
 {
     private readonly IQuizRepository _quizRepository;
     private readonly ISlugifyService _slugifyService;

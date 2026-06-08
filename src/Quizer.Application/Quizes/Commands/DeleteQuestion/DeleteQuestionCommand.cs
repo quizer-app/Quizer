@@ -1,5 +1,5 @@
 ﻿using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Application.Quizes.Commands.DeleteQuestion;
@@ -7,4 +7,4 @@ namespace Quizer.Application.Quizes.Commands.DeleteQuestion;
 public record DeleteQuestionCommand(
     Guid UserId,
     Guid QuestionId
-    ) : IRequest<ErrorOr<QuestionId>>;
+    ) : ICommand<ErrorOr<QuestionId>>;

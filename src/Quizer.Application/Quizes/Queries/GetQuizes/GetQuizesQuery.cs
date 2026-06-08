@@ -1,5 +1,5 @@
 ﻿using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Application.Utils;
 using Quizer.Domain.QuizAggregate;
 
@@ -11,4 +11,4 @@ public record GetQuizesQuery(
     string? SortOrder,
     int PageNumber,
     int PageSize,
-    string? UserName) : IRequest<ErrorOr<PagedList<Quiz>>>;
+    string? UserName) : IQuery<ErrorOr<PagedList<Quiz>>>;

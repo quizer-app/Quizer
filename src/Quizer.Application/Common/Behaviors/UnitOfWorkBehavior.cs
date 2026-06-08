@@ -1,5 +1,5 @@
 using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Application.Common.Interfaces.Persistance;
 
 namespace Quizer.Application.Common.Behaviors;
@@ -21,7 +21,7 @@ public sealed class UnitOfWorkBehavior<TRequest, TResponse> :
         RequestHandlerDelegate<TResponse> next,
         CancellationToken cancellationToken)
     {
-        if (IsNotCommand())
+        if (!IsCommand())
             return await next();
 
         var result = await next();
@@ -31,8 +31,8 @@ public sealed class UnitOfWorkBehavior<TRequest, TResponse> :
         return result;
     }
 
-    private static bool IsNotCommand()
+    private static bool IsCommand()
     {
-        return !typeof(TRequest).Name.EndsWith("Command");
+        return typeof(ICommand<TResponse>).IsAssignableFrom(typeof(TRequest));
     }
 }

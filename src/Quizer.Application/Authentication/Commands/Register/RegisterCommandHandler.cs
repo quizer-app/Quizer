@@ -1,5 +1,5 @@
 using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Quizer.Domain.Common.Errors;
@@ -7,7 +7,7 @@ using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Authentication.Commands.Register;
 
-public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<RegisterResult>>
+public class RegisterCommandHandler : ICommandHandler<RegisterCommand, ErrorOr<RegisterResult>>
 {
     private readonly UserManager<User> _userManager;
     private readonly ILogger<RegisterCommandHandler> _logger;

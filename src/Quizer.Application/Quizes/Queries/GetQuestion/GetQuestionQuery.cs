@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Domain.QuestionAggregate;
 
 namespace Quizer.Application.Quizes.Queries.GetQuestion;
 
-public record GetQuestionQuery(Guid QuestionId): IRequest<ErrorOr<Question>>;
+public record GetQuestionQuery(Guid QuestionId): IQuery<ErrorOr<Question>>;

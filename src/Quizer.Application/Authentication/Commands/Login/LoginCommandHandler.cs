@@ -1,5 +1,5 @@
 ﻿using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Microsoft.AspNetCore.Identity;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Persistance;
@@ -8,7 +8,7 @@ using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Authentication.Commands.Login;
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, ErrorOr<LoginResult>>
+public class LoginCommandHandler : ICommandHandler<LoginCommand, ErrorOr<LoginResult>>
 {
     private readonly IJwtTokenProvider _jwtTokenGenerator;
     private readonly IRefreshTokenRepository _refreshTokenRepository;

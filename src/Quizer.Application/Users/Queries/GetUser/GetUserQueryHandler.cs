@@ -1,5 +1,5 @@
 ﻿using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Microsoft.AspNetCore.Identity;
 using Quizer.Application.Users.Common;
 using Quizer.Domain.Common.Errors;
@@ -7,7 +7,7 @@ using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Users.Queries.GetUser;
 
-public class GetUserQueryHandler : IRequestHandler<GetUserQuery, ErrorOr<UserResult>>
+public class GetUserQueryHandler : IQueryHandler<GetUserQuery, ErrorOr<UserResult>>
 {
     private readonly UserManager<User> _userManager;
 

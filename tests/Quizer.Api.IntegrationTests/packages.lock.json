@@ -136,7 +136,7 @@
         "contentHash": "viTKWaMbL3yJYgGI0DiCeavNbE9UPMWFVK2XS9nYXGbm3NDMd0/L5ER4wBzmTtW3BYh3SrlSXm9RACiKZ6stlA==",
         "dependencies": {
           "FluentValidation": "11.11.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.1.0"
+          "Microsoft.Extensions.Dependencyinjection.Abstractions": "2.1.0"
         }
       },
       "Mapster": {
@@ -160,22 +160,6 @@
           "Mapster": "10.0.7",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0"
         }
-      },
-      "MediatR": {
-        "type": "Transitive",
-        "resolved": "14.1.0",
-        "contentHash": "pdxza1pLqAk+06LV3THzNJrw5K5Ah6EC17TEkoC90gsAxwtXDJAQrGuDSDinHGgxWKWEn5ebqTNN3k1bLJOb0g==",
-        "dependencies": {
-          "MediatR.Contracts": "[2.0.1, 3.0.0)",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
-          "Microsoft.IdentityModel.JsonWebTokens": "8.14.0"
-        }
-      },
-      "MediatR.Contracts": {
-        "type": "Transitive",
-        "resolved": "2.0.1",
-        "contentHash": "FYv95bNT4UwcNA+G/J1oX5OpRiSUxteXaUt2BJbRSdRNiIUNbggJF69wy6mnk2wYToaanpdXZdCwVylt96MpwQ=="
       },
       "Microsoft.AspNetCore.Authentication.JwtBearer": {
         "type": "Transitive",
@@ -927,7 +911,6 @@
           "FluentEmail.SendGrid": "[3.0.2, )",
           "FluentValidation": "[12.1.1, )",
           "FluentValidation.AspNetCore": "[11.3.1, )",
-          "MediatR": "[14.1.0, )",
           "Newtonsoft.Json": "[13.0.4, )",
           "Quizer.Domain": "[1.0.0, )",
           "starkbank-ecdsa": "[1.3.3, )"
@@ -941,7 +924,6 @@
         "dependencies": {
           "ErrorOr": "[2.1.1, )",
           "FluentValidation": "[12.1.1, )",
-          "MediatR": "[14.1.0, )",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "[10.0.8, )"
         }
       },

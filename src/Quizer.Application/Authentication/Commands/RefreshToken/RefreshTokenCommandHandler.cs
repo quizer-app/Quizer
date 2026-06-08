@@ -1,5 +1,5 @@
 using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Microsoft.Extensions.Logging;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Persistance;
@@ -8,7 +8,7 @@ using Quizer.Domain.RefreshTokenAggregate;
 
 namespace Quizer.Application.Authentication.Commands.RefreshToken;
 
-public class RefreshTokenCommandHandler : IRequestHandler<RefreshTokenCommand, ErrorOr<string>>
+public class RefreshTokenCommandHandler : ICommandHandler<RefreshTokenCommand, ErrorOr<string>>
 {
     private readonly ILogger<RefreshTokenCommandHandler> _logger;
     private readonly IJwtTokenProvider _jwtTokenGenerator;

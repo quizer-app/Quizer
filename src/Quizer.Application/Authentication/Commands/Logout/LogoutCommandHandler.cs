@@ -1,5 +1,5 @@
 using ErrorOr;
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Microsoft.AspNetCore.Identity;
 using Quizer.Application.Common.Interfaces.Authentication;
 using Quizer.Application.Common.Interfaces.Persistance;
@@ -9,7 +9,7 @@ using Quizer.Domain.UserAggregate;
 
 namespace Quizer.Application.Authentication.Commands.Logout;
 
-public class LogoutCommandHandler : IRequestHandler<LogoutCommand, ErrorOr<LogoutResult>>
+public class LogoutCommandHandler : ICommandHandler<LogoutCommand, ErrorOr<LogoutResult>>
 {
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly SignInManager<User> _signInManager;

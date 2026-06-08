@@ -1,4 +1,4 @@
-using MediatR;
+using Quizer.Application.Common.Cqrs;
 using Quizer.Application.Common.Interfaces.Persistance;
 using Quizer.Domain.QuestionAggregate;
 using Quizer.Domain.QuizAggregate;
@@ -6,7 +6,7 @@ using Quizer.Domain.QuizAggregate.Events;
 
 namespace Quizer.Application.Quizes.Events;
 
-public class QuizDeletedHandler : INotificationHandler<QuizDeleted>
+public class QuizDeletedHandler : IDomainEventHandler<QuizDeleted>
 {
     private readonly IQuestionRepository _questionRepository;
 
@@ -15,9 +15,9 @@ public class QuizDeletedHandler : INotificationHandler<QuizDeleted>
         _questionRepository = questionRepository;
     }
 
-    public async Task Handle(QuizDeleted notification, CancellationToken cancellationToken)
+    public async Task Handle(QuizDeleted domainEvent, CancellationToken cancellationToken)
     {
-        var quizId = (QuizId)notification.quiz.Id;
+        var quizId = (QuizId)domainEvent.quiz.Id;
         var questions = await _questionRepository.GetAllQuestions(quizId);
 
         foreach (var question in questions)

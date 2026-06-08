@@ -1,6 +1,6 @@
 using ErrorOr;
-using MediatR;
 using Microsoft.Extensions.Logging;
+using Quizer.Application.Common.Cqrs;
 
 namespace Quizer.Application.Common.Behaviors;
 
